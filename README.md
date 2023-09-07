@@ -7,3 +7,7 @@ To configure vscode python interpreter, open the nix-shell and run `which python
 ## Installation
 
 Use nix [shell](https://ryantm.github.io/nixpkgs/languages-frameworks/python/).
+
+## Mypy
+
+mypy must be run in the `src` folder.

@@ -5,6 +5,8 @@ let
     # python packages
     python-dotenv
     psutil
+    pandas
+    numpy
 
     mypy
   ];
