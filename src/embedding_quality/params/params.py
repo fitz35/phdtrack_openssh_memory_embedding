@@ -1,4 +1,4 @@
-from src.commons.params.base_program_params import BaseProgramParams
+from commons.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
 from .cli import CLIArguments
 from .data_origin import DataOriginEnum, convert_str_arg_to_data_origin
@@ -20,7 +20,7 @@ class ProgramParams(BaseProgramParams):
     # NOTE: lowercase values are from the CLI
 
     # results
-    CSV_CLASSIFICATION_RESULTS_PATH: str
+    CSV_EMBEDDING_QUALITY_RESULTS_PATH: str
     FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
 
 
@@ -42,7 +42,7 @@ class ProgramParams(BaseProgramParams):
         """
         Initialize results manager, and start keeping results-related information.
         """
-        self.results_writer = ResultsWriter(self.CSV_CLASSIFICATION_RESULTS_PATH)
+        self.results_writer = ResultsWriter(self.CSV_EMBEDDING_QUALITY_RESULTS_PATH)
 
 
         self.set_result_for(
@@ -92,6 +92,9 @@ class ProgramParams(BaseProgramParams):
             except ValueError:
                 print(f"ERROR: Invalid data origin training: {self.cli_args.args.origins_training}")
                 exit(1)
+        else:
+            print("ERROR: No training data origin given.")
+            exit(1)
         
         if self.cli_args.args.origins_testing is not None:
             try:
@@ -105,6 +108,9 @@ class ProgramParams(BaseProgramParams):
         if self.cli_args.args.dataset_path is not None:
             self.dataset_path = self.cli_args.args.dataset_path
             assert isinstance(self.dataset_path, str)
+        else:
+            print("ERROR: No dataset path given.")
+            exit(1)
     
 
     # result wrappers

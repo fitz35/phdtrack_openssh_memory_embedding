@@ -5,7 +5,7 @@ import platform
 import psutil
 from typing import Optional
 
-from src.commons.utils.utils import datetime2str
+from commons.utils.utils import datetime2str
 
 
 class BaseResultWriter(object):

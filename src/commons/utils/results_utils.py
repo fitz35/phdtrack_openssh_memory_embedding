@@ -2,7 +2,7 @@ import contextlib
 from datetime import datetime
 import logging
 
-from src.commons.results.base_result_writer import BaseResultWriter
+from commons.results.base_result_writer import BaseResultWriter
 
 
 @contextlib.contextmanager

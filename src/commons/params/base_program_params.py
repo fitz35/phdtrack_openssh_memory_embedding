@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
-from src.commons.utils.utils import DATETIME_FORMAT, check_and_create_directory, datetime2str
+from commons.utils.utils import DATETIME_FORMAT, check_and_create_directory, datetime2str
 
 import dotenv
 import os
@@ -39,7 +40,7 @@ class BaseProgramParams(ABC):
             self, 
             load_program_argv : bool = True, 
             debug : bool = False,
-            dotenv_path: str = None,
+            dotenv_path: str | None = None,
             **kwargs
     ):
         """
@@ -154,7 +155,7 @@ class BaseProgramParams(ABC):
         # NOTE: cls.__annotations__ is a dictionary where the keys are the names of 
         #   the class variables and the values are their types
         for variable in all_annotations.keys():
-            env_value = os.getenv(variable)
+            env_value : Any = os.getenv(variable)
             if env_value is not None:
                 # Convert to the appropriate type
                 if all_annotations[variable] == bool:
@@ -236,8 +237,8 @@ class BaseProgramParams(ABC):
         self.COMMON_LOGGER.setLevel(logging.DEBUG)
 
         # add RotatingFileHandler to common logger
-        check_and_create_directory(self.COMMON_LOGGER_DIR_PATH + self.app_name.value)
-        common_log_file_path = self.COMMON_LOGGER_DIR_PATH + self.app_name.value + "/common_log.log"
+        check_and_create_directory(self.COMMON_LOGGER_DIR_PATH)
+        common_log_file_path = self.COMMON_LOGGER_DIR_PATH + "common_log.log"
         common_log_file_handler = RotatingFileHandler(
             common_log_file_path, maxBytes=50000000, backupCount=5
         )
@@ -259,8 +260,8 @@ class BaseProgramParams(ABC):
         # Result logger using file handler
         if self.SAVE_RESULT_LOGS:
             # when using results logger, do:
-            check_and_create_directory(self.RESULTS_LOGGER_DIR_PATH + self.app_name.value)
-            results_log_file_path = self.RESULTS_LOGGER_DIR_PATH + self.app_name.value + "/" + datetime2str(datetime.now()) + "_results.log"
+            check_and_create_directory(self.RESULTS_LOGGER_DIR_PATH)
+            results_log_file_path = self.RESULTS_LOGGER_DIR_PATH + datetime2str(datetime.now()) + "_results.log"
         
             # inform user of the results logger path
             self.COMMON_LOGGER.info("⚓ Results logger path: %s" % results_log_file_path) 

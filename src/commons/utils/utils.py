@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 import json
 import os
 
@@ -10,7 +11,7 @@ def str2bool(string: str) -> bool:
     return json.loads(string.lower())
 
 
-def str2enum(string: str, enum_type: type):
+def str2enum(string: str, enum_type):
     return enum_type[string.upper()]
 
 

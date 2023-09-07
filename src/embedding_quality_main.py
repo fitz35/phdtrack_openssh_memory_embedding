@@ -1,8 +1,9 @@
 
 from embedding_quality.params.params import ProgramParams
+from embedding_quality.pipeline import pipeline
 
 def main():
-    pass
+    pipeline(params)
 
 
 
