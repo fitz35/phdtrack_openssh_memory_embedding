@@ -27,8 +27,8 @@ class CLIArguments:
             -p pipelines
             -otr origins training
             -ots origins testing
+            -d dataset path to use
             -h help
-            --profile launch profiler
         
         usage example:
             python3 main.py -t /home/onyr/Documents/code/phdtrack/phdtrack_data/Training/Training/scp/V_7_8_P1/16 -e /home/onyr/Documents/code/phdtrack/phdtrack_data/Validation/Validation/scp/V_7_8_P1/16 -d False
@@ -64,9 +64,10 @@ class CLIArguments:
             help="Data origin (training, validation, testing) for testing"
         )
         parser.add_argument(
-            '--profiling',
-            action='store_true',
-            help="Launch profiler"
+            "-d",
+            "--dataset_path",
+            type=str,
+            help="Dataset path to use."
         )
 
         # save parsed arguments
