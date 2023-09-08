@@ -1,6 +1,7 @@
 import contextlib
 from datetime import datetime
 import logging
+from typing import Optional
 
 from commons.results.base_result_writer import BaseResultWriter
 
@@ -8,9 +9,9 @@ from commons.results.base_result_writer import BaseResultWriter
 @contextlib.contextmanager
 def time_measure_result(
     message: str, 
-    logger : logging.Logger = None,
-    result_saver: BaseResultWriter = None, 
-    result_column: str = None, 
+    logger : Optional[logging.Logger] = None,
+    result_saver: Optional[BaseResultWriter] = None, 
+    result_column: Optional[str] = None, 
 ):
     """
     Measure the time elapsed since the begining of the context.

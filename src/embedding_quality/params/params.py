@@ -1,7 +1,14 @@
 from commons.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
+from embedding_quality.feature_engineering.correlation_type import CorrelationType
 from .cli import CLIArguments
 from .data_origin import DataOriginEnum, convert_str_arg_to_data_origin
+
+# number of column to keep after feature selection
+NB_COLUMNS_TO_KEEP = 8
+FEATURE_CORRELATION_TYPE = CorrelationType.FE_CORR_PEARSON
+# info column to drop
+INFO_COLUMNS = ["file_path", "f_dtns_addr"]
 
 class ProgramParams(BaseProgramParams):
     """
@@ -67,13 +74,13 @@ class ProgramParams(BaseProgramParams):
             )
     
     
-    def _load_program_argv(self):
+    def _load_program_argv(self) -> None:
         """
         Load given program arguments.
         """
         self.cli_args: CLIArguments = CLIArguments()
     
-    def _consume_program_argv(self):
+    def _consume_program_argv(self) -> None:
         """
         Consume given program arguments.
         """

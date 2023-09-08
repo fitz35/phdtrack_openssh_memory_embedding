@@ -4,9 +4,13 @@ let
   my-python-packages = ps: with ps; [
     # python packages
     python-dotenv
-    psutil
-    pandas
+    psutil # for system monitoring
+    pandas 
     numpy
+
+    seaborn # for plotting
+    matplotlib # for plotting
+    scikit-learn # for machine learning
 
     # quality checks
     mypy

@@ -22,6 +22,11 @@ class ResultsWriter(BaseResultWriter):
         "nb_positive_training_samples_before_balancing",
         "nb_training_samples_after_balancing",
         "nb_positive_training_samples_after_balancing", 
+        # feature selection results
+        "descending_best_column_names",
+        "descending_best_column_values",
+        "feature_engineering_duration",
+        # classification results
         "precision",
         "recall", 
         "accuracy",

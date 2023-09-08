@@ -3,6 +3,8 @@
 
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.data_loading.data_loading import load
+from commons.utils.results_utils import time_measure_result
+from embedding_quality.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 
 
 def pipeline(params : ProgramParams):
@@ -20,4 +22,19 @@ def pipeline(params : ProgramParams):
 
 
     # load data
-    origin_to_samples_and_labels = load(params, params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()))
+    with time_measure_result(
+            f'load_samples_and_labels_from_all_csv_files', 
+            params.RESULTS_LOGGER, 
+            params.results_writer,
+            "data_loading_duration"
+        ):
+        origin_to_samples_and_labels = load(params, params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()))
+
+    # feature engineering
+    with time_measure_result(
+            f'feature_engineering', 
+            params.RESULTS_LOGGER, 
+            params.results_writer,
+            "feature_engineering_duration"
+        ):
+        column_to_keep = feature_engineering_correlation_measurement(params, origin_to_samples_and_labels)

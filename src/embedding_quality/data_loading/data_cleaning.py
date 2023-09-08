@@ -1,8 +1,5 @@
 
-from typing import Tuple
-import pandas as pd
-
-from embedding_quality.params.params import ProgramParams
+from embedding_quality.params.params import INFO_COLUMNS, ProgramParams
 from embedding_quality.data_loading.data_types import SamplesAndLabels
 
 
@@ -24,5 +21,20 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
     # Remove the columns with only one unique value from the samples
     samples = samples.loc[:, ~unique_value_columns]
 
-    return SamplesAndLabels(samples, labels)
+    return remove_info_column(params, SamplesAndLabels(samples, labels))
 
+
+def remove_info_column(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> SamplesAndLabels:
+    """ 
+    remove the column wich are only informationnal (ie file path and dtn address)
+    """
+
+    samples = samples_and_labels.sample
+    labels = samples_and_labels.labels
+
+    
+    samples = samples.drop(columns=INFO_COLUMNS)
+
+    params.RESULTS_LOGGER.info(f'Removing {len(INFO_COLUMNS)} columns with only one unique value: {list(INFO_COLUMNS)}')
+
+    return SamplesAndLabels(samples, labels)
