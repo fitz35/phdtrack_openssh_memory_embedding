@@ -108,13 +108,16 @@ def feature_engineering_correlation_measurement(
     return: best columns names
     """
 
-    preprocessed_data_train, _ = split_preprocessed_data_by_origin(
-        params, origin_to_preprocessed_data
-    )
+    preprocess_data_train_samples_list = []
+    preprocess_data_train_labels_list = []
+
+    for origin in origin_to_preprocessed_data:
+        preprocess_data_train_samples_list.append(origin_to_preprocessed_data[origin].sample)
+        preprocess_data_train_labels_list.append(origin_to_preprocessed_data[origin].labels)
     
     # launch the pipeline
     return __correlation_feature_selection(
         params, 
-        preprocessed_data_train,
+        SamplesAndLabels(pd.concat(preprocess_data_train_samples_list), pd.concat(preprocess_data_train_labels_list)),
         FEATURE_CORRELATION_TYPE
     )

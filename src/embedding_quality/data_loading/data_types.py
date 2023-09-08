@@ -18,6 +18,24 @@ class SamplesAndLabels:
     sample : DataFrame
     labels : Series
 
+    def remove_columns(self, params : ProgramParams, columns: list[str]) -> 'SamplesAndLabels':
+        """
+        Remove columns from the sample.
+        """
+        self.sample = self.sample.drop(columns=columns)
+        params.RESULTS_LOGGER.info(f'Removing {len(columns)} : {columns}')
+
+        return self
+
+    def keep_columns(self, params : ProgramParams, columns: list[str]) -> 'SamplesAndLabels':
+        """
+        Keep columns from the sample.
+        """
+        self.sample = self.sample[columns]
+        params.RESULTS_LOGGER.info(f'Keeping {len(columns)} : {columns}')
+
+        return self
+
 
 def split_dataset_if_needed(
     samples_and_labels_train: SamplesAndLabels, 

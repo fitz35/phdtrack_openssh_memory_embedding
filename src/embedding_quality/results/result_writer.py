@@ -14,8 +14,6 @@ class ResultsWriter(BaseResultWriter):
         "used_feature_columns",
         "data_loading_duration", 
         "data_balancing_duration",
-        "balancing_type", 
-        "model_name",
         "training_dataset_origin", 
         "testing_dataset_origin",
         "nb_training_samples_before_balancing",

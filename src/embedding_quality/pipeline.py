@@ -5,6 +5,8 @@ from embedding_quality.params.params import ProgramParams
 from embedding_quality.data_loading.data_loading import load
 from commons.utils.results_utils import time_measure_result
 from embedding_quality.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
+from embedding_quality.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
+from embedding_quality.data_balancing.data_balancing import apply_balancing
 
 
 def pipeline(params : ProgramParams):
@@ -38,3 +40,16 @@ def pipeline(params : ProgramParams):
             "feature_engineering_duration"
         ):
         column_to_keep = feature_engineering_correlation_measurement(params, origin_to_samples_and_labels)
+
+    # keep only the columns that are usefull
+    for origin in origin_to_samples_and_labels:
+        origin_to_samples_and_labels[origin].keep_columns(params, column_to_keep)
+
+    # cut the data to training and testing
+    training_samples_and_labels, testing_samples_and_labels = split_preprocessed_data_by_origin(params, origin_to_samples_and_labels)
+    training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, testing_samples_and_labels)
+
+    # rebalancing
+    training_samples_and_labels = apply_balancing(params, training_samples_and_labels.sample, training_samples_and_labels.labels)
+
+    
