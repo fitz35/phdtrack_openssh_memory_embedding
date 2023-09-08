@@ -29,6 +29,7 @@ def log_positive_and_negative_labels(params: ProgramParams, labels: pd.Series, m
 
 
 def __load_samples_and_labels_from_csv(
+    params : ProgramParams,
     csv_file_path: str,
     column_dtypes: dict[str, str] | str = PANDA_DTYPE_DEFAULT,
 ) -> SamplesAndLabels | None:
@@ -45,6 +46,11 @@ def __load_samples_and_labels_from_csv(
 
         # Extract the samples from the other columns
         samples = data.iloc[:, :-1]
+
+        # identify the row with nan values (do it in the cleaning stage)
+        #rows_with_nan = samples.isnull().any(axis=1)
+        #if rows_with_nan.any():
+        #    params.RESULTS_LOGGER.warning(f'Found rows with NaN values in {csv_file_path}: {samples[rows_with_nan].index}')
 
     except Exception as e:
         raise type(e)(e.__str__() + f". Error loading data from {csv_file_path}")
@@ -102,7 +108,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         """
         params.RESULTS_LOGGER.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
 
-        res = __load_samples_and_labels_from_csv(csv_file_path, header_types)
+        res = __load_samples_and_labels_from_csv(params, csv_file_path, header_types)
         if res is None:
             list_of_empty_files.append(csv_file_path)
         else:

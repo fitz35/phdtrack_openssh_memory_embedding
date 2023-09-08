@@ -52,13 +52,13 @@ def apply_balancing(
             str(len(labels[labels == 1]))
         )
 
-        X_res, y_res = resample_data(
+        sample_and_labels = resample_data(
             SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION[BALANCING_STRATEGY],
             params, 
             samples, 
             labels
         )
-
+        X_res, y_res = sample_and_labels.sample, sample_and_labels.labels
         params.results_writer.set_result(
             "nb_training_samples_after_balancing",
             str(len(X_res))

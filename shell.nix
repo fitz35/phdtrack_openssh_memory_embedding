@@ -1,46 +1,57 @@
-{ pkgs ? import <nixpkgs> {} }:
+with import <nixpkgs> { };
 
 let
-  my-python-packages = ps: with ps; [
+  pythonPackages = python311Packages;
+in pkgs.mkShell rec {
+  name = "impurePythonEnv";
+  venvDir = "./.venv";
+  buildInputs = [
+    # A Python interpreter including the 'venv' module is required to bootstrap
+    # the environment.
+    pythonPackages.python
+
+    # This execute some shell code to initialize a venv in $venvDir before
+    # dropping into the shell
+    pythonPackages.venvShellHook
+    # shared library with nix-shell
+    autoPatchelfHook
+
+    # Those are dependencies that we would like to use from nixpkgs, which will
+    # add them to PYTHONPATH and thus make them accessible from within the venv.
     # python packages
-    python-dotenv
-    psutil # for system monitoring
-    pandas 
-    numpy
+    pythonPackages.python-dotenv
+    pythonPackages.psutil # for system monitoring
+    pythonPackages.pandas 
+    pythonPackages.numpy
 
-    seaborn # for plotting
-    matplotlib # for plotting
-    scikit-learn # for machine learning
-
-    # imbalancing
-    buildPythonPackage rec {
-      pname = "imbalanced-learn";
-      version = "0.11.0";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "sha256-7582ae8858e6db0b92fef97dd08660a18297ee128d78c2abdc006b8bd86b8fdc";
-      };
-      doCheck = false;
-      propagatedBuildInputs = [
-        # Specify dependencies
-        pkgs.python311Packages.numpy
-        pkgs.python311Packages.scipy
-        pkgs.python311Packages.scikit-learn
-      ];
-    }
+    pythonPackages.seaborn # for plotting
+    pythonPackages.matplotlib # for plotting
+    pythonPackages.scikit-learn # for machine learning
 
     # quality checks
-    mypy
-    pandas-stubs
-    types-psutil
-  ];
-  my-python = pkgs.python311.withPackages my-python-packages;
-in
-pkgs.mkShell {
-  packages = [
-    # packages
-    my-python
+    pythonPackages.mypy
+    pythonPackages.pandas-stubs
+    pythonPackages.types-psutil
 
+
+    # In this particular example, in order to compile any binary extensions they may
+    # require, the Python modules listed in the hypothetical requirements.txt need
+    # the following packages to be installed locally:
     
   ];
+
+  # Run this command, only after creating the virtual environment
+  postVenvCreation = ''
+    unset SOURCE_DATE_EPOCH
+    pip install -r requirements.txt
+    autoPatchelf ./venv
+  '';
+
+  # Now we can execute any commands within the virtual environment.
+  # This is optional and can be left out to run pip manually.
+  postShellHook = ''
+    # allow pip to install wheels
+    unset SOURCE_DATE_EPOCH
+  '';
+
 }
