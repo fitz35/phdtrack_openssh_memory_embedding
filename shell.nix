@@ -8,7 +8,10 @@ let
     pandas
     numpy
 
+    # quality checks
     mypy
+    pandas-stubs
+    types-psutil
   ];
   my-python = pkgs.python311.withPackages my-python-packages;
 in

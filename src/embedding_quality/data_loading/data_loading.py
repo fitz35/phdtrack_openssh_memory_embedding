@@ -16,6 +16,8 @@ from embedding_quality.data_loading.data_cleaning import clean
 from commons.utils.data_utils import count_positive_and_negative_labels
 
 
+PANDA_DTYPE_DEFAULT = "float64"
+
 def log_positive_and_negative_labels(params: ProgramParams, labels: pd.Series, message: str = "") -> None:
     nb_positive_labels, nb_negative_labels = count_positive_and_negative_labels(labels)
 
@@ -28,7 +30,7 @@ def log_positive_and_negative_labels(params: ProgramParams, labels: pd.Series, m
 
 def __load_samples_and_labels_from_csv(
     csv_file_path: str,
-    column_dtypes: dict[str, str] | str = "int32",
+    column_dtypes: dict[str, str] | str = PANDA_DTYPE_DEFAULT,
 ) -> SamplesAndLabels | None:
     # Load the data from the CSV file
     data = pd.read_csv(csv_file_path, dtype=column_dtypes)
@@ -49,7 +51,7 @@ def __load_samples_and_labels_from_csv(
 
     return SamplesAndLabels(samples, labels)
 
-def __generate_dtype_dict(file_path: str, default_type: type = 'int32', special_cols_type: type = 'str', special_cols_keyword: str = 'path') -> dict:
+def __generate_dtype_dict(file_path: str, default_type: str = PANDA_DTYPE_DEFAULT, special_cols_type: str = 'str', special_cols_keyword: str = 'path') -> dict:
     """
     Generate a dictionary for dtype parameter in pd.read_csv where any column containing 
     special_cols_keyword is of type special_cols_type, and all the others are of type default_type.
@@ -104,7 +106,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         if res is None:
             list_of_empty_files.append(csv_file_path)
         else:
-            samples, labels = res
+            samples, labels = res.sample, res.labels
 
             # Print the shapes of the arrays
             params.COMMON_LOGGER.debug(f'shape of samples: {samples.shape}, shape of labels: {labels.shape}')
@@ -151,7 +153,7 @@ def get_all_filepath_per_type(dirpath: str) -> Tuple[list[str], list[str], list[
 def load(
         params: ProgramParams,
         data_origin: set[DataOriginEnum] | None = None
-) -> SamplesAndLabels:
+) -> dict[DataOriginEnum, SamplesAndLabels]:
     """
     Load the samples and labels from all .csv files.
     Take into account the data origin: training, validation, testing.
@@ -161,34 +163,35 @@ def load(
     # Get the filepaths for the training, validation, and testing data
     training_files, validation_files, testing_files = get_all_filepath_per_type(params.dataset_path)
 
-    files_to_load = []
+    loaded = {}
     if data_origin is None:
-        files_to_load = training_files + validation_files + testing_files
-    else:
-        for origin in data_origin:
-            if origin == DataOriginEnum.Training:
-                files_to_load += training_files
-            elif origin == DataOriginEnum.Validation:
-                files_to_load += validation_files
-            elif origin == DataOriginEnum.Testing:
-                files_to_load += testing_files
-            else:
-                raise ValueError(f"Unknown data origin: {origin}")
+        data_origin = {DataOriginEnum.Training, DataOriginEnum.Validation, DataOriginEnum.Testing}
+    
+    for origin in data_origin:
+        if origin == DataOriginEnum.Training:
+            files_to_load = training_files
+        elif origin == DataOriginEnum.Validation:
+            files_to_load = validation_files
+        elif origin == DataOriginEnum.Testing:
+            files_to_load = testing_files
+        else:
+            raise ValueError(f"Unknown data origin: {origin}")
 
 
-    #training_samples, training_labels = load_samples_and_labels_from_all_csv_files(params, training_files)
-    samples, labels = __parallel_load_samples_and_labels_from_all_csv_files(params, files_to_load)
+        #training_samples, training_labels = load_samples_and_labels_from_all_csv_files(params, training_files)
+        samples = __parallel_load_samples_and_labels_from_all_csv_files(params, files_to_load)
 
-    samples, labels = clean(
-        params,
-        samples,
-        labels,
-    )
+        samples_clean = clean(
+            params,
+            samples
+        )
 
-    log_positive_and_negative_labels(
-        params, 
-        labels, 
-        "Loaded data: ({})".format(", ".join([origin.value for origin in data_origin])) if data_origin is not None else "All data"
-    )
+        log_positive_and_negative_labels(
+            params, 
+            samples_clean.labels, 
+            "Loaded data: ({})".format(", ".join([origin.value for origin in data_origin])) if data_origin is not None else "All data"
+        )
 
-    return SamplesAndLabels(samples, labels)
+        loaded[origin] = samples_clean
+
+    return loaded

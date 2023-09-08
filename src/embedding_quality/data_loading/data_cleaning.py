@@ -3,14 +3,17 @@ from typing import Tuple
 import pandas as pd
 
 from embedding_quality.params.params import ProgramParams
+from embedding_quality.data_loading.data_types import SamplesAndLabels
 
 
-def clean(params: ProgramParams, samples: pd.DataFrame, labels: pd.Series) -> Tuple[pd.DataFrame, pd.Series]:
+def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> SamplesAndLabels:
     """
     Clean data.
     1. Remove columns that are composed off only one value
     2. Remove unecessary columns (when usefull ones are provided)
     """
+    samples = samples_and_labels.sample
+    labels = samples_and_labels.labels
     # Find the indices of columns with only one unique value
     unique_value_columns = samples.nunique() == 1
 
@@ -21,5 +24,5 @@ def clean(params: ProgramParams, samples: pd.DataFrame, labels: pd.Series) -> Tu
     # Remove the columns with only one unique value from the samples
     samples = samples.loc[:, ~unique_value_columns]
 
-    return samples, labels
+    return SamplesAndLabels(samples, labels)
 

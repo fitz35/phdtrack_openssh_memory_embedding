@@ -1,7 +1,8 @@
 from typing import Tuple
 import numpy as np
+import pandas as pd
 
-def count_positive_and_negative_labels(labels: np.ndarray) -> Tuple[int, int]:
+def count_positive_and_negative_labels(labels: pd.Series) -> Tuple[int, int]:
     """
     Count the number of positive and negative labels.
     """

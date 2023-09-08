@@ -97,10 +97,10 @@ class BaseResultWriter(object):
         self.__add_header_column_with_value("processor", uname.processor)
 
         # Get CPU information
-        self.__add_header_column_with_value("physical_cores", psutil.cpu_count(logical=False))
-        self.__add_header_column_with_value("total_cores", psutil.cpu_count(logical=True))
+        self.__add_header_column_with_value("physical_cores", str(psutil.cpu_count(logical=False)))
+        self.__add_header_column_with_value("total_cores", str(psutil.cpu_count(logical=True)))
 
         # Get memory information
         mem_info = psutil.virtual_memory()
-        self.__add_header_column_with_value("total_memory", mem_info.total)
-        self.__add_header_column_with_value("available_memory", mem_info.available)
+        self.__add_header_column_with_value("total_memory", str(mem_info.total))
+        self.__add_header_column_with_value("available_memory", str(mem_info.available))
