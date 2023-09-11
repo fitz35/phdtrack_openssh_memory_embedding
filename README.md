@@ -15,3 +15,23 @@ Use nix [shell](https://ryantm.github.io/nixpkgs/languages-frameworks/python/).
 ## Mypy
 
 mypy must be run in the `src` folder.
+
+# Commands
+
+Generate data (mem_to_graph) :
+
+```shell
+cargo run -- -p semantic-embedding-dtn -d /root/phdtrack/phdtrack_data/Training -d /root/phdtrack/phdtrack_data/Performance_Test -d /root/phdtrack/phdtrack_data/Validation -o /root/phdtrack/phdtrack_project_3/src/mem_to_graph/data/semantic_dts_embedding &
+
+cargo run -- -p statistic-embedding-dtn -d /root/phdtrack/phdtrack_data/Training -d /root/phdtrack/phdtrack_data/Performance_Test -d /root/phdtrack/phdtrack_data/Validation -o /root/phdtrack/phdtrack_project_3/src/mem_to_graph/data/statistic_dts_embedding &
+```
+
+Run python quality check :
+
+```shell
+nix-shell
+cd src
+python3 embedding_quality_main.py -otr training -ots validation -d /root/phdtrack/phdtrack_project_3/src/mem_to_graph/data/statistic_dts_embedding
+
+python3 embedding_quality_main.py -otr training -ots validation -d /root/phdtrack/phdtrack_project_3/src/mem_to_graph/data/semantic_dts_embedding
+```
