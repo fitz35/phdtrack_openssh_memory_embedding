@@ -25,6 +25,7 @@ class ResultsWriter(BaseResultWriter):
         "descending_best_column_values",
         "feature_engineering_duration",
         # classification results
+        "classification_duration",
         "precision",
         "recall", 
         "accuracy",

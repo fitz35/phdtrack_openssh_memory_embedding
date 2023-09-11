@@ -7,6 +7,7 @@ from commons.utils.results_utils import time_measure_result
 from embedding_quality.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 from embedding_quality.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
 from embedding_quality.data_balancing.data_balancing import apply_balancing
+from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
 
 
 def pipeline(params : ProgramParams):
@@ -46,10 +47,22 @@ def pipeline(params : ProgramParams):
         origin_to_samples_and_labels[origin].keep_columns(params, column_to_keep)
 
     # cut the data to training and testing
-    training_samples_and_labels, testing_samples_and_labels = split_preprocessed_data_by_origin(params, origin_to_samples_and_labels)
-    training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, testing_samples_and_labels)
+    training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params, origin_to_samples_and_labels)
+    training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
     # rebalancing
     training_samples_and_labels = apply_balancing(params, training_samples_and_labels.sample, training_samples_and_labels.labels)
+
+    # train and evaluate the model
+    with time_measure_result(
+            f'random forest : ', 
+            params.RESULTS_LOGGER, 
+            params.results_writer,
+            "classification_duration"
+        ):
+        ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
+
+    # save results
+    params.results_writer.save_results()
 
     
