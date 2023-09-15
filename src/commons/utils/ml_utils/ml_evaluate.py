@@ -19,7 +19,7 @@ def __get_predicted_classes_from_report(clf_report: dict) -> list:
         # as these are not classes
         if key not in ['accuracy', 'macro avg', 'weighted avg']:
             # Append the class (as an integer) to the classes list
-            classes.append(int(key))
+            classes.append(int(float(key)))
     # Return the classes list
     return classes
 
