@@ -97,7 +97,7 @@ def evaluate(
         result_saver.set_result("false_negatives", str(cm[1, 0]))
 
         # calculate the false positive rate and true positive rate
-        fpr, tpr, thresholds = roc_curve(test_labels, y_pred)
+        fpr, tpr, thresholds = roc_curve(test_labels, y_pred, pos_label=1)
 
         # calculate the area under the ROC curve
         roc_auc = auc(fpr, tpr)
