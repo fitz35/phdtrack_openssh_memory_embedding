@@ -39,6 +39,8 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
     samples = samples.loc[~rows_with_nan]
     labels = labels.loc[~rows_with_nan]
 
+    params.RESULTS_LOGGER.info(f'Removing {len(rows_with_nan)} row with nan value.')
+
     # ---------- Remove columns in the INFO_COLUMNS list ----------
 
 
