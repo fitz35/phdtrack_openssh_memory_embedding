@@ -13,26 +13,9 @@ class ResultsWriter(BaseResultWriter):
         "data_balancing_duration",
         "training_dataset_origin", 
         "testing_dataset_origin",
-        "nb_training_samples_before_balancing",
-        "nb_positive_training_samples_before_balancing",
-        "nb_training_samples_after_balancing",
-        "nb_positive_training_samples_after_balancing", 
-        # feature selection results
-        "descending_best_column_names",
-        "descending_best_column_values",
-        "feature_engineering_duration",
-        # classification results
-        "classification_duration",
-        "precision",
-        "recall", 
-        "accuracy",
-        "f1_score", 
-        "support", 
-        "true_positives", 
-        "true_negatives",
-        "false_positives", 
-        "false_negatives", 
-        "auc"
+        
+
+
     ]
 
     def __init__(self, csv_file_path: str):
