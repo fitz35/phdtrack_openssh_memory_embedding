@@ -15,7 +15,7 @@
         buildInputs = [
           pythonPackages.python
           pythonPackages.venvShellHook
-          autoPatchelfHook
+          pkgs.autoPatchelfHook
 
           pythonPackages.python-dotenv
           pythonPackages.psutil
