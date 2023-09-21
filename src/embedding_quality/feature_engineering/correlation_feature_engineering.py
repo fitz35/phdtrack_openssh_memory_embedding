@@ -10,7 +10,7 @@ import seaborn as sns
 from embedding_quality.params.params import FEATURE_CORRELATION_TYPE, NB_COLUMNS_TO_KEEP, ProgramParams
 from embedding_quality.feature_engineering.correlation_type import CorrelationType
 from embedding_quality.data_loading.data_types import SamplesAndLabels, split_preprocessed_data_by_origin
-from commons.utils.utils import DATETIME_FORMAT
+from research_base.utils.utils import DATETIME_FORMAT
 from embedding_quality.params.data_origin import DataOriginEnum
 
 

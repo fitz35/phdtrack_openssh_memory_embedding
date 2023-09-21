@@ -2,12 +2,15 @@
   description = "Impure Python environment flake";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.research-base.url = "github:0nyr/research-base";
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, research-base }:
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux; # Adjust this as per your architecture
-
-      pythonPackages = pkgs.python311Packages;
+    
+        system = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.${system};
+        pythonPackages = pkgs.python311Packages;
+        researchPackage = research-base.defaultPackage.${system};
 
       impurePythonEnv = pkgs.mkShell rec {
         name = "impurePythonEnv";
@@ -28,6 +31,8 @@
           pythonPackages.mypy
           pythonPackages.pandas-stubs
           pythonPackages.types-psutil
+
+          researchPackage
         ];
 
         postVenvCreation = ''

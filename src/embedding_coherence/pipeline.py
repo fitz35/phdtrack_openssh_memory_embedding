@@ -3,7 +3,7 @@
 
 from embedding_coherence.params.params import ProgramParams
 from embedding_coherence.data_loading.data_loading import load
-from commons.utils.results_utils import time_measure_result
+from research_base.utils.results_utils import time_measure_result
 
 def pipeline(params : ProgramParams):
     # check that params.DATA_ORIGINS_TRAINING is not empty

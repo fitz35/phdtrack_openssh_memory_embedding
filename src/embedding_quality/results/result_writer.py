@@ -1,4 +1,4 @@
-from commons.results.base_result_writer import BaseResultWriter
+from research_base.results.base_result_writer import BaseResultWriter
 
 class ResultsWriter(BaseResultWriter):
     """
@@ -35,5 +35,9 @@ class ResultsWriter(BaseResultWriter):
         "auc"
     ]
 
-    def __init__(self, csv_file_path: str):
-        super().__init__(csv_file_path, self.ADDITIONAL_HEADERS)
+    def __init__(self, pipeline_name: str):
+        super().__init__(
+            "/home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/embedding_quality/result.csv", 
+            self.ADDITIONAL_HEADERS, 
+            pipeline_name
+        )

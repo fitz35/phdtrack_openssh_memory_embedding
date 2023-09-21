@@ -3,7 +3,7 @@
 
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.data_loading.data_loading import load
-from commons.utils.results_utils import time_measure_result
+from research_base.utils.results_utils import time_measure_result
 from embedding_quality.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 from embedding_quality.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
 from embedding_quality.data_balancing.data_balancing import apply_balancing
@@ -28,7 +28,7 @@ def pipeline(params : ProgramParams):
     with time_measure_result(
             f'load_samples_and_labels_from_all_csv_files', 
             params.RESULTS_LOGGER, 
-            params.results_writer,
+            params.get_results_writer(),
             "data_loading_duration"
         ):
         origin_to_samples_and_labels = load(params, params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()))
@@ -37,7 +37,7 @@ def pipeline(params : ProgramParams):
     with time_measure_result(
             f'feature_engineering', 
             params.RESULTS_LOGGER, 
-            params.results_writer,
+            params.get_results_writer(),
             "feature_engineering_duration"
         ):
         column_to_keep = feature_engineering_correlation_measurement(params, origin_to_samples_and_labels)
@@ -57,12 +57,12 @@ def pipeline(params : ProgramParams):
     with time_measure_result(
             f'random forest : ', 
             params.RESULTS_LOGGER, 
-            params.results_writer,
+            params.get_results_writer(),
             "classification_duration"
         ):
         ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
 
     # save results
-    params.results_writer.save_results()
+    params.get_results_writer().save_results()
 
     

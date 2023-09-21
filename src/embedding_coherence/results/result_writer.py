@@ -1,4 +1,4 @@
-from commons.results.base_result_writer import BaseResultWriter
+from research_base.results.base_result_writer import BaseResultWriter
 
 class ResultsWriter(BaseResultWriter):
     """

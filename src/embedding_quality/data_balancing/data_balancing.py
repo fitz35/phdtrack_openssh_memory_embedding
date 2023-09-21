@@ -1,6 +1,6 @@
 import pandas as pd
 
-from commons.utils.results_utils import time_measure_result
+from research_base.utils.results_utils import time_measure_result
 
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler, SMOTE, ADASYN
@@ -25,7 +25,7 @@ def resample_data(
     with time_measure_result(
             f'resample_data ({sampler_class.__name__})', 
             params.RESULTS_LOGGER, 
-            params.results_writer, 
+            params.get_results_writer(), 
             "data_balancing_duration"
         ):
         sampler = sampler_class(random_state=params.RANDOM_SEED)
@@ -43,11 +43,11 @@ def apply_balancing(
     if BALANCING_STRATEGY == BalancingStrategies.NO_BALANCING:
         return SamplesAndLabels(samples, labels)
     elif BALANCING_STRATEGY in SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION.keys():
-        params.results_writer.set_result(
+        params.get_results_writer().set_result(
             "nb_training_samples_before_balancing",
             str(len(samples))
         )
-        params.results_writer.set_result(
+        params.get_results_writer().set_result(
             "nb_positive_training_samples_before_balancing",
             str(len(labels[labels == 1]))
         )
@@ -59,11 +59,11 @@ def apply_balancing(
             labels
         )
         X_res, y_res = sample_and_labels.sample, sample_and_labels.labels
-        params.results_writer.set_result(
+        params.get_results_writer().set_result(
             "nb_training_samples_after_balancing",
             str(len(X_res))
         )
-        params.results_writer.set_result(
+        params.get_results_writer().set_result(
             "nb_positive_training_samples_after_balancing",
             str(len(y_res[y_res == 1]))
         )

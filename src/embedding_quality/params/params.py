@@ -1,4 +1,5 @@
-from commons.params.base_program_params import BaseProgramParams
+from enum import Enum
+from research_base.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
 from embedding_quality.feature_engineering.correlation_type import CorrelationType
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
@@ -12,11 +13,13 @@ BALANCING_STRATEGY = BalancingStrategies.UNDERSAMPLING
 # info column to drop
 INFO_COLUMNS = ["file_path", "f_dtns_addr"]
 
-class ProgramParams(BaseProgramParams):
+class Pipeline(Enum):
+    PIPELINE="embedding_quality"
+
+class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
     """
     Wrapper class for program parameters.
     """
-    results_writer: ResultsWriter
 
     ### cli args
     cli_args: CLIArguments
@@ -39,7 +42,7 @@ class ProgramParams(BaseProgramParams):
             debug : bool = False,
             **kwargs
     ):
-        super().__init__(load_program_argv, debug)
+        super().__init__("embedding_quality", Pipeline, ResultsWriter, load_program_argv, debug)
 
         # keep results
         self.__results_manager_init()
@@ -51,13 +54,6 @@ class ProgramParams(BaseProgramParams):
         """
         Initialize results manager, and start keeping results-related information.
         """
-        self.results_writer = ResultsWriter(self.CSV_EMBEDDING_QUALITY_RESULTS_PATH)
-
-
-        self.set_result_for(
-            "random_seed",
-            str(self.RANDOM_SEED)
-        )
 
         self.set_result_for(
             "dataset_path",
@@ -121,16 +117,15 @@ class ProgramParams(BaseProgramParams):
             print("ERROR: No dataset path given.")
             exit(1)
     
-
-    # result wrappers
-    def save_results_to_csv(self):
-        """
-        Save results to CSV files.
-        """
-        self.results_writer.save_results()
     
     def set_result_for(self, column_name: str, value: str):
         """
         Set a result for a given pipeline.
         """
-        self.results_writer.set_result(column_name, value)
+        super().set_result_for(Pipeline.PIPELINE, column_name, value)
+
+    def get_results_writer(self) -> ResultsWriter:
+        """
+        Get the results writer for the current pipeline.
+        """
+        return self.results_manager.get_result_writer_for(Pipeline.PIPELINE)

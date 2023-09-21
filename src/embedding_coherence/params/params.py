@@ -1,4 +1,4 @@
-from commons.params.base_program_params import BaseProgramParams
+from research_base.params.base_program_params import BaseProgramParams
 from embedding_coherence.results.result_writer import ResultsWriter
 from .cli import CLIArguments
 from .data_origin import DataOriginEnum, convert_str_arg_to_data_origin

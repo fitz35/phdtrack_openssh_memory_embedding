@@ -1,6 +1,6 @@
 from enum import Enum
 
-from commons.utils.enum_utils import print_enum_values, convert_str_arg_to_enum_member
+from research_base.utils.enum_utils import print_enum_values, convert_str_arg_to_enum_member
 
 class BalancingStrategies(Enum):
     """

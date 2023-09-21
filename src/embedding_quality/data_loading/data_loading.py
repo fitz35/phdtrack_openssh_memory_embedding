@@ -13,7 +13,7 @@ from embedding_quality.data_loading.data_types import SamplesAndLabels
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.params.data_origin import DataOriginEnum
 from embedding_quality.data_loading.data_cleaning import clean
-from commons.utils.data_utils import count_positive_and_negative_labels
+from research_base.utils.data_utils import count_positive_and_negative_labels
 
 
 PANDA_DTYPE_DEFAULT = "float64"
