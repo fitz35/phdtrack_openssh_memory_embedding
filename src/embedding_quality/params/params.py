@@ -1,4 +1,5 @@
 from enum import Enum
+import os
 from research_base.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
 from embedding_quality.feature_engineering.correlation_type import CorrelationType
@@ -32,7 +33,6 @@ class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
     # NOTE: lowercase values are from the CLI
 
     # results
-    CSV_EMBEDDING_QUALITY_RESULTS_PATH: str
     FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
 
 
@@ -42,7 +42,8 @@ class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
             debug : bool = False,
             **kwargs
     ):
-        super().__init__("embedding_quality", Pipeline, ResultsWriter, load_program_argv, debug)
+        dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+        super().__init__("embedding_quality", Pipeline, ResultsWriter, load_program_argv, debug, dotenv_path=dotenv_path)
 
         # keep results
         self.__results_manager_init()

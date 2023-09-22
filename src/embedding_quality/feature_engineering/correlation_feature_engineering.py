@@ -71,13 +71,13 @@ def __correlation_feature_selection(
 
     # keep results
     sorted_corr_sums = corr_sums.sort_values(ascending=False)
-    params.results_writer.set_result(
+    params.set_result_for(
         "descending_best_column_names",
         " ".join(
             sorted_corr_sums.index.tolist()
         )
     )
-    params.results_writer.set_result(
+    params.set_result_for(
         "descending_best_column_values",
         " ".join(
             str(sorted_corr_sums.values.tolist())
