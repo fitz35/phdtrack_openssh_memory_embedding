@@ -1,6 +1,7 @@
 
 
 
+import time
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
@@ -11,6 +12,8 @@ from embedding_quality.classification.ml_random_forest import ml_random_forest_p
 
 
 def pipeline(params : ProgramParams):
+    
+
     # check that params.DATA_ORIGINS_TRAINING is not empty
     if params.data_origins_training is None or len(params.data_origins_training) == 0:
         params.COMMON_LOGGER.warning(f"No training data origins (params.DATA_ORIGINS_TRAINING: {params.data_origins_training})")
@@ -22,7 +25,8 @@ def pipeline(params : ProgramParams):
             params.COMMON_LOGGER.warning(f"Training and testing data origins are not disjoint (params.DATA_ORIGINS_TRAINING: {params.data_origins_training}, params.DATA_ORIGINS_TESTING: {params.data_origins_testing})")
             exit(1)
 
-
+    start_time = time.time()
+    params.set_result_for("start_time", start_time)
 
     # load data
     with time_measure_result(
@@ -61,6 +65,11 @@ def pipeline(params : ProgramParams):
             "classification_duration"
         ):
         ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
+
+
+    end_time = time.time()
+    params.set_result_for("end_time", end_time)
+    params.set_result_for("duration", end_time - start_time)
 
     # save results
     params.get_results_writer().save_results()

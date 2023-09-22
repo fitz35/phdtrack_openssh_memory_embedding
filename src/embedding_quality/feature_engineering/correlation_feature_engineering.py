@@ -79,9 +79,7 @@ def __correlation_feature_selection(
     )
     params.set_result_for(
         "descending_best_column_values",
-        " ".join(
-            str(sorted_corr_sums.values.tolist())
-        )
+        " ".join(map(str, sorted_corr_sums.tolist()))
     )
     
     # Find the names of the columns that have the smallest sums

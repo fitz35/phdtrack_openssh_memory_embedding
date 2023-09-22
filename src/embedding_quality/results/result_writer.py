@@ -8,7 +8,6 @@ class ResultsWriter(BaseResultWriter):
     """
     ADDITIONAL_HEADERS: list[str] = [
         "dataset_path",
-        "used_feature_columns",
         "data_loading_duration", 
         "data_balancing_duration",
         "training_dataset_origin", 
