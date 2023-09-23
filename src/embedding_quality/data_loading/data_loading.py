@@ -13,19 +13,9 @@ from embedding_quality.data_loading.data_types import SamplesAndLabels
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.params.data_origin import DataOriginEnum
 from embedding_quality.data_loading.data_cleaning import clean
-from research_base.utils.data_utils import count_positive_and_negative_labels
 
 
 PANDA_DTYPE_DEFAULT = "float64"
-
-def log_positive_and_negative_labels(params: ProgramParams, labels: pd.Series, message: str = "") -> None:
-    nb_positive_labels, nb_negative_labels = count_positive_and_negative_labels(labels)
-
-    if message != "":
-        params.RESULTS_LOGGER.info(message)
-
-    params.RESULTS_LOGGER.info(f'Number of positive labels: {nb_positive_labels}')
-    params.RESULTS_LOGGER.info(f'Number of negative labels: {nb_negative_labels}')
 
 
 def __load_samples_and_labels_from_csv(
@@ -190,12 +180,6 @@ def load(
         samples_clean = clean(
             params,
             samples
-        )
-
-        log_positive_and_negative_labels(
-            params, 
-            samples_clean.labels, 
-            "Loaded data: ({})".format(", ".join([origin.value for origin in data_origin])) if data_origin is not None else "All data"
         )
 
         loaded[origin] = samples_clean

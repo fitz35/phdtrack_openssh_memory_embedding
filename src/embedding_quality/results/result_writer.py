@@ -12,10 +12,8 @@ class ResultsWriter(BaseResultWriter):
         "data_balancing_duration",
         "training_dataset_origin", 
         "testing_dataset_origin",
-        "nb_training_samples_before_balancing",
-        "nb_positive_training_samples_before_balancing",
-        "nb_training_samples_after_balancing",
-        "nb_positive_training_samples_after_balancing", 
+        "nb_samples_before_balancing",
+        "nb_samples_after_balancing",
         # feature selection results
         "descending_best_column_names",
         "descending_best_column_values",
