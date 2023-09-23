@@ -9,10 +9,10 @@ from typing import List, Tuple
 import pandas as pd
 from threading import Lock
 
-from embedding_quality.data_loading.data_types import SamplesAndLabels
+from commons.data_loading.data_types import SamplesAndLabels
 from embedding_quality.params.params import ProgramParams
 from embedding_quality.params.data_origin import DataOriginEnum
-from embedding_quality.data_loading.data_cleaning import clean
+from commons.data_loading.data_cleaning import clean
 
 
 PANDA_DTYPE_DEFAULT = "float64"

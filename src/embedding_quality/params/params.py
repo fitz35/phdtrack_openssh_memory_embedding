@@ -2,7 +2,7 @@ from enum import Enum
 import os
 from research_base.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
-from embedding_quality.feature_engineering.correlation_type import CorrelationType
+from commons.feature_engineering.correlation_type import CorrelationType
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
 from .cli import CLIArguments
 from .data_origin import DataOriginEnum, convert_str_arg_to_data_origin

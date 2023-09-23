@@ -1,7 +1,7 @@
 
 import pandas as pd
 from embedding_quality.params.params import INFO_COLUMNS, ProgramParams
-from embedding_quality.data_loading.data_types import SamplesAndLabels
+from .data_types import SamplesAndLabels
 
 
 def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> SamplesAndLabels:

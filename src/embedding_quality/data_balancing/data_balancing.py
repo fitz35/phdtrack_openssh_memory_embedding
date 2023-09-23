@@ -6,7 +6,7 @@ from research_base.utils.data_utils import dict_to_csv_value, count_labels
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler, SMOTE, ADASYN
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
-from embedding_quality.data_loading.data_types import SamplesAndLabels
+from commons.data_loading.data_types import SamplesAndLabels
 from embedding_quality.params.params import BALANCING_STRATEGY, ProgramParams
 
 
