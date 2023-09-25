@@ -9,7 +9,7 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 
-from embedding_quality.params.data_origin import DataOriginEnum
+from commons.data_loading.data_origin import DataOriginEnum
 from embedding_quality.params.params import ProgramParams
 
 

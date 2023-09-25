@@ -63,4 +63,4 @@ def apply_balancing(
 
         return SamplesAndLabels(X_res, y_res)
     else:
-        raise ValueError(f"Invalid balancing strategy: {params.balancing_strategy}")
+        raise ValueError(f"Invalid balancing strategy: {BALANCING_STRATEGY}")

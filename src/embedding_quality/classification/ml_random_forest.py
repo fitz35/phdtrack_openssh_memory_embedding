@@ -20,8 +20,8 @@ def ml_random_forest_pipeline(
     # Evaluate model
     evaluate(
         clf,
-        samples_and_labels_test.sample,
-        samples_and_labels_test.labels,
+        samples_and_labels_test.sample, # type: ignore
+        samples_and_labels_test.labels, # type: ignore
         params.RESULTS_LOGGER,
         params.get_results_writer(),
     )

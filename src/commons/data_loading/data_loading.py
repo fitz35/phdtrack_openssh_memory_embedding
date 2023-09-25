@@ -4,22 +4,20 @@
 from concurrent.futures import ThreadPoolExecutor
 import csv
 import glob
+from logging import Logger
 import os
 from typing import List, Tuple
 import pandas as pd
 from threading import Lock
 
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_quality.params.params import ProgramParams
-from embedding_quality.params.data_origin import DataOriginEnum
-from commons.data_loading.data_cleaning import clean
+from commons.data_loading.data_origin import DataOriginEnum
 
 
 PANDA_DTYPE_DEFAULT = "float64"
 
 
 def __load_samples_and_labels_from_csv(
-    params : ProgramParams,
     csv_file_path: str,
     column_dtypes: dict[str, str] | str = PANDA_DTYPE_DEFAULT,
 ) -> SamplesAndLabels | None:
@@ -69,7 +67,10 @@ def __generate_dtype_dict(file_path: str, default_type: str = PANDA_DTYPE_DEFAUL
 
 
 def __parallel_load_samples_and_labels_from_all_csv_files(
-        params: ProgramParams, csv_file_paths: List[str]
+        csv_file_paths: List[str],
+        logger_common : Logger,
+        logger_result : Logger,
+        max_workers: int = 6,
 ) -> SamplesAndLabels:
     """
     Load the samples and labels from all .csv files.
@@ -96,16 +97,16 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         """
         Load the samples and labels from one .csv file.
         """
-        params.RESULTS_LOGGER.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
+        logger_result.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
 
-        res = __load_samples_and_labels_from_csv(params, csv_file_path, header_types)
+        res = __load_samples_and_labels_from_csv( csv_file_path, header_types)
         if res is None:
             list_of_empty_files.append(csv_file_path)
         else:
             samples, labels = res.sample, res.labels
 
             # Print the shapes of the arrays
-            params.COMMON_LOGGER.debug(f'shape of samples: {samples.shape}, shape of labels: {labels.shape}')
+            logger_common.debug(f'shape of samples: {samples.shape}, shape of labels: {labels.shape}')
 
             # Acquire the lock
             with concat_lock:
@@ -114,7 +115,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
             # The lock is released after the 'with' statement
 
     # multi-threaded loading and generation of samples and labels
-    with ThreadPoolExecutor(max_workers=min(params.MAX_ML_WORKERS, 6)) as executor:
+    with ThreadPoolExecutor(max_workers=min(max_workers, 6)) as executor:
         results = executor.map(
             load_samples_and_labels_from_csv_and_concatenate, 
             csv_file_paths,
@@ -124,7 +125,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         for _ in results:
             pass
 
-    params.COMMON_LOGGER.info(f'Number of empty files: {len(list_of_empty_files)}')
+    logger_common.info(f'Number of empty files: {len(list_of_empty_files)}')
 
     # Concatenate DataFrames and labels Series
     all_samples = pd.concat(all_samples_list, ignore_index=True)
@@ -147,8 +148,11 @@ def get_all_filepath_per_type(dirpath: str) -> Tuple[list[str], list[str], list[
     return training_files, validation_files, testing_files
 
 def load(
-        params: ProgramParams,
-        data_origin: set[DataOriginEnum] | None = None
+        dataset_path: str,
+        logger_common : Logger,
+        logger_result : Logger,
+        data_origin: set[DataOriginEnum] | None = None,
+        max_workers: int = 6,
 ) -> dict[DataOriginEnum, SamplesAndLabels]:
     """
     Load the samples and labels from all .csv files.
@@ -157,7 +161,7 @@ def load(
     """
     
     # Get the filepaths for the training, validation, and testing data
-    training_files, validation_files, testing_files = get_all_filepath_per_type(params.dataset_path)
+    training_files, validation_files, testing_files = get_all_filepath_per_type(dataset_path)
 
     loaded = {}
     if data_origin is None:
@@ -175,13 +179,8 @@ def load(
 
 
         #training_samples, training_labels = load_samples_and_labels_from_all_csv_files(params, training_files)
-        samples = __parallel_load_samples_and_labels_from_all_csv_files(params, files_to_load)
+        samples = __parallel_load_samples_and_labels_from_all_csv_files( files_to_load, logger_common, logger_result, max_workers)
 
-        samples_clean = clean(
-            params,
-            samples
-        )
-
-        loaded[origin] = samples_clean
+        loaded[origin] = samples
 
     return loaded

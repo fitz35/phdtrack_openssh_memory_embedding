@@ -9,6 +9,7 @@ from commons.feature_engineering.correlation_feature_engineering import feature_
 from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
 from embedding_quality.data_balancing.data_balancing import apply_balancing
 from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
+from embedding_quality.data.data_cleaning import clean
 
 
 def pipeline(params : ProgramParams):
@@ -26,7 +27,7 @@ def pipeline(params : ProgramParams):
             exit(1)
 
     start_time = time.time()
-    params.set_result_for("start_time", start_time)
+    params.set_result_for("start_time", str(start_time))
 
     # load data
     with time_measure_result(
@@ -35,7 +36,19 @@ def pipeline(params : ProgramParams):
             params.get_results_writer(),
             "data_loading_duration"
         ):
-        origin_to_samples_and_labels = load(params, params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()))
+        origin_to_samples_and_labels = (
+            load(
+                params.dataset_path, 
+                params.COMMON_LOGGER, 
+                params.RESULTS_LOGGER, 
+                params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()), 
+                params.MAX_ML_WORKERS
+                )
+            )
+    
+    # clean data
+    for origin in origin_to_samples_and_labels:
+        origin_to_samples_and_labels[origin] = clean(params, origin_to_samples_and_labels[origin])
 
     # feature engineering
     with time_measure_result(
@@ -44,7 +57,12 @@ def pipeline(params : ProgramParams):
             params.get_results_writer(),
             "feature_engineering_duration"
         ):
-        column_to_keep = feature_engineering_correlation_measurement(params, origin_to_samples_and_labels)
+        column_to_keep = feature_engineering_correlation_measurement(
+            origin_to_samples_and_labels,
+            params.FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH,
+            params.RESULTS_LOGGER,
+            params.get_results_writer(),
+            )
 
     # keep only the columns that are usefull
     for origin in origin_to_samples_and_labels:
@@ -68,8 +86,8 @@ def pipeline(params : ProgramParams):
 
 
     end_time = time.time()
-    params.set_result_for("end_time", end_time)
-    params.set_result_for("duration", end_time - start_time)
+    params.set_result_for("end_time", str(end_time))
+    params.set_result_for("duration", str(end_time - start_time))
 
     # save results
     params.get_results_writer().save_results()
