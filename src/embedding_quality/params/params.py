@@ -1,9 +1,8 @@
 from enum import Enum
 import os
-from research_base.params.base_program_params import BaseProgramParams
 from embedding_quality.results.result_writer import ResultsWriter
-from commons.feature_engineering.correlation_type import CorrelationType
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
+from commons.params.common_params import CommonProgramParams
 from .cli import CLIArguments
 from commons.data_loading.data_origin import DataOriginEnum, convert_str_arg_to_data_origin
 
@@ -15,16 +14,13 @@ INFO_COLUMNS = ["file_path", "f_dtns_addr"]
 class Pipeline(Enum):
     PIPELINE="embedding_quality"
 
-class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
+class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     """
     Wrapper class for program parameters.
     """
 
     ### cli args
     cli_args: CLIArguments
-    data_origins_training: set[DataOriginEnum]
-    data_origins_testing: set[DataOriginEnum]
-    dataset_path : str
     
     ### env vars
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
@@ -37,39 +33,20 @@ class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
     def __init__(
             self, 
             load_program_argv : bool = True, 
-            debug : bool = False,
-            **kwargs
+            debug : bool = False
     ):
         dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
-        super().__init__("embedding_quality", Pipeline, ResultsWriter, load_program_argv, debug, dotenv_path=dotenv_path)
-
-        # keep results
-        self.__results_manager_init()
+        super().__init__(
+            "embedding_quality", 
+            dotenv_path, 
+            Pipeline, 
+            ResultsWriter, 
+            load_program_argv, 
+            debug
+            )
 
         # to be done last
         self._log_program_params()
-    
-    def __results_manager_init(self):
-        """
-        Initialize results manager, and start keeping results-related information.
-        """
-
-        self.set_result_for(
-            "dataset_path",
-            self.dataset_path
-        )
-
-        self.set_result_for(
-            "training_dataset_origin",
-            " ".join([origin.value for origin in self.data_origins_training])
-        )
-        if self.data_origins_testing is not None:
-            # NOTE: when DATA_ORIGINS_TESTING to none, we can split the data in the pipeline if needed.
-            self.set_result_for(
-                "testing_dataset_origin", 
-                " ".join([origin.value for origin in self.data_origins_testing])
-            )
-    
     
     def _load_program_argv(self) -> None:
         """
@@ -121,7 +98,7 @@ class ProgramParams(BaseProgramParams[Pipeline, ResultsWriter]):
         """
         Set a result for a given pipeline.
         """
-        super().set_result_for(Pipeline.PIPELINE, column_name, value)
+        super()._set_result_for_pipeline(Pipeline.PIPELINE, column_name, value)
 
     def get_results_writer(self) -> ResultsWriter:
         """
