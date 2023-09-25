@@ -9,10 +9,14 @@ class ResultsWriter(CommonResultsWriter):
     It stores everything related to classification results.
     """
     ADDITIONAL_HEADERS: list[str] = [
-        
+        # clustering
         "scaling_duration",
-        "distance_matrix_computation_time",
         "clustering_duration",
+        "min_samples",
+        "best_eps",
+        "best_n_clusters",
+        "best_silhouette_score",
+        "best_noise_number",
 
     ]
 

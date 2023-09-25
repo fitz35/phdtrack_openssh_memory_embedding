@@ -5,13 +5,12 @@ from typing import List, Literal
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+plt.switch_backend('agg') # to avoid tkinter error, backend no GUI, see https://stackoverflow.com/questions/52839758/matplotlib-and-runtimeerror-main-thread-is-not-in-main-loop
 import seaborn as sns
 
 from research_base.utils.utils import DATETIME_FORMAT
 from research_base.results.base_result_writer import BaseResultWriter
 
-
-from embedding_quality.params.params import ProgramParams
 from commons.feature_engineering.correlation_type import CorrelationType
 from commons.data_loading.data_types import SamplesAndLabels
 
