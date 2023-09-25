@@ -1,5 +1,6 @@
 
 import time
+import pandas as pd
 from research_base.utils.results_utils import time_measure_result
 
 from embedding_coherence.params.params import ProgramParams
@@ -76,7 +77,12 @@ def pipeline(params : ProgramParams):
             params.get_results_writer(),
             "clustering_duration"
         ):
-        density_clustering_pipeline(params, training_samples_and_labels)
+        clusters = density_clustering_pipeline(params, training_samples_and_labels)
+    
+    # zipping clusters and labels
+    associated_clusters_and_labels = zip_cluster_and_label(clusters, training_samples_and_labels.labels)
+    # Associate cluster to labels
+    params.RESULTS_LOGGER.info(f"Associating clusters to labels : \n {associated_clusters_and_labels}")
 
 
     end_time = time.time()
@@ -86,5 +92,39 @@ def pipeline(params : ProgramParams):
     # save results
     params.get_results_writer().save_results()
 
+def zip_cluster_and_label(clusters : pd.Series, labels : pd.Series):
+    """
+    Zip clusters and labels into a dictionary.
+    """
 
-    
+    def transform_dict(input_dict):
+        """
+        Transforms a dictionary with tuple keys into a nested dictionary.
+        
+        Args:
+        - input_dict (dict): A dictionary with tuple keys (int, str) and int values.
+        
+        Returns:
+        - dict: A nested dictionary where the first element of the tuple becomes the outer key
+                and the second element becomes the inner key.
+        """
+        
+        # Initialize the output dictionary
+        output_dict = {}
+        
+        # Iterate over each key, value pair in the input dictionary
+        for (num, letter), value in input_dict.items():
+            
+            # If the number (num) is not already a key in the output dictionary, add it
+            if num not in output_dict:
+                output_dict[num] = {}
+            
+            # Add the letter as a key inside the inner dictionary and set its value
+            output_dict[num][letter] = value
+            
+        return output_dict
+
+    df = pd.DataFrame({'Cluster': clusters, 'Label': labels})
+    counts = df.groupby(['Cluster', 'Label']).size()
+    counts_dict = transform_dict(counts.to_dict())
+    return counts_dict

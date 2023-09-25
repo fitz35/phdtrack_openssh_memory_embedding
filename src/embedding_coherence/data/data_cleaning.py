@@ -41,9 +41,11 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
 
     params.RESULTS_LOGGER.info(f'Removing {len(rows_with_nan)} row with nan value.')
 
-    # ---------- Remove columns in the INFO_COLUMNS list ----------
 
+    # --------- limits the number of samples to use ----------
+    if params.MAX_NUMBERS_OF_SAMPLES_TO_USE > 0:
+        samples = samples.iloc[:params.MAX_NUMBERS_OF_SAMPLES_TO_USE]
+        labels = labels.iloc[:params.MAX_NUMBERS_OF_SAMPLES_TO_USE]
 
-
-
+    # ---------- Remove columns in the INFO_COLUMNS list, and return it ----------
     return SamplesAndLabels(samples, labels).remove_columns(INFO_COLUMNS, params.RESULTS_LOGGER)

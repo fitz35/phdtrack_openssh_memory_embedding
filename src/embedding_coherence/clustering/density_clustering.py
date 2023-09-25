@@ -16,7 +16,7 @@ from embedding_coherence.params.params import ProgramParams
 def density_clustering_pipeline(
         params : ProgramParams,
         samples_and_sample_str_train: SamplesAndLabels,
-) -> None:
+):
     """
     Density clustering pipeline.
     """
@@ -40,7 +40,7 @@ def density_clustering_pipeline(
         # But not for cosine similarity
         #scaler = StandardScaler()
         #df_scaled = pd.DataFrame(scaler.fit_transform(samples_train), columns=samples_train.columns).astype('float32')
-        df_scaled = samples_train.iloc[:50000].astype('float32')
+        df_scaled = samples_train.astype('float32')
 
 
     # precompute cosine similarity matrix
@@ -55,7 +55,7 @@ def density_clustering_pipeline(
     #    distance_matrix = pairwise_distances(df_scaled, metric="cosine")
 
     # Define the range of eps values we want to try
-    eps_values = np.linspace(0.6, 0.9, num=4)  # customize as necessary
+    eps_values = np.linspace(0.6, 0.9, num=1)  # customize as necessary
     #eps_values = [0.6]
 
     # define the minimum number of samples we want in a cluster
@@ -112,4 +112,6 @@ def density_clustering_pipeline(
     params.set_result_for("best_silhouette_score", str(best_score))
     params.set_result_for("best_noise_number", str(n_noise))
     params.RESULTS_LOGGER.info(f"Best eps: {best_eps}, number of clusters: {best_n_clusters}, silhouette score: {best_score}, noise points: {n_noise}")
+    return pd.Series(best_labels, name='Cluster')
+
 

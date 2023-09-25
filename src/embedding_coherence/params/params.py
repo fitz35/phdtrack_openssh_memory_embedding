@@ -23,6 +23,11 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
     # NOTE: lowercase values are from the CLI
 
+
+    # dev variable
+    # max number of samples to use, negative value means no limit
+    MAX_NUMBERS_OF_SAMPLES_TO_USE: int
+
     # results
     FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
 
