@@ -12,6 +12,7 @@ class ResultsWriter(CommonResultsWriter):
         
         "scaling_duration",
         "distance_matrix_computation_time",
+        "clustering_duration",
 
     ]
 

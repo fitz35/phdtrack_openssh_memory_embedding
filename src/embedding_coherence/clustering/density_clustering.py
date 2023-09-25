@@ -1,6 +1,6 @@
 
 
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import DBSCAN, OPTICS
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.metrics import pairwise_distances, silhouette_score
 import numpy as np
@@ -40,7 +40,8 @@ def density_clustering_pipeline(
         # But not for cosine similarity
         #scaler = StandardScaler()
         #df_scaled = pd.DataFrame(scaler.fit_transform(samples_train), columns=samples_train.columns).astype('float32')
-        df_scaled = samples_train.astype('float32')
+        df_scaled = samples_train.iloc[:20000].astype('float32')
+        print(f"df_scaled: {df_scaled.shape}")
     # precompute cosine similarity matrix
     # reduce memory usage and save time (avoid to compute the same cosine similarity multiple times)
     # too much memory usage for large datasets : 84to
@@ -53,23 +54,34 @@ def density_clustering_pipeline(
     #    distance_matrix = pairwise_distances(df_scaled, metric="cosine")
 
     # Define the range of eps values we want to try
-    #eps_values = np.linspace(0.1, 5, num=2)  # customize as necessary
+    #eps_values = np.linspace(0.5, 0.9, num=2)  # customize as necessary
     eps_values = [0.6]
 
     for eps in eps_values:
         # density clustering
-        dbscan = DBSCAN(eps=eps, min_samples=50, metric="cosine", algorithm='ball_tree', n_jobs=params.MAX_ML_WORKERS)  # customize min_samples as necessary
-        dbscan.fit(df_scaled)
+        #dbscan = DBSCAN(
+        #    eps=eps, 
+        #    min_samples=50, 
+        #    metric='cosine', 
+        #    algorithm='ball_tree', 
+        #    n_jobs=params.MAX_ML_WORKERS,
+        #)  # customize min_samples as necessary
+        #dbscan.fit(df_scaled)
+
+        optics = OPTICS(min_samples=50, metric='cosine', n_jobs=params.MAX_ML_WORKERS, algorithm='brute', cluster_method="xi")
+        
+        with np.errstate(divide='ignore'): # ignore divide by zero warning
+            optics.fit_predict(df_scaled)
 
         # Get labels for training set
-        labels = dbscan.labels_
+        labels = optics.labels_
 
         # Number of clusters, ignoring noise if present
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
 
         # Calculate silhouette score if there's more than one cluster
         if n_clusters > 1:
-            score = silhouette_score(samples_train, labels)
+            score = silhouette_score(df_scaled, labels)
             print(f"eps: {eps}, number of clusters: {n_clusters}, silhouette score: {score}")
 
             if score > best_score:

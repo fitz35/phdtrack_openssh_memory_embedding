@@ -70,8 +70,13 @@ def pipeline(params : ProgramParams):
     training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params.data_origins_training, params.data_origins_testing, origin_to_samples_and_labels)
     training_samples_and_labels, _ = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
-
-    density_clustering_pipeline(params, training_samples_and_labels)
+    with time_measure_result(
+            f'clustering', 
+            params.RESULTS_LOGGER, 
+            params.get_results_writer(),
+            "clustering_duration"
+        ):
+        density_clustering_pipeline(params, training_samples_and_labels)
 
 
     end_time = time.time()
