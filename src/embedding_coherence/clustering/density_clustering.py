@@ -1,14 +1,20 @@
 
 
 from sklearn.cluster import DBSCAN
-from sklearn.metrics import silhouette_score
+from sklearn.discriminant_analysis import StandardScaler
+from sklearn.metrics import pairwise_distances, silhouette_score
 import numpy as np
+import pandas as pd
+from research_base.utils.results_utils import time_measure_result
 
 from commons.data_loading.data_types import SamplesAndLabels
+
+from embedding_coherence.params.params import ProgramParams
 
 # $ python main_value_node.py -p ds_density_clustering -otr testing -b undersampling -d load_data_structure_dataset
 
 def density_clustering_pipeline(
+        params : ProgramParams,
         samples_and_sample_str_train: SamplesAndLabels,
 ) -> None:
     """
@@ -24,13 +30,36 @@ def density_clustering_pipeline(
     best_n_clusters = None
     best_labels = None
 
+    # Scale data (required for DBSCAN)
+    with time_measure_result(
+            f'scaling_duration', 
+            params.RESULTS_LOGGER, 
+            params.get_results_writer(),
+            "scaling_duration"
+        ):
+        # But not for cosine similarity
+        #scaler = StandardScaler()
+        #df_scaled = pd.DataFrame(scaler.fit_transform(samples_train), columns=samples_train.columns).astype('float32')
+        df_scaled = samples_train.astype('float32')
+    # precompute cosine similarity matrix
+    # reduce memory usage and save time (avoid to compute the same cosine similarity multiple times)
+    # too much memory usage for large datasets : 84to
+    #with time_measure_result(
+    #        f'distance_matrix_computation', 
+    #        params.RESULTS_LOGGER, 
+    #        params.get_results_writer(),
+    #        "distance_matrix_computation_time"
+    #    ):
+    #    distance_matrix = pairwise_distances(df_scaled, metric="cosine")
+
     # Define the range of eps values we want to try
-    eps_values = np.linspace(0.1, 5, num=2)  # customize as necessary
+    #eps_values = np.linspace(0.1, 5, num=2)  # customize as necessary
+    eps_values = [0.6]
 
     for eps in eps_values:
         # density clustering
-        dbscan = DBSCAN(eps=eps, min_samples=5)  # customize min_samples as necessary
-        dbscan.fit(samples_train)
+        dbscan = DBSCAN(eps=eps, min_samples=50, metric="cosine", algorithm='ball_tree', n_jobs=params.MAX_ML_WORKERS)  # customize min_samples as necessary
+        dbscan.fit(df_scaled)
 
         # Get labels for training set
         labels = dbscan.labels_

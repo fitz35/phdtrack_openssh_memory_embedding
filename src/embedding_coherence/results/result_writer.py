@@ -10,7 +10,8 @@ class ResultsWriter(CommonResultsWriter):
     """
     ADDITIONAL_HEADERS: list[str] = [
         
-
+        "scaling_duration",
+        "distance_matrix_computation_time",
 
     ]
 

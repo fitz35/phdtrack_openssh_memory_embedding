@@ -71,7 +71,7 @@ def pipeline(params : ProgramParams):
     training_samples_and_labels, _ = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
 
-    density_clustering_pipeline(training_samples_and_labels)
+    density_clustering_pipeline(params, training_samples_and_labels)
 
 
     end_time = time.time()
