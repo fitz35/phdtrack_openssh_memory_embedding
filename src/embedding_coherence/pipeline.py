@@ -1,9 +1,11 @@
 
-
+from research_base.utils.results_utils import time_measure_result
 
 from embedding_coherence.params.params import ProgramParams
-from embedding_coherence.data_loading.data_loading import load
-from research_base.utils.results_utils import time_measure_result
+from embedding_coherence.data.data_cleaning import clean
+
+from commons.data_loading.data_loading import load
+from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 
 def pipeline(params : ProgramParams):
     # check that params.DATA_ORIGINS_TRAINING is not empty
@@ -19,20 +21,44 @@ def pipeline(params : ProgramParams):
 
 
 
-    # load data
     with time_measure_result(
             f'load_samples_and_labels_from_all_csv_files', 
             params.RESULTS_LOGGER, 
-            params.results_writer,
+            params.get_results_writer(),
             "data_loading_duration"
         ):
-        origin_to_samples_and_labels = load(params, params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()))
+        origin_to_samples_and_labels = (
+            load(
+                params.dataset_path, 
+                params.COMMON_LOGGER, 
+                params.RESULTS_LOGGER, 
+                params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()), 
+                params.MAX_ML_WORKERS
+                )
+            )
+    
+    # clean data
+    for origin in origin_to_samples_and_labels:
+        origin_to_samples_and_labels[origin] = clean(params, origin_to_samples_and_labels[origin])
 
-    column_to_keep = []
+    # feature engineering
+    # feature engineering
+    with time_measure_result(
+            f'feature_engineering', 
+            params.RESULTS_LOGGER, 
+            params.get_results_writer(),
+            "feature_engineering_duration"
+        ):
+        column_to_keep = feature_engineering_correlation_measurement(
+            origin_to_samples_and_labels,
+            params.FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH,
+            params.RESULTS_LOGGER,
+            params.get_results_writer(),
+            )
 
     # keep only the columns that are usefull
     for origin in origin_to_samples_and_labels:
-        origin_to_samples_and_labels[origin].keep_columns(params, column_to_keep)
+        origin_to_samples_and_labels[origin].keep_columns(column_to_keep, params.RESULTS_LOGGER)
 
 
     

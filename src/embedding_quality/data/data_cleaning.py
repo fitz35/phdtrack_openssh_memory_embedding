@@ -46,4 +46,4 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
 
 
 
-    return SamplesAndLabels(samples, labels).remove_columns(params, INFO_COLUMNS)
+    return SamplesAndLabels(samples, labels).remove_columns( INFO_COLUMNS, params.RESULTS_LOGGER)

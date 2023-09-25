@@ -4,7 +4,7 @@ from embedding_quality.results.result_writer import ResultsWriter
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
 from commons.params.common_params import CommonProgramParams
 from .cli import CLIArguments
-from commons.data_loading.data_origin import DataOriginEnum, convert_str_arg_to_data_origin
+from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
 
 BALANCING_STRATEGY = BalancingStrategies.UNDERSAMPLING

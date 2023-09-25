@@ -66,10 +66,10 @@ def pipeline(params : ProgramParams):
 
     # keep only the columns that are usefull
     for origin in origin_to_samples_and_labels:
-        origin_to_samples_and_labels[origin].keep_columns(params, column_to_keep)
+        origin_to_samples_and_labels[origin].keep_columns( column_to_keep, params.RESULTS_LOGGER)
 
     # cut the data to training and testing
-    training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params, origin_to_samples_and_labels)
+    training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params.data_origins_training, params.data_origins_testing, origin_to_samples_and_labels)
     training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
     # rebalancing

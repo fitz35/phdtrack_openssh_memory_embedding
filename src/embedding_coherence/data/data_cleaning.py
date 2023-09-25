@@ -1,7 +1,7 @@
 
 import pandas as pd
 from embedding_coherence.params.params import INFO_COLUMNS, ProgramParams
-from embedding_coherence.data_loading.data_types import SamplesAndLabels
+from commons.data_loading.data_types import SamplesAndLabels
 
 
 def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> SamplesAndLabels:
@@ -46,4 +46,4 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
 
 
 
-    return SamplesAndLabels(samples, labels).remove_columns(params, INFO_COLUMNS)
+    return SamplesAndLabels(samples, labels).remove_columns(INFO_COLUMNS, params.RESULTS_LOGGER)

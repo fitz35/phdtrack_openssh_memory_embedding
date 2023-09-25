@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import Optional, Tuple
 from pandas import DataFrame, Series
 
@@ -10,7 +11,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from commons.data_loading.data_origin import DataOriginEnum
-from embedding_quality.params.params import ProgramParams
 
 
 @dataclass
@@ -18,21 +18,21 @@ class SamplesAndLabels:
     sample : DataFrame
     labels : Series
 
-    def remove_columns(self, params : ProgramParams, columns: list[str]) -> 'SamplesAndLabels':
+    def remove_columns(self, columns: list[str], logger : Logger) -> 'SamplesAndLabels':
         """
         Remove columns from the sample.
         """
         self.sample = self.sample.drop(columns=columns)
-        params.RESULTS_LOGGER.info(f'Removing {len(columns)} : {columns}')
+        logger.info(f'Removing {len(columns)} : {columns}')
 
         return self
 
-    def keep_columns(self, params : ProgramParams, columns: list[str]) -> 'SamplesAndLabels':
+    def keep_columns(self, columns: list[str], logger : Logger) -> 'SamplesAndLabels':
         """
         Keep columns from the sample.
         """
         self.sample = self.sample[columns]
-        params.RESULTS_LOGGER.info(f'Keeping {len(columns)} : {columns}')
+        logger.info(f'Keeping {len(columns)} : {columns}')
 
         return self
 
@@ -74,20 +74,21 @@ def handle_data_origin(
 
 
 def split_preprocessed_data_by_origin(
-        params: ProgramParams, 
+        training_data_origins: set[DataOriginEnum],
+        testing_data_origins: Optional[set[DataOriginEnum]],
         origin_to_samples_and_labels: dict[DataOriginEnum, SamplesAndLabels]
 ) -> Tuple[SamplesAndLabels, Optional[SamplesAndLabels]]:
     """
     Split samples and labels into training and testing sets.
     """
     preprocessed_data_train = handle_data_origin(
-        params.data_origins_training,
+        training_data_origins,
         origin_to_samples_and_labels
     )
     preprocessed_data_test = None
-    if params.data_origins_testing is not None:
+    if testing_data_origins is not None:
         preprocessed_data_test = handle_data_origin(
-            params.data_origins_testing,
+            testing_data_origins,
             origin_to_samples_and_labels
         )
     

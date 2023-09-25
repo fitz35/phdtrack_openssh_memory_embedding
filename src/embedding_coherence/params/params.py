@@ -1,74 +1,49 @@
-from research_base.params.base_program_params import BaseProgramParams
+from enum import Enum
+import os
 from embedding_coherence.results.result_writer import ResultsWriter
+from commons.params.common_params import CommonProgramParams
 from .cli import CLIArguments
-from .data_origin import DataOriginEnum, convert_str_arg_to_data_origin
+from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
 # info column to drop
 INFO_COLUMNS = ["file_path", "f_dtns_addr"]
 
-class ProgramParams(BaseProgramParams):
+class Pipeline(Enum):
+    PIPELINE="embedding_coherence"
+
+class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     """
     Wrapper class for program parameters.
     """
-    results_writer: ResultsWriter
 
     ### cli args
     cli_args: CLIArguments
-    data_origins_training: set[DataOriginEnum]
-    data_origins_testing: set[DataOriginEnum]
-    dataset_path : str
     
     ### env vars
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
     # NOTE: lowercase values are from the CLI
 
     # results
-    CSV_EMBEDDING_QUALITY_RESULTS_PATH: str
     FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
 
 
     def __init__(
             self, 
             load_program_argv : bool = True, 
-            debug : bool = False,
-            **kwargs
+            debug : bool = False
     ):
-        super().__init__(load_program_argv, debug)
-
-        # keep results
-        self.__results_manager_init()
+        dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+        super().__init__(
+            "embedding_quality", 
+            dotenv_path, 
+            Pipeline, 
+            ResultsWriter, 
+            load_program_argv, 
+            debug
+            )
 
         # to be done last
         self._log_program_params()
-    
-    def __results_manager_init(self):
-        """
-        Initialize results manager, and start keeping results-related information.
-        """
-        self.results_writer = ResultsWriter(self.CSV_EMBEDDING_QUALITY_RESULTS_PATH)
-
-
-        self.set_result_for(
-            "random_seed",
-            str(self.RANDOM_SEED)
-        )
-
-        self.set_result_for(
-            "dataset_path",
-            self.dataset_path
-        )
-
-        self.set_result_for(
-            "training_dataset_origin",
-            " ".join([origin.value for origin in self.data_origins_training])
-        )
-        if self.data_origins_testing is not None:
-            # NOTE: when DATA_ORIGINS_TESTING to none, we can split the data in the pipeline if needed.
-            self.set_result_for(
-                "testing_dataset_origin", 
-                " ".join([origin.value for origin in self.data_origins_testing])
-            )
-    
     
     def _load_program_argv(self) -> None:
         """
@@ -115,16 +90,15 @@ class ProgramParams(BaseProgramParams):
             print("ERROR: No dataset path given.")
             exit(1)
     
-
-    # result wrappers
-    def save_results_to_csv(self):
-        """
-        Save results to CSV files.
-        """
-        self.results_writer.save_results()
     
     def set_result_for(self, column_name: str, value: str):
         """
         Set a result for a given pipeline.
         """
-        self.results_writer.set_result(column_name, value)
+        super()._set_result_for_pipeline(Pipeline.PIPELINE, column_name, value)
+
+    def get_results_writer(self) -> ResultsWriter:
+        """
+        Get the results writer for the current pipeline.
+        """
+        return self.results_manager.get_result_writer_for(Pipeline.PIPELINE)
