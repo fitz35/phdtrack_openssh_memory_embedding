@@ -9,7 +9,7 @@ from research_base.utils.data_utils import count_labels
 
 from commons.data_loading.data_types import SamplesAndLabels
 
-from embedding_coherence.params.params import ProgramParams
+from embedding_coherence.params.params import CLUSTERIZATION_ALGORITHM, CLUSTERIZATION_METHOD, CLUSTERIZATION_METRIC, NB_VALUES_TO_TESTS_EPSILON, ProgramParams
 
 # $ python main_value_node.py -p ds_density_clustering -otr testing -b undersampling -d load_data_structure_dataset
 
@@ -55,7 +55,7 @@ def density_clustering_pipeline(
     #    distance_matrix = pairwise_distances(df_scaled, metric="cosine")
 
     # Define the range of eps values we want to try
-    eps_values = np.linspace(0.6, 0.9, num=1)  # customize as necessary
+    eps_values = np.linspace(0.01, 0.05, num=NB_VALUES_TO_TESTS_EPSILON)  # customize as necessary
     #eps_values = [0.6]
 
     # define the minimum number of samples we want in a cluster
@@ -76,7 +76,14 @@ def density_clustering_pipeline(
         #)  # customize min_samples as necessary
         #dbscan.fit(df_scaled)
 
-        optics = OPTICS(min_samples=min_samples, metric='cosine', n_jobs=params.MAX_ML_WORKERS, algorithm='brute', cluster_method="xi")
+        optics = OPTICS(
+            min_samples=min_samples, 
+            metric=CLUSTERIZATION_METRIC, 
+            n_jobs=params.MAX_ML_WORKERS, 
+            algorithm=CLUSTERIZATION_ALGORITHM, 
+            cluster_method=CLUSTERIZATION_METHOD,
+            xi=eps
+        )
         with time_measure_result(
             f'clustering_duration_for_{eps}', 
             params.RESULTS_LOGGER

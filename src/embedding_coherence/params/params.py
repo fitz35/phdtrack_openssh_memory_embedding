@@ -8,6 +8,13 @@ from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 # info column to drop
 INFO_COLUMNS = ["file_path", "f_dtns_addr"]
 
+CLUSTERIZATION_METHOD = "xi"
+CLUSTERIZATION_METRIC = "cosine"
+CLUSTERIZATION_ALGORITHM = "brute"
+
+# number of values to test for epsilon or xi, keep 1 for optics algorithm
+NB_VALUES_TO_TESTS_EPSILON = 1
+
 class Pipeline(Enum):
     PIPELINE="embedding_coherence"
 
