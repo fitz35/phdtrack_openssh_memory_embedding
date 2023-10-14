@@ -32,6 +32,8 @@
           pythonPackages.pandas-stubs
           pythonPackages.types-psutil
 
+          pythonPackages.tqdm # progress bar
+
           researchPackage
         ];
 
