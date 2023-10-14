@@ -1,6 +1,7 @@
 
 
 from commons.results.commons_results_writer import CommonResultsWriter
+from research_base.utils.ml_utils.ml_evaluate import EVALUATE_RESULT_KEYS
 
 
 class ResultsWriter(CommonResultsWriter):
@@ -14,23 +15,11 @@ class ResultsWriter(CommonResultsWriter):
         "data_balancing_duration",
         "nb_samples_before_balancing",
         "nb_samples_after_balancing",
-        # classification results
-        "classification_duration",
-        "precision",
-        "recall", 
-        "accuracy",
-        "f1_score", 
-        "support", 
-        "true_positives", 
-        "true_negatives",
-        "false_positives", 
-        "false_negatives", 
-        "auc"
     ]
 
     def __init__(self, pipeline_name: str):
         super().__init__(
             "/home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/embedding_quality/result.csv", 
-            self.ADDITIONAL_HEADERS, 
+            self.ADDITIONAL_HEADERS + EVALUATE_RESULT_KEYS, 
             pipeline_name
         )
