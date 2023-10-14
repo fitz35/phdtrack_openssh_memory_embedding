@@ -34,6 +34,12 @@
 
           pythonPackages.tqdm # progress bar
 
+          # deep learning
+          pythonPackages.torch
+          pythonPackages.datetime
+          pythonPackages.graphviz
+          pythonPackages.pygraphviz
+
           researchPackage
         ];
 
