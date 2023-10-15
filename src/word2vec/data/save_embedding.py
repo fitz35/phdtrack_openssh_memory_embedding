@@ -7,19 +7,20 @@ import pandas as pd
 from word2vec.params.params import USER_DATA_COLUMN, ProgramParams
 
 
-def gen_and_save_embedding(
+def __gen_and_save_one_embedding(
         params : ProgramParams,
-        samples_and_sample_str_train: SamplesAndLabels,
-        samples_and_sample_str_test: SamplesAndLabels,
+        samples_and_sample_str: SamplesAndLabels,
         model : Word2Vec,
+        file_prefix : str,
 ):
+    
     def get_average_embedding(word_sequence : list[str]) :
         if word_sequence:
             return np.mean([model.wv[word] for word in word_sequence], axis=0)
         return np.zeros(model.vector_size)
     
-    samples = pd.concat([samples_and_sample_str_train.sample, samples_and_sample_str_test.sample], ignore_index=True)
-    labels = pd.concat([samples_and_sample_str_train.labels, samples_and_sample_str_test.labels], ignore_index=True)
+    samples = samples_and_sample_str.sample
+    labels = samples_and_sample_str.labels
 
 
     # Directly create the embeddings DataFrame
@@ -31,5 +32,15 @@ def gen_and_save_embedding(
 
     embeddings_df["label"] = labels.astype("int16").tolist()
 
-    embeddings_df.to_csv(os.path.join(params.OUTPUT_FOLDER, "word2vec_embedding.csv"), index=False)
+    embeddings_df.to_csv(os.path.join(params.OUTPUT_FOLDER, f"{file_prefix}_word2vec_embedding.csv"), index=False)
+
+
+def gen_and_save_embedding(
+        params : ProgramParams,
+        samples_and_sample_str_train: SamplesAndLabels,
+        samples_and_sample_str_test: SamplesAndLabels,
+        model : Word2Vec,
+):
+    __gen_and_save_one_embedding(params, samples_and_sample_str_train, model, "training")
+    __gen_and_save_one_embedding(params, samples_and_sample_str_test, model, "validation")
 

@@ -18,12 +18,18 @@ class SamplesAndLabels:
     sample : DataFrame
     labels : Series
 
-    def remove_columns(self, columns: list[str], logger : Logger) -> 'SamplesAndLabels':
+    def remove_columns(self, columns: list[str], logger: Logger) -> 'SamplesAndLabels':
         """
         Remove columns from the sample.
         """
-        self.sample = self.sample.drop(columns=columns)
-        logger.info(f'Removing {len(columns)} : {columns}')
+        # Filter out columns that don't exist in the dataframe
+        columns_to_remove = [col for col in columns if col in self.sample.columns]
+        
+        # Drop the columns
+        self.sample.drop(columns=columns_to_remove, inplace=True)
+        
+        # Log the information
+        logger.info(f'Removing {len(columns_to_remove)} : {columns_to_remove}')
 
         return self
 

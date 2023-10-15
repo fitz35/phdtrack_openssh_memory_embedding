@@ -11,7 +11,7 @@ from commons.data_loading.data_origin import DataOriginEnum
 from commons.feature_engineering.correlation_type import CorrelationType
 
 
-NB_COLUMNS_TO_KEEP = 8
+NB_COLUMNS_TO_KEEP = 16
 FEATURE_CORRELATION_TYPE = CorrelationType.FE_CORR_PEARSON
 
 ResultWriter = TypeVar('ResultWriter', bound=BaseResultWriter)  # CustomResultWriter should be a subtype of BaseResultWriter
