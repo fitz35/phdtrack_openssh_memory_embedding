@@ -27,6 +27,7 @@ class CLIArguments:
             -d dataset path to use
             -otr origins training
             -ots origins testing
+            -o output folder
             
         """
         parser = argparse.ArgumentParser(description='Program [ARGUMENTS]')
@@ -63,6 +64,12 @@ class CLIArguments:
             nargs='*',
             default=None,
             help="Data origin (training, validation, testing) for testing"
+        )
+        parser.add_argument(
+            '-o',
+            '--output_folder',
+            type=str,
+            help="the path of the output folder"
         )
         # save parsed arguments
         self.args = parser.parse_args()

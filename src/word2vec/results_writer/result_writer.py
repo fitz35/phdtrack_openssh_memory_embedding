@@ -14,18 +14,21 @@ class ResultsWriter(BaseResultWriter):
         "training_dataset_origin", 
         "testing_dataset_origin",
 
-        
+        "word2vec_training_duration",
+        "word2vec_embedding_duration",
     ]
 
     # NOTE: The result writer passed to the program params class should only have
     # the :pipeline_name: parameter in its init args.
     def __init__(self, pipeline_name: str):
 
-        result_csv_save_path = os.environ.get("RESULTS_LOGGER_DIR_PATH")
+        result_csv_save_path = os.environ.get("RESULTS_CSV_DIR_PATH")
         if result_csv_save_path is None:
-            raise Exception("ERROR: RESULTS_LOGGER_DIR_PATH env var not set.")
+            raise Exception("ERROR: RESULTS_CSV_DIR_PATH env var not set.")
         elif not os.path.exists(result_csv_save_path):
-            raise Exception("ERROR: RESULTS_LOGGER_DIR_PATH env var does not point to a valid path.")
+            raise Exception("ERROR: RESULTS_CSV_DIR_PATH env var does not point to a valid path.")
+        
+        result_csv_save_path = os.path.join(result_csv_save_path, "results.csv")
 
         super().__init__(
             csv_file_path = result_csv_save_path, 

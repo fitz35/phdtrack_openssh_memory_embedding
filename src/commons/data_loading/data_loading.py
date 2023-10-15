@@ -45,15 +45,18 @@ def __load_samples_and_labels_from_csv(
 
     return SamplesAndLabels(samples, labels)
 
-def __generate_dtype_dict(file_path: str, default_type: str = PANDA_DTYPE_DEFAULT, special_cols_type: str = 'str', special_cols_keyword: str = 'path') -> dict:
+def __generate_dtype_dict(file_path: str, 
+                          default_type: str = PANDA_DTYPE_DEFAULT, 
+                          special_cols_type: str = 'str', 
+                          special_cols_keywords: list[str] = ['path', "hexa_representation"]) -> dict:
     """
     Generate a dictionary for dtype parameter in pd.read_csv where any column containing 
-    special_cols_keyword is of type special_cols_type, and all the others are of type default_type.
+    any keyword from special_cols_keywords is of type special_cols_type, and all the others are of type default_type.
 
     :param file_path: path to the csv file
     :param default_type: default type for columns
     :param special_cols_type: type for special columns
-    :param special_cols_keyword: keyword to identify special columns
+    :param special_cols_keywords: list of keywords to identify special columns (NOTE : "hexa_representation" is a hack to load chunk user data as string)
     :return: dtype dict
     """
     with open(file_path, 'r') as f:
@@ -61,7 +64,7 @@ def __generate_dtype_dict(file_path: str, default_type: str = PANDA_DTYPE_DEFAUL
         header = next(reader)  # get the first line, i.e., header
 
     # create dtype dict: column_name -> type
-    dtype_dict = {col: special_cols_type if special_cols_keyword in col else default_type for col in header}
+    dtype_dict = {col: special_cols_type if any(keyword in col for keyword in special_cols_keywords) else default_type for col in header}
 
     return dtype_dict
 

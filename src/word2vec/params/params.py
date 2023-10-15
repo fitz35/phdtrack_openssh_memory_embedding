@@ -1,78 +1,76 @@
 from enum import Enum
 import os
-from research_base.params.base_program_params import BaseProgramParams
-from results_writer.result_writer import ResultsWriter
+from commons.params.common_params import CommonProgramParams
+from word2vec.results_writer.result_writer import ResultsWriter
+from .cli import CLIArguments
 from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
-from .cli import CLIArguments
+# column name for the user data of each chunk
+USER_DATA_COLUMN = "hexa_representation"
 
-class PipelineNames(Enum):
-    Word2vec = "word2vec"
+# word2vec window size, in bytes. To have the number of words in a window, divide by the word size in bytes
+WORD2VEC_WINDOW_BYTES_SIZE = 8
 
-class ProgramParams(BaseProgramParams):
+# word2vec min count
+WORD2VEC_MIN_COUNT = 1
+
+# word2vec vector size
+WORD2VEC_VECTOR_SIZE = 100
+
+
+class Pipeline(Enum):
+    PIPELINE="word2vec"
+
+class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     """
     Wrapper class for program parameters.
     """
+
+    ### cli args
     cli_args: CLIArguments
-    app_name : str = "EMBEDDING DEEP LEARNING"
     
     ### env vars
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
     # NOTE: lowercase values are from the CLI
 
-    # data
-    ANNOTATED_GRAPH_DOT_GV_DIR_PATH: str
-    PICKLE_DATASET_DIR_PATH: str
+
+    # length of the word in bytes for word2vec
+    WORD_BYTE_SIZE: int
+
+
+    # dev variable
+    # max number of samples to use, negative value means no limit
+    MAX_NUMBERS_OF_SAMPLES_TO_USE: int
+
+    # results
+    FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
+
 
     def __init__(
             self, 
             load_program_argv : bool = True, 
-            debug : bool = False,
-            **kwargs
+            debug : bool = False
     ):
-        # determine dotenv path
-        # NOTE: the .env file is in the same path as this current file, else, in the parent folder
-        # Initialize dotenv_path to None
-        dotenv_path = None
-
-        # Start from the current directory
-        current_dir = os.path.dirname(__file__)
-
-        # Loop to walk upwards in the directory tree
-        parent_dir_level = 0
-        while current_dir != '/' and parent_dir_level < 3:
-            potential_dotenv_path = os.path.join(current_dir, '.env')
-            if os.path.exists(potential_dotenv_path):
-                dotenv_path = potential_dotenv_path
-                break
-            # Move up to the parent directory
-            current_dir = os.path.dirname(current_dir)
-            parent_dir_level += 1
-
-        if dotenv_path is None:
-            raise Exception("ERROR: .env file not found.")
-
+        dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
         super().__init__(
-            app_name = self.app_name,
-            pipeline_names_enum = PipelineNames,
-            result_writer = ResultsWriter,
-            load_program_argv = load_program_argv,
-            debug = debug, 
-            dotenv_path = dotenv_path
-        )
+            "word2vec", 
+            dotenv_path, 
+            Pipeline, 
+            ResultsWriter, 
+            load_program_argv, 
+            debug
+            )
 
         # to be done last
         self._log_program_params()
     
-    
-    def _load_program_argv(self):
+    def _load_program_argv(self) -> None:
         """
         Load given program arguments.
         """
         self.cli_args: CLIArguments = CLIArguments()
-
-
-    def _consume_program_argv(self):
+    
+    def _consume_program_argv(self) -> None:
         """
         Consume given program arguments.
         """
@@ -110,4 +108,24 @@ class ProgramParams(BaseProgramParams):
         else:
             print("ERROR: No dataset path given.")
             exit(1)
-        
+
+        if self.cli_args.args.output_folder is not None:
+            self.OUTPUT_FOLDER = self.cli_args.args.output_folder
+            assert isinstance(self.OUTPUT_FOLDER, str)
+            assert os.path.isdir(self.OUTPUT_FOLDER), f"The folder '{self.OUTPUT_FOLDER}' does not exist!"
+        else:
+            print("ERROR: No output folder given.")
+            exit(1)
+    
+    
+    def set_result_for(self, column_name: str, value: str):
+        """
+        Set a result for a given pipeline.
+        """
+        super()._set_result_for_pipeline(Pipeline.PIPELINE, column_name, value)
+
+    def get_results_writer(self) -> ResultsWriter:
+        """
+        Get the results writer for the current pipeline.
+        """
+        return self.results_manager.get_result_writer_for(Pipeline.PIPELINE)

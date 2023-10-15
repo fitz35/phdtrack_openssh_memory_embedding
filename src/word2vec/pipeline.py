@@ -2,14 +2,14 @@
 
 
 import time
-from embedding_quality.params.params import ProgramParams
 from commons.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
-from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
-from embedding_quality.data_balancing.data_balancing import apply_balancing
-from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
-from embedding_quality.data.data_cleaning import clean
+from word2vec.data.save_embedding import gen_and_save_embedding
+from word2vec.embedding.word2vec import word2vec_pipeline
+from word2vec.params.params import ProgramParams
+
+from word2vec.data.word2vec_input import transform_hex_data
 
 
 def pipeline(params : ProgramParams):
@@ -46,10 +46,32 @@ def pipeline(params : ProgramParams):
                 )
             )
     
-    # clean data
+    # prepare data for word2vec
     for origin in origin_to_samples_and_labels:
-        origin_to_samples_and_labels[origin] = clean(params, origin_to_samples_and_labels[origin])
+        df = origin_to_samples_and_labels[origin].sample
+        df = transform_hex_data(params, df)
 
+    # cut the data to training and testing
+    training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params.data_origins_training, params.data_origins_testing, origin_to_samples_and_labels)
+    training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
+
+    # train the model
+    with time_measure_result(
+            f'word2vec training : ', 
+            params.RESULTS_LOGGER, 
+            params.get_results_writer(),
+            "word2vec_training_duration"
+        ):
+        word2vec = word2vec_pipeline(params, training_samples_and_labels)
+
+    # generate the embedding
+    with time_measure_result(
+            f'word2vec used to embedde : ', 
+            params.RESULTS_LOGGER, 
+            params.get_results_writer(),
+            "word2vec_embedding_duration"
+        ):
+        gen_and_save_embedding(params, training_samples_and_labels, testing_samples_and_labels, word2vec)
 
     end_time = time.time()
     params.set_result_for("end_time", str(end_time))
