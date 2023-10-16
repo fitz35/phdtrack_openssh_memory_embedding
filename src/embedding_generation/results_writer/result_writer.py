@@ -14,8 +14,8 @@ class ResultsWriter(BaseResultWriter):
         "training_dataset_origin", 
         "testing_dataset_origin",
 
-        "word2vec_training_duration",
-        "word2vec_embedding_duration",
+        "model_training_duration",
+        "gen_embedding_duration",
     ]
 
     # NOTE: The result writer passed to the program params class should only have

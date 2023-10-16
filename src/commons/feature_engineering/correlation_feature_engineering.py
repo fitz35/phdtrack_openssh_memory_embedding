@@ -92,7 +92,7 @@ def __correlation_feature_selection(
     # Find the names of the columns that have the smallest sums
     # NOTE: We drop the 1 correlation of the column with itself by substracting 1 to the sums
     corr_sums -= 1
-    best_columns_names = corr_sums.nsmallest(NB_COLUMNS_TO_KEEP).index.tolist()
+    best_columns_names = corr_sums.nsmallest(NB_COLUMNS_TO_KEEP, keep="first").index.tolist()
     
     logger.info(f"Keeping columns: {best_columns_names}")
 

@@ -1,5 +1,5 @@
-from word2vec.params.params import ProgramParams
-from word2vec.pipeline import pipeline
+from embedding_generation.params.params import ProgramParams
+from embedding_generation.pipeline import pipeline
 
 
 def main():

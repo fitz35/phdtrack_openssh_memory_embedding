@@ -4,7 +4,7 @@
 import pandas as pd
 from typing import List
 
-from word2vec.params.params import USER_DATA_COLUMN, ProgramParams
+from embedding_generation.params.params import USER_DATA_COLUMN, ProgramParams
 
 
 def split_into_chunks(hex_string: str, chunk_size: int = 2) -> List[str]:

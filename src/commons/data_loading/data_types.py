@@ -41,6 +41,15 @@ class SamplesAndLabels:
         logger.info(f'Keeping {len(columns)} : {columns}')
 
         return self
+    
+    def save_to_csv(self, file_path : str):
+        """
+        Save the samples and labels to a CSV file.
+        """
+        embeddings_df = self.sample.copy()
+        embeddings_df["label"] = self.labels.astype("int16").tolist()
+
+        embeddings_df.to_csv(file_path, index=False)
 
 
 def split_dataset_if_needed(

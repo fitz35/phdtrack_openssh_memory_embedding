@@ -2,6 +2,8 @@
 import sys
 import argparse
 
+from embedding_generation.params.pipelines import Pipeline
+
 # wrapped program flags
 class CLIArguments:
     args: argparse.Namespace
@@ -28,6 +30,7 @@ class CLIArguments:
             -otr origins training
             -ots origins testing
             -o output folder
+            -p pipelines to run
             
         """
         parser = argparse.ArgumentParser(description='Program [ARGUMENTS]')
@@ -70,6 +73,14 @@ class CLIArguments:
             '--output_folder',
             type=str,
             help="the path of the output folder"
+        )
+        parser.add_argument(
+            '-p',
+            '--pipelines',
+            type=str,
+            nargs='*',
+            default=None,
+            help="List of pipelines to run: " + str(list(map(lambda x: x.name.lower(), Pipeline)))
         )
         # save parsed arguments
         self.args = parser.parse_args()

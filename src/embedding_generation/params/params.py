@@ -1,7 +1,11 @@
 from enum import Enum
 import os
+
+from research_base.utils.enum_utils import convert_str_arg_to_enum_member
+
 from commons.params.common_params import CommonProgramParams
-from word2vec.results_writer.result_writer import ResultsWriter
+from embedding_generation.params.pipelines import Pipeline
+from embedding_generation.results_writer.result_writer import ResultsWriter
 from .cli import CLIArguments
 from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
@@ -18,8 +22,7 @@ WORD2VEC_MIN_COUNT = 1
 WORD2VEC_VECTOR_SIZE = 100
 
 
-class Pipeline(Enum):
-    PIPELINE="word2vec"
+
 
 class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     """
@@ -53,7 +56,7 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     ):
         dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
         super().__init__(
-            "word2vec", 
+            "embedding_generation", 
             dotenv_path, 
             Pipeline, 
             ResultsWriter, 
@@ -116,16 +119,26 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
         else:
             print("ERROR: No output folder given.")
             exit(1)
+
+        if self.cli_args.args.pipelines is not None:
+            try:
+                self.pipelines = set(map(lambda x : convert_str_arg_to_enum_member(x, Pipeline), self.cli_args.args.pipelines))
+                assert isinstance(self.pipelines, set)
+
+            except ValueError:
+                    print(f"ERROR: Invalid pipeline name: {self.cli_args.args.pipelines}")
+                    exit(1)
     
     
-    def set_result_for(self, column_name: str, value: str):
+    def set_result_for(self, pipeline : Pipeline, column_name: str, value: str):
         """
         Set a result for a given pipeline.
         """
-        super()._set_result_for_pipeline(Pipeline.PIPELINE, column_name, value)
+        self.results_manager.set_result_for(pipeline, column_name, value)
+        
 
-    def get_results_writer(self) -> ResultsWriter:
+    def get_results_writer(self, pipeline : Pipeline) -> ResultsWriter:
         """
         Get the results writer for the current pipeline.
         """
-        return self.results_manager.get_result_writer_for(Pipeline.PIPELINE)
+        return self.results_manager.get_result_writer_for(pipeline)

@@ -30,7 +30,7 @@ def clean(params: ProgramParams, samples_and_labels: SamplesAndLabels) -> Sample
     # Log all the removed rows
 # Log the removed rows where NaN is not in the "truc" column
     for _, row in samples[rows_with_nan].iterrows():
-        if pd.notna(row['Skewness']) and pd.notna(row['Kurtosis']):
+        if 'Skewness' in row and 'Kurtosis' in row and pd.notna(row['Skewness']) and pd.notna(row['Kurtosis']):
             file_path = row['file_path']
             params.RESULTS_LOGGER.info(f'WARN : Removing row with NaN values in file_path: {file_path}, f_dtns_addr: {row["f_dtns_addr"]}')
     

@@ -11,7 +11,7 @@ from commons.data_loading.data_origin import DataOriginEnum
 from commons.feature_engineering.correlation_type import CorrelationType
 
 
-NB_COLUMNS_TO_KEEP = 16
+NB_COLUMNS_TO_KEEP = 8
 FEATURE_CORRELATION_TYPE = CorrelationType.FE_CORR_PEARSON
 
 ResultWriter = TypeVar('ResultWriter', bound=BaseResultWriter)  # CustomResultWriter should be a subtype of BaseResultWriter
@@ -50,18 +50,18 @@ class CommonProgramParams(Generic[PipelineNamesEnum, ResultWriter], BaseProgramP
         Initialize results manager, and start keeping results-related information.
         """
 
-        self.set_result_for(
+        self.set_result_forall(
             "dataset_path",
             self.dataset_path
         )
 
-        self.set_result_for(
+        self.set_result_forall(
             "training_dataset_origin",
             " ".join([origin.value for origin in self.data_origins_training])
         )
         if self.data_origins_testing is not None:
             # NOTE: when DATA_ORIGINS_TESTING to none, we can split the data in the pipeline if needed.
-            self.set_result_for(
+            self.set_result_forall(
                 "testing_dataset_origin", 
                 " ".join([origin.value for origin in self.data_origins_testing])
             )
