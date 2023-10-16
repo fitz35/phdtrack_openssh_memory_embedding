@@ -1,4 +1,5 @@
 
+import os
 from typing import Any
 import numpy as np
 import pandas as pd
@@ -16,12 +17,12 @@ from embedding_generation.params.pipelines import Pipeline
 
 
 # Hyperparameters
-embedding_dim = 64
-transformer_units = 128
+embedding_dim = 32
+transformer_units = 64
 num_heads = 2
 num_transformer_layers = 2
 input_length = None  # This allows variable length input
-output_dim = 128  # Fixed-size vector dimension
+output_dim = 64  # Fixed-size vector dimension
 
 
 
@@ -30,16 +31,11 @@ def transformers_pipeline(
         samples_and_sample_str_train: SamplesAndLabels,
         samples_and_sample_str_test: SamplesAndLabels,
 ):
-    samples_and_sample_train_samples = __get_input_encoder_from_samplesAndLabels(samples_and_sample_str_train)
-
-    samples_and_sample_test_samples = __get_input_encoder_from_samplesAndLabels(samples_and_sample_str_test)
+    train_nb_samples = len(samples_and_sample_str_train.labels) # to slice the joined_samples later
 
     encoder = __get_encoder()
 
-    train_nb_samples = samples_and_sample_train_samples.shape[0] # to slice the joined_samples later
-
-    joined_samples = np.dstack((samples_and_sample_train_samples, samples_and_sample_test_samples))
-
+    input_data = __get_input_encoder_from_samplesAndLabels(samples_and_sample_str_train, samples_and_sample_str_test)
 
     # train the model
     with time_measure_result(
@@ -48,14 +44,28 @@ def transformers_pipeline(
             params.get_results_writer(pipeline=Pipeline.Transformers),
             "model_training_duration"
         ):
-        embedded : np.ndarray[Any, Any] = encoder.predict(joined_samples)
-    trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=[USER_DATA_COLUMN])
-    test_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=[USER_DATA_COLUMN])
+        embedded : np.ndarray[Any, Any] = encoder.predict(input_data, batch_size=1, verbose="1")
+    trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=[f'embedded_{i}' for i in range(output_dim)])
+    assert len(trained_embedded) == len(samples_and_sample_str_train.labels), f"len(trained_embedded)={len(trained_embedded)} != len(samples_and_sample_str_train.labels)={len(samples_and_sample_str_train.labels)}"
+
+    tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=[f'embedded_{i}' for i in range(len(embedded) - output_dim)])
+    assert len(tested_embedded) == len(samples_and_sample_str_test.labels), f"len(tested_embedded)={len(tested_embedded)} != len(samples_and_sample_str_test.labels)={len(samples_and_sample_str_test.labels)}"
+
+    trained = SamplesAndLabels(trained_embedded, samples_and_sample_str_train.labels)
+    tested = SamplesAndLabels(tested_embedded, samples_and_sample_str_test.labels)
+
+    folder = os.path.join(params.OUTPUT_FOLDER, "transformers")
+    os.makedirs(folder, exist_ok=True)
+
+    trained.save_to_csv(os.path.join(folder, f"training_transformers_embedding.csv"))
+    tested.save_to_csv(os.path.join(folder, f"validation_transformers_embedding.csv"))
     
 
-def __get_input_encoder_from_samplesAndLabels(df_train: SamplesAndLabels):
-    output = __transform_hex_data(df_train.sample)
-    output = output[USER_DATA_COLUMN].tolist()
+def __get_input_encoder_from_samplesAndLabels(df_train: SamplesAndLabels, df_test: SamplesAndLabels):
+    df = pd.concat([df_train.sample, df_test.sample])
+
+    output = __transform_hex_data(df)
+    output = output[USER_DATA_COLUMN].apply(lambda list_x : [float(int(x, 16)) for x in list_x ]).tolist()
     # Pad the sequences
     # first dimension is the number of samples, second is the length of the sequence
     padded_sequences = pad_sequences(output, padding='post', dtype='float32') 

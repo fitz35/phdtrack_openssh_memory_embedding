@@ -54,8 +54,11 @@ def word2vec_pipeline(
         train_embedded = __gen_embedding(samples_and_sample_str_train, model)
         test_embedded = __gen_embedding(samples_and_sample_str_test, model)
 
-    train_embedded.save_to_csv(os.path.join(params.OUTPUT_FOLDER, f"training_word2vec_embedding.csv"))
-    test_embedded.save_to_csv(os.path.join(params.OUTPUT_FOLDER, f"validation_word2vec_embedding.csv"))
+    folder = os.path.join(params.OUTPUT_FOLDER, "word2vec")
+    os.makedirs(folder, exist_ok=True)
+
+    train_embedded.save_to_csv(os.path.join(folder, f"training_word2vec_embedding.csv"))
+    test_embedded.save_to_csv(os.path.join(folder, f"validation_word2vec_embedding.csv"))
 
 
 def __transform_hex_data(params : ProgramParams, df: pd.DataFrame) -> pd.DataFrame:
