@@ -1,3 +1,4 @@
 imbalanced-learn==0.11.0
 torch-geometric==2.3.1
 gensim==4.3.2
+tensorflow-cpu==2.14.0
