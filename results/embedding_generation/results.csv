@@ -1,0 +1,1 @@
+pipeline_name,start_time,end_time,duration,random_seed,dataset_path,data_loading_duration,training_dataset_origin,testing_dataset_origin,model_training_duration,gen_embedding_duration,system,node_name,release,version,machine,processor,physical_cores,total_cores,total_memory,available_memory

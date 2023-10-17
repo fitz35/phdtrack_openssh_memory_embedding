@@ -57,6 +57,6 @@ def pipeline(params : ProgramParams):
     params.set_result_forall("duration", str(end_time - start_time))
 
     # save results
-    params.results_manager.save_results_forall()
-
+    for pipeline in params.pipelines:
+        params.results_manager.save_results_for(pipeline)
     
