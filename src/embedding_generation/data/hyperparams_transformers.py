@@ -48,11 +48,11 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
 
 
     index = 0
-    embedding_dim = [32, 64, 128]
-    transformer_units = [64, 128, 256]
+    embedding_dim = [16, 32, 64, 128]
+    transformer_units = [8, 64, 128, 256]
     num_heads = [2, 4, 8]
     num_transformer_layers = [2, 4, 8]
-    output_dims = [64, 128, 256]
+    output_dims = [16, 64, 128, 256]
     dropout_rates = [0.1, 0.2, 0.3]
     activations = ["relu"]
 

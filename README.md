@@ -6,7 +6,7 @@ To configure vscode python interpreter, open the nix-shell and run `which python
 
 ## Installation
 
-Use nix [shell](https://ryantm.github.io/nixpkgs/languages-frameworks/python/).
+Use nix [shell](https://ryantm.github.io/nixpkgs/languages-frameworks/python/) and devellop.
 
 ### Work with no packaged python module
 
@@ -29,7 +29,7 @@ cargo run -- -p statistic-embedding-dtn -d /root/phdtrack/phdtrack_data/Training
 Run python quality check :
 
 ```shell
-nix-shell
+nix develop
 cd src
 python3 embedding_quality_main.py -otr training -ots validation -d /root/phdtrack/phdtrack_project_3/src/mem_to_graph/data/statistic_dts_embedding
 

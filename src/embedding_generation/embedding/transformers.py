@@ -108,7 +108,7 @@ def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -
         
         # Multi-head Self Attention
         attention = layers.MultiHeadAttention(num_heads=num_heads, key_dim=units)(inputs, inputs)
-        attention = layers.Dropout(0.1, seed=params.RANDOM_SEED)(attention)
+        attention = layers.Dropout(hyperparams.dropout_rate, seed=params.RANDOM_SEED)(attention)
         add_attention = layers.Add()([inputs, attention])
         attention_out = layers.LayerNormalization()(add_attention)
         
