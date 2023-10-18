@@ -16,7 +16,6 @@ class TransformersHyperParams:
     transformer_units : int
     num_heads : int
     num_transformer_layers : int
-    output_dim : int
     dropout_rate : float
     activation : str
 
@@ -48,11 +47,10 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
 
 
     index = 0
-    embedding_dim = [16, 32, 64, 128]
-    transformer_units = [8, 64, 128, 256]
-    num_heads = [2, 4, 8]
-    num_transformer_layers = [2, 4, 8]
-    output_dims = [16, 64, 128, 256]
+    embedding_dim = [16, 32, 64, 128] # output of the embedding (result size)
+    transformer_units = [8, 64, 128, 256] # dimension of the transformer units (see .md)
+    num_heads = [2, 4, 8] # attention heads
+    num_transformer_layers = [2, 4, 8] # number of transformer layers
     dropout_rates = [0.1, 0.2, 0.3]
     activations = ["relu"]
 
@@ -60,7 +58,6 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
         for transformer_unit in transformer_units:
             for num_head in num_heads:
                 for num_transformer_layer in num_transformer_layers:
-                    for output_dim in output_dims:
                         for dropout_rate in dropout_rates:
                             for activation in activations:
                                 all_hyperparams.append(TransformersHyperParams(
@@ -69,7 +66,6 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
                                     transformer_units=transformer_unit,
                                     num_heads=num_head,
                                     num_transformer_layers=num_transformer_layer,
-                                    output_dim=output_dim,
                                     dropout_rate=dropout_rate,
                                     activation=activation
                                 ))

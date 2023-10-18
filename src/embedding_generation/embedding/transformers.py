@@ -57,10 +57,10 @@ def transformers_pipeline(
 
 
         # split the embedded data into train and test
-        trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=[f'embedded_{i}' for i in range(hyperparam.output_dim)])
+        trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=[f'embedded_{i}' for i in range(hyperparam.embedding_dim)])
         assert len(trained_embedded) == len(samples_and_sample_str_train.labels), f"len(trained_embedded)={len(trained_embedded)} != len(samples_and_sample_str_train.labels)={len(samples_and_sample_str_train.labels)}"
 
-        tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=[f'embedded_{i}' for i in range(len(embedded) - hyperparam.output_dim)])
+        tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=[f'embedded_{i}' for i in range(len(embedded) - hyperparam.embedding_dim)])
         assert len(tested_embedded) == len(samples_and_sample_str_test.labels), f"len(tested_embedded)={len(tested_embedded)} != len(samples_and_sample_str_test.labels)={len(samples_and_sample_str_test.labels)}"
 
         trained = SamplesAndLabels(trained_embedded, samples_and_sample_str_train.labels)
@@ -133,7 +133,7 @@ def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -
 
     # Pooling layer to get fixed size output
     pooled = layers.GlobalAveragePooling1D()(embedded)
-    output = layers.Dense(hyperparams.output_dim, hyperparams.activation)(pooled)
+    output = layers.Dense(hyperparams.embedding_dim, hyperparams.activation)(pooled)
 
     encoder = models.Model(inputs, output)
 
