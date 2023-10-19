@@ -14,6 +14,7 @@ class ResultsWriter(BaseResultWriter):
         "training_dataset_origin", 
         "testing_dataset_origin",
 
+        "max_token_number",
         "model_training_duration",
         "gen_embedding_duration",
     ]

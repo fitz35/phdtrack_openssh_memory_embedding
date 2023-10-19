@@ -22,9 +22,14 @@ def word2vec_pipeline(
     # prepare data for word2vec
     samples_and_sample_train_samples = samples_and_sample_str_train.sample
     samples_and_sample_train_samples = __transform_hex_data(params, samples_and_sample_train_samples)
+    max_length_train = samples_and_sample_train_samples[USER_DATA_COLUMN].apply(len).max()
 
     samples_and_sample_test_samples = samples_and_sample_str_test.sample
     samples_and_sample_test_samples = __transform_hex_data(params, samples_and_sample_test_samples)
+    max_length_test = samples_and_sample_test_samples[USER_DATA_COLUMN].apply(len).max()
+
+
+    params.set_result_for(Pipeline.Word2Vec, "max_token_number", str(max(max_length_train, max_length_test)))
 
     # train the model
     with time_measure_result(

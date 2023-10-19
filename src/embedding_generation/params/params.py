@@ -22,8 +22,6 @@ WORD2VEC_MIN_COUNT = 1
 WORD2VEC_VECTOR_SIZE = 100
 
 
-
-
 class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     """
     Wrapper class for program parameters.
