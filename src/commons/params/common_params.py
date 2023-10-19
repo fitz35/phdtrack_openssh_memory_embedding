@@ -10,6 +10,8 @@ from research_base.params.base_program_params import BaseProgramParams
 from commons.data_loading.data_origin import DataOriginEnum
 from commons.feature_engineering.correlation_type import CorrelationType
 
+# column name for the user data of each chunk (for the chunk extraction pipeline)
+USER_DATA_COLUMN = "hexa_representation"
 
 NB_COLUMNS_TO_KEEP = 8
 FEATURE_CORRELATION_TYPE = CorrelationType.FE_CORR_PEARSON

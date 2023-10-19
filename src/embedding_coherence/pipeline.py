@@ -3,14 +3,14 @@ import time
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
 
-from embedding_coherence.params.params import ProgramParams
-from embedding_coherence.data.data_cleaning import clean
+from embedding_coherence.params.params import INFO_COLUMNS, ProgramParams
 from embedding_coherence.clustering.density_clustering import density_clustering_pipeline
 
 
 from commons.data_loading.data_loading import load
 from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
+from commons.data_loading.data_cleaning import clean_all
 
 
 def pipeline(params : ProgramParams):
@@ -45,8 +45,7 @@ def pipeline(params : ProgramParams):
             )
     
     # clean data
-    for origin in origin_to_samples_and_labels:
-        origin_to_samples_and_labels[origin] = clean(params, origin_to_samples_and_labels[origin])
+    origin_to_samples_and_labels = clean_all(params, origin_to_samples_and_labels, INFO_COLUMNS)
 
     # feature engineering
     # feature engineering

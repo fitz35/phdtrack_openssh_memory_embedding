@@ -8,8 +8,9 @@ from research_base.utils.results_utils import time_measure_result
 
 from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.params.pipelines import Pipeline
-from embedding_generation.params.params import USER_DATA_COLUMN, WORD2VEC_MIN_COUNT, WORD2VEC_VECTOR_SIZE, WORD2VEC_WINDOW_BYTES_SIZE, ProgramParams
+from embedding_generation.params.params import WORD2VEC_MIN_COUNT, WORD2VEC_VECTOR_SIZE, WORD2VEC_WINDOW_BYTES_SIZE, ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
+from commons.params.common_params import USER_DATA_COLUMN
 
 
 

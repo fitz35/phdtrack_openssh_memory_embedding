@@ -53,7 +53,7 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
     index = 0
     word_byte_sizes = [32, 16] # size of the word in bytes
     embedding_dims = [16, 32, 64, 128] # output of the embedding (result size)
-    transformer_units = [8, 64, 128, 256] # dimension of the transformer units (see .md)
+    transformer_units = [2, 4, 8] # dimension of the transformer units (see .md)
     num_heads = [2, 4, 8] # attention heads
     num_transformer_layers = [2, 4, 8] # number of transformer layers
     dropout_rates = [0.1, 0.2, 0.3]

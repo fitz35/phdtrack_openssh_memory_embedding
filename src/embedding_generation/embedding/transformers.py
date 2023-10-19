@@ -11,10 +11,11 @@ from research_base.utils.results_utils import time_measure_result
 
 
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_generation.params.params import USER_DATA_COLUMN, ProgramParams
+from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
 from embedding_generation.params.pipelines import Pipeline
 from embedding_generation.data.hyperparams_transformers import TRANSFORMERS_BATCH_SIZE, TransformersHyperParams, get_transformers_hyperparams
+from commons.params.common_params import USER_DATA_COLUMN
 
 
 # Hyperparameters

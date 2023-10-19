@@ -2,14 +2,14 @@
 
 
 import time
-from embedding_quality.params.params import ProgramParams
+from embedding_quality.params.params import INFO_COLUMNS, ProgramParams
 from commons.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
 from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
 from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
 from embedding_quality.data_balancing.data_balancing import apply_balancing
 from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
-from embedding_quality.data.data_cleaning import clean
+from commons.data_loading.data_cleaning import clean_all
 
 
 def pipeline(params : ProgramParams):
@@ -47,8 +47,7 @@ def pipeline(params : ProgramParams):
             )
     
     # clean data
-    for origin in origin_to_samples_and_labels:
-        origin_to_samples_and_labels[origin] = clean(params, origin_to_samples_and_labels[origin])
+    origin_to_samples_and_labels = clean_all(params, origin_to_samples_and_labels, INFO_COLUMNS)
 
     # feature engineering
     with time_measure_result(

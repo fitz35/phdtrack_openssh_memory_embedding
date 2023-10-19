@@ -9,9 +9,6 @@ from embedding_generation.results_writer.result_writer import ResultsWriter
 from .cli import CLIArguments
 from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
-# column name for the user data of each chunk
-USER_DATA_COLUMN = "hexa_representation"
-
 # word2vec window size, in bytes. To have the number of words in a window, divide by the word size in bytes
 WORD2VEC_WINDOW_BYTES_SIZE = 8
 
