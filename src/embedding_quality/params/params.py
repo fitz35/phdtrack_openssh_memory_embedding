@@ -9,7 +9,7 @@ from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
 BALANCING_STRATEGY = BalancingStrategies.UNDERSAMPLING
 # info column to drop
-INFO_COLUMNS = ["file_path", "f_dtns_addr"]
+INFO_COLUMNS = ["file_path", "chn_addr"]
 
 class Pipeline(Enum):
     PIPELINE="embedding_quality"
@@ -92,6 +92,10 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
         else:
             print("ERROR: No dataset path given.")
             exit(1)
+        
+        if self.cli_args.args.no_balancing is not None:
+            self.no_balancing = self.cli_args.args.no_balancing
+            assert isinstance(self.no_balancing, bool)
     
     
     def set_result_for(self, column_name: str, value: str):

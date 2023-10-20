@@ -29,7 +29,7 @@ class SamplesAndLabels:
         self.sample.drop(columns=columns_to_remove, inplace=True)
         
         # Log the information
-        logger.info(f'Removing {len(columns_to_remove)} : {columns_to_remove}')
+        logger.info(f'Removing {len(columns_to_remove)} columns (keeping {self.sample.shape[1]} columns): {columns_to_remove}')
 
         return self
 

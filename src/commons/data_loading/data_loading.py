@@ -22,7 +22,20 @@ def __load_samples_and_labels_from_csv(
     column_dtypes: dict[str, str] | str = PANDA_DTYPE_DEFAULT,
 ) -> SamplesAndLabels | None:
     # Load the data from the CSV file
-    data = pd.read_csv(csv_file_path, dtype=column_dtypes)
+    try:
+        data = pd.read_csv(csv_file_path, dtype=column_dtypes)
+    except pd.errors.EmptyDataError:
+        print(f"The CSV {csv_file_path} file is empty.")
+        return None
+    except pd.errors.ParserError:
+        print(f"Error during parsing the CSV {csv_file_path} file.")
+        return None
+    except FileNotFoundError:
+        print(f"The specified CSV {csv_file_path} file was not found.")
+        return None
+    except Exception as e:
+        print(f"An error occurred while reading the CSV {csv_file_path} file: {e}")
+        return None
 
     # Check if data is empty
     if data.empty:
@@ -34,6 +47,9 @@ def __load_samples_and_labels_from_csv(
 
         # Extract the samples from the other columns
         samples = data.iloc[:, :-1]
+
+        # add file_path column
+        samples["file_path"] = csv_file_path
 
         # identify the row with nan values (do it in the cleaning stage)
         #rows_with_nan = samples.isnull().any(axis=1)

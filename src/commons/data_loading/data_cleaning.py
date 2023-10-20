@@ -27,20 +27,24 @@ def _clean(params: CommonProgramParams, samples_and_labels: SamplesAndLabels, in
 
     # ---------- Remove rows with NaN values ----------
     # Find the indices of rows with NaN values
-    rows_with_nan = samples.isnull().any(axis=1)
-    # Log all the removed rows
-# Log the removed rows where NaN is not in the "truc" column
-    for _, row in samples[rows_with_nan].iterrows():
-        if 'Skewness' in row and 'Kurtosis' in row and pd.notna(row['Skewness']) and pd.notna(row['Kurtosis']):
-            file_path = row['file_path']
-            params.RESULTS_LOGGER.info(f'WARN : Removing row with NaN values in file_path: {file_path}, f_dtns_addr: {row["f_dtns_addr"]}')
-    
+    cols_to_exclude = set(['Kurtosis', 'Skewness']) & set(samples.columns)
+    mask_for_logging = samples.drop(columns=list(cols_to_exclude)).isna().any(axis=1)
+
+    # Log the removed rows where NaN is not in the "Skewness" or "Kurtosis" column
+    for _, row in samples[mask_for_logging].iterrows():
+
+        file_path = row['file_path']
+        params.RESULTS_LOGGER.info(f'WARN : Removing row with NaN values in file_path: {file_path}, f_dtns_addr: {row["chn_addr"]}')
+
+    # Filter rows where NaN values are present in any column
+    mask_for_removal = samples.isna().any(axis=1)
     
     # Remove the rows with NaN values from the samples and labels
-    samples = samples.loc[~rows_with_nan]
-    labels = labels.loc[~rows_with_nan]
+    samples = samples.loc[~mask_for_removal]
+    labels = labels.loc[~mask_for_removal]
 
-    params.RESULTS_LOGGER.info(f'Removing {len(rows_with_nan)} row with nan value.')
+    num_rows_removed = mask_for_removal.sum()
+    params.RESULTS_LOGGER.info(f'Removing {num_rows_removed} row with nan value.')
 
     # ---------- Remove columns in the INFO_COLUMNS list ----------
 
@@ -88,6 +92,7 @@ def clean_all(
     params.COMMON_LOGGER.info("Cleaning data")
     result = {}
     for origin in samples_and_labels:
+        params.RESULTS_LOGGER.info(f'Cleaning data for {origin}')
         result[origin] = _clean(params, samples_and_labels[origin], info_column)
     
     return result

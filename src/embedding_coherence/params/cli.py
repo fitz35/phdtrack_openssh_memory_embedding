@@ -29,6 +29,7 @@ class CLIArguments:
             -ots origins testing
             -d dataset path to use
             -h help
+            --no_balancing unactivate balancing
         
         usage example:
             python3 main.py -t /home/onyr/Documents/code/phdtrack/phdtrack_data/Training/Training/scp/V_7_8_P1/16 -e /home/onyr/Documents/code/phdtrack/phdtrack_data/Validation/Validation/scp/V_7_8_P1/16 -d False
@@ -68,6 +69,11 @@ class CLIArguments:
             "--dataset_path",
             type=str,
             help="Dataset path to use."
+        )
+        parser.add_argument(
+            '--no_balancing', 
+            action='store_true',
+            help="unactivate balancing, True or False"
         )
 
         # save parsed arguments

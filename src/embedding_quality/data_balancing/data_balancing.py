@@ -41,26 +41,27 @@ def apply_balancing(
     """
     Get the rebalanced data.
     """    
-    if BALANCING_STRATEGY == BalancingStrategies.NO_BALANCING:
-        return SamplesAndLabels(samples, labels)
+    
+    params.set_result_for(
+        "nb_samples_before_balancing",
+        dict_to_csv_value(count_labels(labels))
+    )
+    if params.no_balancing or BALANCING_STRATEGY == BalancingStrategies.NO_BALANCING:
+        sample_and_labels = SamplesAndLabels(samples, labels)
     elif BALANCING_STRATEGY in SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION.keys():
-        params.set_result_for(
-            "nb_samples_before_balancing",
-            dict_to_csv_value(count_labels(labels))
-        )
-
         sample_and_labels = resample_data(
             SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION[BALANCING_STRATEGY],
             params, 
             samples, 
             labels
         )
-        X_res, y_res = sample_and_labels.sample, sample_and_labels.labels
-        params.set_result_for(
-            "nb_samples_after_balancing",
-            dict_to_csv_value(count_labels(y_res))
-        )
-
-        return SamplesAndLabels(X_res, y_res)
     else:
         raise ValueError(f"Invalid balancing strategy: {BALANCING_STRATEGY}")
+    
+    params.set_result_for(
+        "nb_samples_after_balancing",
+        dict_to_csv_value(count_labels(sample_and_labels.labels))
+    )
+
+    return sample_and_labels
+    

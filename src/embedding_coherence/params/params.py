@@ -101,6 +101,10 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
         else:
             print("ERROR: No dataset path given.")
             exit(1)
+
+        if self.cli_args.args.no_balancing is not None:
+            self.no_balancing = self.cli_args.args.no_balancing
+            assert isinstance(self.no_balancing, bool)
     
     
     def set_result_for(self, column_name: str, value: str):
