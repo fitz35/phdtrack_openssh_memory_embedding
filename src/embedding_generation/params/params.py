@@ -25,6 +25,8 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
 
 
     # dev variable
+    # Transformers batch size, the number of samples to use in one batch for the transformers model
+    TRANSFORMERS_BATCH_SIZE : int
     # max number of samples to use, negative value means no limit
     MAX_NUMBERS_OF_SAMPLES_TO_USE: int
 

@@ -1,4 +1,6 @@
 
+import contextlib
+import io
 import os
 from typing import Any
 import numpy as np
@@ -14,13 +16,8 @@ from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
 from embedding_generation.params.pipelines import Pipeline
-from embedding_generation.data.hyperparams_transformers import TRANSFORMERS_BATCH_SIZE, TransformersHyperParams, get_transformers_hyperparams
+from embedding_generation.data.hyperparams_transformers import TransformersHyperParams, get_transformers_hyperparams
 from commons.params.common_params import USER_DATA_COLUMN
-
-
-# Hyperparameters
-input_length = None  # This allows variable length input
-
 
 
 def transformers_pipeline(
@@ -44,11 +41,17 @@ def transformers_pipeline(
         params.RESULTS_LOGGER.info(f"Transformers instance : {hyperparam}")
 
         input_data = __get_input_encoder_from_samplesAndLabels(hyperparam, samples_and_sample_str_train, samples_and_sample_str_test)
-        params.RESULTS_LOGGER.info(f"token number for instance {hyperparam.index} (with padding) : {input_data.shape[1]}")
+        tocken_number = input_data.shape[1]
+        
+        params.RESULTS_LOGGER.info(f"token number for instance {hyperparam.index} (with padding) : {tocken_number}")
+        
+
+        params.COMMON_LOGGER.info(f"input_data shape : {input_data.shape}")
 
         # compute the encoder
 
-        encoder = __get_encoder(params, hyperparam)
+        encoder = __get_encoder(params, hyperparam, tocken_number)
+        params.RESULTS_LOGGER.info(f"encoder summary : {__get_model_summary(encoder)}")
 
         
         # train the model
@@ -58,14 +61,16 @@ def transformers_pipeline(
                 params.get_results_writer(pipeline=Pipeline.Transformers),
                 "model_training_duration"
             ):
-            embedded : np.ndarray[Any, Any] = encoder.predict(input_data, batch_size=TRANSFORMERS_BATCH_SIZE, verbose="1")
+            
+            embedded : np.ndarray[Any, Any] = encoder.predict(input_data, batch_size=params.TRANSFORMERS_BATCH_SIZE, verbose="1")
 
 
         # split the embedded data into train and test
-        trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=[f'embedded_{i}' for i in range(hyperparam.embedding_dim)])
+        colums = [f'embedded_{i}' for i in range(hyperparam.embedding_dim)]
+        trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=colums)
         assert len(trained_embedded) == len(samples_and_sample_str_train.labels), f"len(trained_embedded)={len(trained_embedded)} != len(samples_and_sample_str_train.labels)={len(samples_and_sample_str_train.labels)}"
 
-        tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=[f'embedded_{i}' for i in range(len(embedded) - hyperparam.embedding_dim)])
+        tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=colums)
         assert len(tested_embedded) == len(samples_and_sample_str_test.labels), f"len(tested_embedded)={len(tested_embedded)} != len(samples_and_sample_str_test.labels)={len(samples_and_sample_str_test.labels)}"
 
         trained = SamplesAndLabels(trained_embedded, samples_and_sample_str_train.labels)
@@ -82,7 +87,7 @@ def transformers_pipeline(
         #save the run hyperparams
 
         hyperparam.log(params.RESULTS_LOGGER)
-        hyperparam.append_to_csv(os.path.join(embedding_folder, f"hyperparams.csv"))
+        hyperparam.append_to_csv(os.path.join(params.OUTPUT_FOLDER, f"hyperparams.csv"))
 
 
     
@@ -90,28 +95,28 @@ def transformers_pipeline(
 def __get_input_encoder_from_samplesAndLabels(hyperparam : TransformersHyperParams, df_train: SamplesAndLabels, df_test: SamplesAndLabels):
     df = pd.concat([df_train.sample, df_test.sample])
 
-    output = __transform_hex_data(hyperparam, df)
+    output = __transform_hex_data(hyperparam, df=df)
+    del df
     output = output[USER_DATA_COLUMN].apply(lambda list_x : [float(int(x, 16)) for x in list_x ]).tolist()
+    
     # Pad the sequences
     # first dimension is the number of samples, second is the length of the sequence
-    padded_sequences = pad_sequences(output, padding='post', dtype='float32') 
-
+    padded_sequences = pad_sequences(output, padding='post', dtype='float64') 
     # Reshape for the encoder like (batch_size, sequence_length, feature_size) (3d)
-    padded_sequences = padded_sequences.reshape(padded_sequences.shape[0], padded_sequences.shape[1], 1)
-
+    padded_sequences = np.expand_dims(padded_sequences, axis=-1)
     return padded_sequences
 
 
 def __transform_hex_data(hyperparam : TransformersHyperParams, df: pd.DataFrame) -> pd.DataFrame:
     """Transforms the specified column of a DataFrame into lists of 2-byte length strings."""
-    transformed_df = df.copy()
-    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, hyperparam.word_byte_size))
+    transformed_df = df
+    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, hyperparam.word_character_size))
     return transformed_df
 
-def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -> tf.keras.Model:
+def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams, input_size :int) -> tf.keras.Model:
     def transformer_encoder(units: int, num_heads: int) -> tf.keras.Model:
         # Input
-        inputs = layers.Input(shape=(None, hyperparams.embedding_dim))
+        inputs = layers.Input(shape=(input_size, hyperparams.embedding_dim))
         
         # Multi-head Self Attention
         attention = layers.MultiHeadAttention(num_heads=num_heads, key_dim=units)(inputs, inputs)
@@ -129,7 +134,7 @@ def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -
         return models.Model(inputs, output)
 
     # Define the encoder model
-    inputs = layers.Input(shape=(input_length, 1))
+    inputs = layers.Input(shape=(None, 1))
 
     # Embedding layer
     embedded = layers.Dense(hyperparams.embedding_dim, activation=hyperparams.activation)(inputs)
@@ -145,3 +150,28 @@ def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -
     encoder = models.Model(inputs, output)
 
     return encoder
+
+
+def __get_model_summary(model: tf.keras.Model):
+    """
+    Captures the summary of a Keras model as a string.
+    
+    Parameters:
+    - model (keras.Model): The Keras model for which the summary is needed.
+
+    Returns:
+    - str: A string containing the summary of the model.
+    """
+
+    # Create a StringIO object to capture the standard output
+    stream = io.StringIO()
+
+    # Redirect the standard output to the StringIO object
+    with contextlib.redirect_stdout(stream):
+        model.summary()
+
+    # Retrieve the model summary from the StringIO object
+    summary_string = stream.getvalue()
+    stream.close()
+
+    return summary_string

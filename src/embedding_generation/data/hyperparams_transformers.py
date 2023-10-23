@@ -6,9 +6,6 @@ from dataclasses import dataclass
 import logging
 import os
 
-# number of file to handle in parallel by the transformers pipeline
-TRANSFORMERS_BATCH_SIZE = 5
-
 
 @dataclass
 class TransformersHyperParams:
@@ -16,7 +13,7 @@ class TransformersHyperParams:
     Hyperparameters for the Transformers model.
     """
     index : int
-    word_byte_size : int
+    word_character_size : int
     embedding_dim : int
     transformer_units : int
     num_heads : int
@@ -27,7 +24,7 @@ class TransformersHyperParams:
 
     def to_dir_name(self) -> str:
         attributes = [
-            "word_byte_size", "embedding_dim", "transformer_units",
+            "word_character_size", "embedding_dim", "transformer_units",
             "num_heads", "num_transformer_layers", "dropout_rate", "activation"
         ]
         dir_name = "_".join(f"{attr}={getattr(self, attr)}" for attr in attributes)
@@ -36,7 +33,7 @@ class TransformersHyperParams:
         dir_name = re.sub(r"[^\w\s-]", "", dir_name)
         dir_name = re.sub(r"[-\s]+", "-", dir_name).strip("-_")
         
-        return dir_name
+        return "transformers_" + dir_name
 
 
     def log(self, logger : logging.Logger):
@@ -67,15 +64,15 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
 
 
     index = 0
-    word_byte_sizes = [32, 16] # size of the word in bytes
-    embedding_dims = [16, 32, 64, 128] # output of the embedding (result size)
+    word_character_sizes = [16, 8] # size of the word in bytes (take care to not overflow f64, so max 8 bytes, ie 16 characters)
+    embedding_dims = [8, 16, 100] # output of the embedding (result size)
     transformer_units = [2, 4, 8] # dimension of the transformer units (see .md)
     num_heads = [2, 4, 8] # attention heads
     num_transformer_layers = [2, 4, 8] # number of transformer layers
     dropout_rates = [0.1, 0.2, 0.3]
     activations = ["relu"]
 
-    for word_byte_size in word_byte_sizes:
+    for word_character_size in word_character_sizes:
         for embedding_dim in embedding_dims:
             for transformer_unit in transformer_units:
                 for num_head in num_heads:
@@ -84,7 +81,7 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
                                 for activation in activations:
                                     all_hyperparams.append(TransformersHyperParams(
                                         index=index,
-                                        word_byte_size=word_byte_size,
+                                        word_character_size=word_character_size,
                                         embedding_dim=embedding_dim,
                                         transformer_units=transformer_unit,
                                         num_heads=num_head,

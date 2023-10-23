@@ -30,7 +30,7 @@ class Word2vecHyperparams:
         dir_name = re.sub(r"[^\w\s-]", "", dir_name)
         dir_name = re.sub(r"[-\s]+", "-", dir_name).strip("-_")
         
-        return dir_name
+        return "word2vec_" + dir_name
 
     def log(self, logger : logging.Logger):
         logger.info(f"TransformersHyperParams : {self.__dict__}")
