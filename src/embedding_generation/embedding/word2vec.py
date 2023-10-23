@@ -8,7 +8,7 @@ from research_base.utils.results_utils import time_measure_result
 
 from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.params.pipelines import Pipeline
-from embedding_generation.params.params import WORD2VEC_MIN_COUNT, WORD2VEC_VECTOR_SIZE, WORD2VEC_WINDOW_BYTES_SIZE, ProgramParams
+from embedding_generation.params.params import WORD2VEC_MIN_COUNT, WORD2VEC_WINDOW_BYTES_SIZE, ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
 from commons.params.common_params import USER_DATA_COLUMN
 
@@ -43,7 +43,7 @@ def word2vec_pipeline(
         sentences = samples_and_sample_train_samples[USER_DATA_COLUMN].tolist()
         model = Word2Vec(
             sentences, 
-            vector_size=WORD2VEC_VECTOR_SIZE, 
+            vector_size=params.output_size, 
             window=int(WORD2VEC_WINDOW_BYTES_SIZE/params.WORD_BYTE_SIZE), 
             min_count=WORD2VEC_MIN_COUNT, 
             workers=params.MAX_ML_WORKERS
