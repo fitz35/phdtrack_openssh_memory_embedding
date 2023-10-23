@@ -36,11 +36,13 @@ def transformers_pipeline(
     for hyperparam in all_hyper_params:
         
         # test if we have already computed this hyperparam
-        trannsformers_folder = os.path.join(params.OUTPUT_FOLDER, "transformers")
-        embedding_folder = os.path.join(trannsformers_folder, f"embedding_index_{hyperparam.to_dir_name()}")
+        embedding_folder = os.path.join(params.OUTPUT_FOLDER, f"embedding_index_{hyperparam.to_dir_name()}")
         if os.path.exists(embedding_folder):
+            params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed")
             continue
         
+        params.RESULTS_LOGGER.info(f"Transformers instance : {hyperparam}")
+
         input_data = __get_input_encoder_from_samplesAndLabels(hyperparam, samples_and_sample_str_train, samples_and_sample_str_test)
         params.RESULTS_LOGGER.info(f"token number for instance {hyperparam.index} (with padding) : {input_data.shape[1]}")
 
@@ -102,8 +104,9 @@ def __get_input_encoder_from_samplesAndLabels(hyperparam : TransformersHyperPara
 
 def __transform_hex_data(hyperparam : TransformersHyperParams, df: pd.DataFrame) -> pd.DataFrame:
     """Transforms the specified column of a DataFrame into lists of 2-byte length strings."""
-    df[USER_DATA_COLUMN] = df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, hyperparam.word_byte_size))
-    return df
+    transformed_df = df.copy()
+    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, hyperparam.word_byte_size))
+    return transformed_df
 
 def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams) -> tf.keras.Model:
     def transformer_encoder(units: int, num_heads: int) -> tf.keras.Model:

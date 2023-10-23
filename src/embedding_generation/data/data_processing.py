@@ -9,5 +9,8 @@ def split_into_chunks(hex_string: str, chunk_size: int = 2) -> List[str]:
     remainder = len(hex_string) % chunk_size
     if remainder:
         hex_string += '0' * (chunk_size - remainder)
+    
+    return_list = [hex_string[i:i+chunk_size] for i in range(0, len(hex_string), chunk_size)]
+    #print(return_list)
 
-    return [hex_string[i:i+chunk_size] for i in range(0, len(hex_string), chunk_size)]
+    return return_list

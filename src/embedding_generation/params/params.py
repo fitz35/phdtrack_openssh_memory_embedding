@@ -9,11 +9,6 @@ from embedding_generation.results_writer.result_writer import ResultsWriter
 from .cli import CLIArguments
 from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
-# word2vec window size, in bytes. To have the number of words in a window, divide by the word size in bytes
-WORD2VEC_WINDOW_BYTES_SIZE = 8
-
-# word2vec min count
-WORD2VEC_MIN_COUNT = 1
 
 
 class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
@@ -27,10 +22,6 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     ### env vars
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
     # NOTE: lowercase values are from the CLI
-
-
-    # length of the word in bytes for word2vec
-    WORD_BYTE_SIZE: int
 
 
     # dev variable
@@ -120,18 +111,6 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
             except ValueError:
                     print(f"ERROR: Invalid pipeline name: {self.cli_args.args.pipelines}")
                     exit(1)
-
-
-        if self.cli_args.args.output_size is not None:
-            try:
-                self.output_size = int( self.cli_args.args.output_size)
-                assert isinstance(self.output_size, int)
-
-            except ValueError:
-                    print(f"ERROR: Invalid output_size : {self.cli_args.args.output_size}")
-                    exit(1)
-        else:
-            self.output_size = 100
     
     
     def set_result_for(self, pipeline : Pipeline, column_name: str, value: str):

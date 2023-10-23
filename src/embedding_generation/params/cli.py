@@ -82,12 +82,6 @@ class CLIArguments:
             default=None,
             help="List of pipelines to run: " + str(list(map(lambda x: x.name.lower(), Pipeline)))
         )
-        parser.add_argument(
-            '-osz',
-            '--output_size',
-            type=int,
-            default=None,
-            help="the output size of the embedding (defaut 100)"
-        )
+
         # save parsed arguments
         self.args = parser.parse_args()

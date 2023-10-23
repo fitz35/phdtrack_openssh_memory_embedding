@@ -1,4 +1,5 @@
 
+import os
 from commons.results.commons_results_writer import CommonResultsWriter
 
 
@@ -21,8 +22,14 @@ class ResultsWriter(CommonResultsWriter):
     ]
 
     def __init__(self, pipeline_name: str):
+
+        result_csv_save_path = os.environ.get("RESULTS_CSV_DIR_PATH")
+        if result_csv_save_path is None:
+            raise Exception("ERROR: RESULTS_CSV_DIR_PATH env var not set.")
+        elif not os.path.exists(result_csv_save_path):
+            raise Exception("ERROR: RESULTS_CSV_DIR_PATH env var does not point to a valid path.")
         super().__init__(
-            "/home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/embedding_coherence/result.csv", 
+            os.path.join(result_csv_save_path, "result.csv"), 
             self.ADDITIONAL_HEADERS, 
             pipeline_name
         )

@@ -8,9 +8,10 @@ from research_base.utils.results_utils import time_measure_result
 
 from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.params.pipelines import Pipeline
-from embedding_generation.params.params import WORD2VEC_MIN_COUNT, WORD2VEC_WINDOW_BYTES_SIZE, ProgramParams
+from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
 from commons.params.common_params import USER_DATA_COLUMN
+from embedding_generation.data.hyperparams_word2vec import Word2vecHyperparams, get_word2vec_hyperparams_instances
 
 
 
@@ -22,64 +23,96 @@ def word2vec_pipeline(
 ):
     # prepare data for word2vec
     samples_and_sample_train_samples = samples_and_sample_str_train.sample
-    samples_and_sample_train_samples = __transform_hex_data(params, samples_and_sample_train_samples)
-    max_length_train = samples_and_sample_train_samples[USER_DATA_COLUMN].apply(len).max()
+    
 
     samples_and_sample_test_samples = samples_and_sample_str_test.sample
-    samples_and_sample_test_samples = __transform_hex_data(params, samples_and_sample_test_samples)
-    max_length_test = samples_and_sample_test_samples[USER_DATA_COLUMN].apply(len).max()
-
-
-    params.set_result_for(Pipeline.Word2Vec, "max_token_number", str(max(max_length_train, max_length_test)))
-
-    # train the model
-    with time_measure_result(
-            f'word2vec training : ', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(pipeline=Pipeline.Word2Vec),
-            "model_training_duration"
-        ):
-        
-        sentences = samples_and_sample_train_samples[USER_DATA_COLUMN].tolist()
-        model = Word2Vec(
-            sentences, 
-            vector_size=params.output_size, 
-            window=int(WORD2VEC_WINDOW_BYTES_SIZE/params.WORD_BYTE_SIZE), 
-            min_count=WORD2VEC_MIN_COUNT, 
-            workers=params.MAX_ML_WORKERS
-        )
-
     
-    # generate the embedding
-    with time_measure_result(
-            f'word2vec used to embedde : ', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(Pipeline.Word2Vec),
-            "gen_embedding_duration"
-        ):
-        train_embedded = __gen_embedding(samples_and_sample_str_train, model)
-        test_embedded = __gen_embedding(samples_and_sample_str_test, model)
 
-    folder = os.path.join(params.OUTPUT_FOLDER, "word2vec")
+    instances: list[Word2vecHyperparams] = get_word2vec_hyperparams_instances()
+
+    folder = params.OUTPUT_FOLDER
     os.makedirs(folder, exist_ok=True)
 
-    train_embedded.save_to_csv(os.path.join(folder, f"training_word2vec_embedding.csv"))
-    test_embedded.save_to_csv(os.path.join(folder, f"validation_word2vec_embedding.csv"))
+    for instance in instances:
+
+        instance_folder = os.path.join(folder, instance.to_dir_name())
+        if os.path.exists(instance_folder):
+            params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed")
+            continue
+
+        params.RESULTS_LOGGER.info(f"Word2Vec instance : {instance}")
+
+        samples_and_sample_train_samples_new = __transform_hex_data(instance, samples_and_sample_train_samples)
+        max_length_train = samples_and_sample_train_samples_new[USER_DATA_COLUMN].apply(len).max()
+        samples_and_sample_test_samples_new = __transform_hex_data(instance, samples_and_sample_test_samples)
+        max_length_test = samples_and_sample_test_samples_new[USER_DATA_COLUMN].apply(len).max()
+
+        params.RESULTS_LOGGER.info(f"max_length_train : {max(max_length_train, max_length_test)}")
+
+        # train the model
+        with time_measure_result(
+                f'word2vec training : ', 
+                params.RESULTS_LOGGER
+            ):
+            
+            sentences = samples_and_sample_train_samples_new[USER_DATA_COLUMN].tolist()
+            model = Word2Vec(
+                sentences, 
+                vector_size=instance.output_size, 
+                window=int(instance.window_bytes_size/instance.word_byte_size), 
+                min_count=instance.min_count, 
+                workers=params.MAX_ML_WORKERS,
+                seed=params.RANDOM_SEED
+            )
+
+        
+        # generate the embedding
+        with time_measure_result(
+                f'word2vec used to embedde : ', 
+                params.RESULTS_LOGGER, 
+                params.get_results_writer(Pipeline.Word2Vec),
+                "gen_embedding_duration"
+            ):
+            train_embedded = __gen_embedding(
+                SamplesAndLabels(
+                    samples_and_sample_train_samples_new, 
+                    samples_and_sample_str_train.labels
+                    ), 
+                model
+            )
+            test_embedded = __gen_embedding(
+                SamplesAndLabels(
+                    samples_and_sample_test_samples_new, 
+                    samples_and_sample_str_test.labels
+                    ),
+                model
+            )
+
+        os.makedirs(instance_folder, exist_ok=True)
+        train_embedded.save_to_csv(os.path.join(instance_folder, f"training_word2vec_embedding.csv"))
+        test_embedded.save_to_csv(os.path.join(instance_folder, f"validation_word2vec_embedding.csv"))
 
 
-def __transform_hex_data(params : ProgramParams, df: pd.DataFrame) -> pd.DataFrame:
+def __transform_hex_data(params: Word2vecHyperparams, df: pd.DataFrame) -> pd.DataFrame:
     """Transforms the specified column of a DataFrame into lists of 2-byte length strings."""
-    df[USER_DATA_COLUMN] = df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, params.WORD_BYTE_SIZE))
-    return df
+    transformed_df = df.copy()
+    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, params.word_byte_size))
+    return transformed_df
 
 def __gen_embedding(
     samples_and_sample_str: SamplesAndLabels,
     model : Word2Vec,
 ):
-    def get_average_embedding(word_sequence : list[str]) :
-        if word_sequence:
-            return np.mean([model.wv[word] for word in word_sequence], axis=0)
-        return np.zeros(model.vector_size)
+    
+    def get_average_embedding(word_sequence):
+        """
+        Get the average embedding of a sequence of words. (SKIP oov = out-of-vocabulary words)
+        """
+        embeddings = [model.wv[word] for word in word_sequence if word in model.wv]
+        if embeddings:
+            return np.mean(embeddings, axis=0)
+        else:
+            return np.zeros(model.vector_size)
     
     samples = samples_and_sample_str.sample
     labels = samples_and_sample_str.labels
