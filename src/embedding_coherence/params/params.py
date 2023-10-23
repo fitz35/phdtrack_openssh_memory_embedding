@@ -13,7 +13,7 @@ CLUSTERIZATION_METRIC = "cosine"
 CLUSTERIZATION_ALGORITHM = "brute"
 
 # number of values to test for epsilon or xi, keep 1 for optics algorithm
-NB_VALUES_TO_TESTS_EPSILON = 1
+NB_VALUES_TO_TESTS_EPSILON = 5
 
 class Pipeline(Enum):
     PIPELINE="embedding_coherence"
@@ -101,10 +101,6 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
         else:
             print("ERROR: No dataset path given.")
             exit(1)
-
-        if self.cli_args.args.no_balancing is not None:
-            self.no_balancing = self.cli_args.args.no_balancing
-            assert isinstance(self.no_balancing, bool)
     
     
     def set_result_for(self, column_name: str, value: str):

@@ -70,11 +70,5 @@ class CLIArguments:
             type=str,
             help="Dataset path to use."
         )
-        parser.add_argument(
-            '--no_balancing', 
-            action='store_true',
-            help="unactivate balancing, True or False"
-        )
-
         # save parsed arguments
         self.args = parser.parse_args()
