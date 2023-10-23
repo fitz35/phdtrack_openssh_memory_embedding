@@ -33,12 +33,11 @@ def transformers_pipeline(
 
     all_hyper_params = get_transformers_hyperparams()
 
-
     for hyperparam in all_hyper_params:
         
         # test if we have already computed this hyperparam
         trannsformers_folder = os.path.join(params.OUTPUT_FOLDER, "transformers")
-        embedding_folder = os.path.join(trannsformers_folder, f"embedding_index_{hyperparam.index}")
+        embedding_folder = os.path.join(trannsformers_folder, f"embedding_index_{hyperparam.to_dir_name()}")
         if os.path.exists(embedding_folder):
             continue
         
@@ -72,6 +71,7 @@ def transformers_pipeline(
 
         # save the embedded data
         
+
         os.makedirs(embedding_folder, exist_ok=True)
 
         trained.save_to_csv(os.path.join(embedding_folder, f"training_transformers_embedding.csv"))

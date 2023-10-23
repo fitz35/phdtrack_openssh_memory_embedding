@@ -1,6 +1,7 @@
 
 
 import csv
+import re
 from dataclasses import dataclass
 import logging
 import os
@@ -22,6 +23,21 @@ class TransformersHyperParams:
     num_transformer_layers : int
     dropout_rate : float
     activation : str
+
+
+    def to_dir_name(self) -> str:
+        attributes = [
+            "word_byte_size", "embedding_dim", "transformer_units",
+            "num_heads", "num_transformer_layers", "dropout_rate", "activation"
+        ]
+        dir_name = "_".join(f"{attr}={getattr(self, attr)}" for attr in attributes)
+        
+        # Replace or remove special characters
+        dir_name = re.sub(r"[^\w\s-]", "", dir_name)
+        dir_name = re.sub(r"[-\s]+", "-", dir_name).strip("-_")
+        
+        return dir_name
+
 
     def log(self, logger : logging.Logger):
         logger.info(f"TransformersHyperParams : {self.__dict__}")
