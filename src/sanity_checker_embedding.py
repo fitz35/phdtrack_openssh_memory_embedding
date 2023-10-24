@@ -1,6 +1,25 @@
 import os
 import argparse
+
+from tqdm import tqdm
 import pandas as pd
+import concurrent.futures
+
+
+def check_csv_file(file_path):
+    try:
+        # Try reading the CSV file
+        df = pd.read_csv(file_path)
+    except pd.errors.EmptyDataError:
+        return f"WARNING: {os.path.basename(file_path)} is empty"
+    except Exception as e:
+        return f"ERROR reading {os.path.basename(file_path)}: {e}"
+
+    # Check if the CSV file is empty after reading
+    if df.empty:
+        return f"WARNING: {os.path.basename(file_path)} is empty after reading"
+
+    return df.columns.tolist(), file_path
 
 def check_csv_consistency(directory):
     for root, dirs, files in os.walk(directory):
@@ -15,37 +34,26 @@ def check_csv_consistency(directory):
             print("  No CSV files found\n")
             continue
 
-        # Initialize variables to store the first header and file name
         first_header = None
         first_file_name = None
+        file_paths = [os.path.join(root, csv_file) for csv_file in csv_files]
 
-        # Iterate through the CSV files and perform the checks
-        for csv_file in csv_files:
-            file_path = os.path.join(root, csv_file)
-            try:
-                # Try reading the CSV file
-                df = pd.read_csv(file_path)
-            except pd.errors.EmptyDataError:
-                print(f"  WARNING: {csv_file} is empty")
-                continue
-            except Exception as e:
-                print(f"  ERROR reading {csv_file}: {e}")
-                continue
+        # Using ThreadPoolExecutor to parallelize the task
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            # Map the function and its inputs using tqdm for a progress bar
+            results = list(tqdm(executor.map(check_csv_file, file_paths), total=len(csv_files), desc="  Checking", unit="file"))
 
-            # Check if the CSV file is empty after reading
-            if df.empty:
-                print(f"  WARNING: {csv_file} is empty after reading")
-                continue
-
-            # Check for consistency in headers
-            if first_header is None:
-                first_header = df.columns.tolist()
-                first_file_name = csv_file
-            elif df.columns.tolist() != first_header:
-                print(f"  ERROR: Header in {csv_file} does not match header in {first_file_name}")
+        for headers, file_path in results:
+            if isinstance(headers, str):  # If the result is a string, it's a warning or error message
+                print(headers)
+            else:
+                if first_header is None:
+                    first_header = headers
+                    first_file_name = os.path.basename(file_path)
+                elif headers != first_header:
+                    print(f"  ERROR: Header in {os.path.basename(file_path)} does not match header in {first_file_name}")
 
         print("  Checks complete\n")
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Check consistency of CSV files in embedding folders.")
     parser.add_argument('directory', type=str, help='Path to the directory containing embedding folders.')
