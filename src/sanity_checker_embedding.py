@@ -29,19 +29,18 @@ def check_csv_consistency(directory):
         print(f"Checking embedding in: {root}")
 
         # Filter out non-CSV files
-        csv_files = [f for f in files if f.lower().endswith('.csv')]
-        if not csv_files:
+        file_paths = [os.path.join(root, f) for f in files if f.endswith('.csv')]
+        if not file_paths:
             print("  No CSV files found\n")
             continue
 
         first_header = None
         first_file_name = None
-        file_paths = [os.path.join(root, csv_file) for csv_file in csv_files]
 
         # Using ThreadPoolExecutor to parallelize the task
         with concurrent.futures.ThreadPoolExecutor() as executor:
             # Map the function and its inputs using tqdm for a progress bar
-            results = list(tqdm(executor.map(check_csv_file, file_paths), total=len(csv_files), desc="  Checking", unit="file"))
+            results = list(tqdm(executor.map(check_csv_file, file_paths), total=len(file_paths), desc="  Checking", unit="file"))
 
         for headers, file_path in results:
             if isinstance(headers, str):  # If the result is a string, it's a warning or error message
