@@ -93,8 +93,7 @@ def word2vec_pipeline(
         os.makedirs(instance_folder, exist_ok=True)
 
         # test the model
-        input_folder = os.path.basename(params.dataset_path)
-        testing_pipeline(os.path.join(input_folder, instance_folder_name), train_embedded, test_embedded)
+        testing_pipeline(instance_folder, train_embedded, test_embedded)
 
 
 def __transform_hex_data(params: Word2vecHyperparams, df: pd.DataFrame) -> pd.DataFrame:

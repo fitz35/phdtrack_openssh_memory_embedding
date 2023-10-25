@@ -1,29 +1,29 @@
 
-import sys
+import os
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_quality.params.params import ProgramParams as ClassifierParams
-from embedding_quality.pipeline import pipeline as classifier_pipeline
-from embedding_coherence.params.params import ProgramParams as ClusteringParams
-from embedding_coherence.pipeline import pipeline as clustering_pipeline
 
 
-def testing_pipeline(dataset : str, training : SamplesAndLabels, validation : SamplesAndLabels):
+def testing_pipeline(dataset_path : str, training : SamplesAndLabels, validation : SamplesAndLabels):
     """
     launch the testing pipeline
     """
-    if "filtered" in dataset:
-        args = ["-d", dataset, "-otr", "training", "-ots", "validation", "--no_balancing"]
+
+    # save the embeddings
+    training.save_to_csv(os.path.join(dataset_path, "training.csv"))
+    validation.save_to_csv(os.path.join(dataset_path, "validation.csv"))
+
+
+    if "filtered" in dataset_path:
+        filtered = "--no_balancing"
     else:
-        args = ["-d", dataset, "-otr", "training", "-ots", "validation"]
-
-    # random forest
-    sys.argv[1:] = args
-    params = ClassifierParams(dotenv_path="embedding_quality/.env", construct_log=False)
+        filtered = ""
     
-    classifier_pipeline(params, (training, validation))
 
+    os.system(f"python3 embedding_coherence_main.py -d {dataset_path} -otr training -ots validation")
 
-    # clustering
-    sys.argv[1:] = ["-d", dataset, "-otr", "training", "-ots", "validation"]
-    params = ClusteringParams(dotenv_path="embedding_coherence/.env", construct_log=False)
-    clustering_pipeline(params, (training, validation))
+    os.system(f"python3 embedding_quality_main.py -d {dataset_path} -otr training -ots testing {filtered}")
+    
+
+    # remove the embeddings
+    os.remove(os.path.join(dataset_path, "training.csv"))
+    os.remove(os.path.join(dataset_path, "validation.csv"))
