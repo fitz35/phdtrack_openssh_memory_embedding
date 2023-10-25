@@ -6,7 +6,7 @@ from sklearn.utils import shuffle
 import numpy as np
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
-from research_base.utils.data_utils import count_labels
+from research_base.utils.data_utils import dict_to_csv_value, count_labels
 
 from commons.data_loading.data_types import SamplesAndLabels
 
@@ -43,11 +43,14 @@ def density_clustering_pipeline(
         #df_scaled = pd.DataFrame(scaler.fit_transform(samples_train), columns=samples_train.columns).astype('float32')
         df_scaled = samples_train.astype('float32')
 
+    params.RESULTS_LOGGER.info(f"Number of samples before rebalancing and limiting rows: {dict_to_csv_value(count_labels(labels_train))}")
 
     # rebalance classes (economise memory and time)
     df_scaled, labels_train = balance_classes(params, df_scaled, labels_train)
     # limit the number of rows (economise memory and time)
     df_scaled, labels_train = limit_rows(params, df_scaled, labels_train)
+
+    params.RESULTS_LOGGER.info(f"Number of samples after rebalancing and limiting rows: {dict_to_csv_value(count_labels(labels_train))}")
 
     # precompute cosine similarity matrix
     # reduce memory usage and save time (avoid to compute the same cosine similarity multiple times)
@@ -166,7 +169,7 @@ def balance_classes(params : ProgramParams, df: pd.DataFrame, labels: pd.Series)
     labels_sampled = pd.concat([labels_minority, labels_majority_sampled])
     
     # Shuffle the data
-    shufled_data : Tuple[pd.DataFrame, pd.Series] = shuffle(df_sampled, labels_sampled, random_state=random_state) # type: ignore
+    shufled_data : Tuple[pd.DataFrame, pd.Series] = shuffle(df_sampled, labels_sampled, random_state=params.RANDOM_SEED) # type: ignore
     df_sampled, labels_sampled = shufled_data
     
     return df_sampled, labels_sampled
@@ -213,4 +216,4 @@ def limit_rows(params : ProgramParams, df: pd.DataFrame, labels: pd.Series) -> t
     df_final = pd.concat(dfs)
     labels_final = pd.concat(label_series)
     
-    return shuffle(df_final, labels_final, random_state=random_state) # type: ignore
+    return shuffle(df_final, labels_final, random_state=params.RANDOM_SEED) # type: ignore
