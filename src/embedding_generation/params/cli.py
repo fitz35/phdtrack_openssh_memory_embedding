@@ -72,7 +72,7 @@ class CLIArguments:
             '-o',
             '--output_folder',
             type=str,
-            help="the path of the output folder"
+            help="the path of the output folder (save the advancement)"
         )
         parser.add_argument(
             '-p',

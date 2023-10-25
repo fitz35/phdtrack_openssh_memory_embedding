@@ -12,6 +12,7 @@ from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
 from commons.params.common_params import USER_DATA_COLUMN
 from embedding_generation.data.hyperparams_word2vec import Word2vecHyperparams, get_word2vec_hyperparams_instances
+from embedding_generation.testing_pipeline import testing_pipeline
 
 
 
@@ -35,7 +36,8 @@ def word2vec_pipeline(
 
     for instance in instances:
 
-        instance_folder = os.path.join(folder, instance.to_dir_name())
+        instance_folder_name = f"embedding_word2vec_{instance.to_dir_name()}"
+        instance_folder = os.path.join(folder, instance_folder_name)
         if os.path.exists(instance_folder):
             params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed")
             continue
@@ -89,8 +91,9 @@ def word2vec_pipeline(
             )
 
         os.makedirs(instance_folder, exist_ok=True)
-        train_embedded.save_to_csv(os.path.join(instance_folder, f"training_word2vec_embedding.csv"))
-        test_embedded.save_to_csv(os.path.join(instance_folder, f"validation_word2vec_embedding.csv"))
+
+        # test the model
+        testing_pipeline(instance_folder_name, train_embedded, test_embedded)
 
 
 def __transform_hex_data(params: Word2vecHyperparams, df: pd.DataFrame) -> pd.DataFrame:

@@ -18,6 +18,7 @@ from embedding_generation.data.data_processing import split_into_chunks
 from embedding_generation.params.pipelines import Pipeline
 from embedding_generation.data.hyperparams_transformers import TransformersHyperParams, get_transformers_hyperparams
 from commons.params.common_params import USER_DATA_COLUMN
+from embedding_generation.testing_pipeline import testing_pipeline
 
 
 def transformers_pipeline(
@@ -33,7 +34,8 @@ def transformers_pipeline(
     for hyperparam in all_hyper_params:
         
         # test if we have already computed this hyperparam
-        embedding_folder = os.path.join(params.OUTPUT_FOLDER, f"embedding_index_{hyperparam.to_dir_name()}")
+        embedding_folder_name = f"embedding_transformers_{hyperparam.to_dir_name()}"
+        embedding_folder = os.path.join(params.OUTPUT_FOLDER, embedding_folder_name)
         if os.path.exists(embedding_folder):
             params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed")
             continue
@@ -77,17 +79,17 @@ def transformers_pipeline(
         tested = SamplesAndLabels(tested_embedded, samples_and_sample_str_test.labels)
 
         # save the embedded data
-        
 
         os.makedirs(embedding_folder, exist_ok=True)
-
-        trained.save_to_csv(os.path.join(embedding_folder, f"training_transformers_embedding.csv"))
-        tested.save_to_csv(os.path.join(embedding_folder, f"validation_transformers_embedding.csv"))
 
         #save the run hyperparams
 
         hyperparam.log(params.RESULTS_LOGGER)
         hyperparam.append_to_csv(os.path.join(params.OUTPUT_FOLDER, f"hyperparams.csv"))
+
+
+        # test the model
+        testing_pipeline(embedding_folder_name, trained, tested)
 
 
     
