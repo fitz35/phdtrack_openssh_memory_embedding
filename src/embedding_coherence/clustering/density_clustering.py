@@ -2,6 +2,7 @@
 
 from sklearn.cluster import OPTICS
 from sklearn.metrics import silhouette_score
+from sklearn.utils import shuffle
 import numpy as np
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
@@ -42,6 +43,11 @@ def density_clustering_pipeline(
         #df_scaled = pd.DataFrame(scaler.fit_transform(samples_train), columns=samples_train.columns).astype('float32')
         df_scaled = samples_train.astype('float32')
 
+
+    # rebalance classes (economise memory and time)
+    df_scaled, labels_train = balance_classes(params, df_scaled, labels_train)
+    # limit the number of rows (economise memory and time)
+    df_scaled, labels_train = limit_rows(params, df_scaled, labels_train)
 
     # precompute cosine similarity matrix
     # reduce memory usage and save time (avoid to compute the same cosine similarity multiple times)
@@ -122,3 +128,89 @@ def density_clustering_pipeline(
     return pd.Series(best_labels, name='Cluster')
 
 
+
+
+def balance_classes(params : ProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Balances the classes in the given DataFrame and Series by undersampling the majority class.
+    
+    Parameters:
+    - df: pd.DataFrame
+        The input DataFrame containing the features.
+    - labels: pd.Series
+        The input Series containing the labels.
+    - random_state: int, optional (default=42)
+        Controls the randomness of the sampling and shuffling.
+        
+    Returns:
+    - tuple[pd.DataFrame, pd.Series]
+        The balanced and shuffled DataFrame and Series.
+    """
+    # Separate the majority and minority classes
+    df_minority = df[labels != 0]
+    labels_minority = labels[labels != 0]
+    
+    df_majority = df[labels == 0]
+    labels_majority = labels[labels == 0]
+    
+    # Check if minority classes are actually in minority
+    if len(df_minority) >= len(df_majority):
+        return df, labels
+    
+    # Sample from the majority class to balance the classes
+    df_majority_sampled = df_majority.sample(n=len(df_minority), random_state=params.RANDOM_SEED)
+    labels_majority_sampled = labels_majority.loc[df_majority_sampled.index]
+    
+    # Concatenate the majority and minority samples
+    df_sampled = pd.concat([df_minority, df_majority_sampled])
+    labels_sampled = pd.concat([labels_minority, labels_majority_sampled])
+    
+    # Shuffle the data
+    shufled_data : Tuple[pd.DataFrame, pd.Series] = shuffle(df_sampled, labels_sampled, random_state=random_state) # type: ignore
+    df_sampled, labels_sampled = shufled_data
+    
+    return df_sampled, labels_sampled
+
+
+
+def limit_rows(params : ProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Limits the number of rows in the DataFrame and Series while maintaining class ratios.
+    
+    Parameters:
+    - df: pd.DataFrame
+        The input DataFrame containing the features.
+    - labels: pd.Series
+        The input Series containing the labels.
+    - max_rows: int, optional (default=80000)
+        The maximum number of rows in the returned data.
+    - random_state: int, optional (default=42)
+        Controls the randomness of the sampling.
+        
+    Returns:
+    - tuple[pd.DataFrame, pd.Series]
+        The DataFrame and Series with the number of rows limited to max_rows.
+    """
+    max_rows = params.MAX_NUMBERS_OF_SAMPLES_TO_USE_AFTER_REBALANCING
+    if len(df) <= max_rows:
+        return df, labels
+    
+    unique_labels = labels.unique()
+    dfs = []
+    label_series = []
+
+    for label in unique_labels:
+        df_label = df[labels == label]
+        labels_label = labels[labels == label]
+        num_rows = int((len(df_label) / len(df)) * max_rows)
+        
+        df_sampled = df_label.sample(n=num_rows, random_state=params.RANDOM_SEED)
+        labels_sampled = labels_label.loc[df_sampled.index]
+        
+        dfs.append(df_sampled)
+        label_series.append(labels_sampled)
+    
+    df_final = pd.concat(dfs)
+    labels_final = pd.concat(label_series)
+    
+    return shuffle(df_final, labels_final, random_state=random_state) # type: ignore

@@ -34,6 +34,8 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     # dev variable
     # max number of samples to use, negative value means no limit
     MAX_NUMBERS_OF_SAMPLES_TO_USE: int
+    # max number of samples to use after rebalancing, negative value means no limit (limit the memory usage)
+    MAX_NUMBERS_OF_SAMPLES_TO_USE_AFTER_REBALANCING: int
 
     # results
     FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH: str
