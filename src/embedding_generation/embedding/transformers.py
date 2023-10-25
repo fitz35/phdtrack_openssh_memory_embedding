@@ -89,7 +89,8 @@ def transformers_pipeline(
 
 
         # test the model
-        testing_pipeline(embedding_folder_name, trained, tested)
+        input_folder = os.path.basename(params.dataset_path)
+        testing_pipeline(os.path.join(input_folder, embedding_folder_name), trained, tested)
 
 
     
