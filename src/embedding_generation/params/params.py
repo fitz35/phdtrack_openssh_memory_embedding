@@ -37,6 +37,7 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
     def __init__(
             self, 
             load_program_argv : bool = True, 
+            construct_log : bool = True,
             debug : bool = False
     ):
         dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -46,6 +47,7 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
             Pipeline, 
             ResultsWriter, 
             load_program_argv, 
+            construct_log,
             debug
             )
 
