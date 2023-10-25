@@ -33,6 +33,7 @@ class CommonProgramParams(Generic[PipelineNamesEnum, ResultWriter], BaseProgramP
             pipeline : Type[PipelineNamesEnum],
             resultsWriter : Type[ResultWriter],
             load_program_argv : bool = True, 
+            construct_log : bool = True,
             debug : bool = False
     ):
         super().__init__(
@@ -41,7 +42,8 @@ class CommonProgramParams(Generic[PipelineNamesEnum, ResultWriter], BaseProgramP
             resultsWriter, 
             load_program_argv, 
             debug, 
-            dotenv_path
+            dotenv_path,
+            construct_log
             )
 
         # keep results

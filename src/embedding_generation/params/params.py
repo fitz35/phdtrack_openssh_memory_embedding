@@ -113,6 +113,9 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
             except ValueError:
                     print(f"ERROR: Invalid pipeline name: {self.cli_args.args.pipelines}")
                     exit(1)
+        else:
+            print("ERROR: No pipeline given.")
+            exit(1)
     
     
     def set_result_for(self, pipeline : Pipeline, column_name: str, value: str):

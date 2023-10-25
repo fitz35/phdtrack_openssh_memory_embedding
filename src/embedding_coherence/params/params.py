@@ -40,17 +40,21 @@ class ProgramParams(CommonProgramParams[Pipeline, ResultsWriter]):
 
 
     def __init__(
-            self, 
+            self,
+            dotenv_path : str | None = None, 
             load_program_argv : bool = True, 
-            debug : bool = False
+            debug : bool = False,
+            construct_log : bool = True
     ):
-        dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+        if dotenv_path is None:
+            dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
         super().__init__(
             "embedding_quality", 
             dotenv_path, 
             Pipeline, 
             ResultsWriter, 
             load_program_argv, 
+            construct_log,
             debug
             )
 

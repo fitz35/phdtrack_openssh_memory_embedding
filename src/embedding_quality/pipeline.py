@@ -2,17 +2,19 @@
 
 
 import time
+from typing import Tuple
 from embedding_quality.params.params import INFO_COLUMNS, ProgramParams
 from commons.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
 from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
-from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
+from commons.data_loading.data_types import SamplesAndLabels, split_dataset_if_needed, split_preprocessed_data_by_origin
 from embedding_quality.data_balancing.data_balancing import apply_balancing
 from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
 from commons.data_loading.data_cleaning import clean_all
+from commons.data_loading.data_origin import DataOriginEnum
 
 
-def pipeline(params : ProgramParams):
+def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabels, SamplesAndLabels] | None = None):
     
 
     # check that params.DATA_ORIGINS_TRAINING is not empty
@@ -29,25 +31,33 @@ def pipeline(params : ProgramParams):
     start_time = time.time()
     params.set_result_for("start_time", str(start_time))
 
-    # load data
-    with time_measure_result(
-            f'load_samples_and_labels_from_all_csv_files', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "data_loading_duration"
-        ):
-        origin_to_samples_and_labels = (
-            load(
-                params.dataset_path, 
-                params.COMMON_LOGGER, 
+    if already_loaded_data is not None:
+        params.RESULTS_LOGGER.info("Using already loaded data")
+        params.set_result_for("data_loading_duration", "0")
+        origin_to_samples_and_labels = {
+            DataOriginEnum.Training : already_loaded_data[0],
+            DataOriginEnum.Validation : already_loaded_data[1]
+        }
+    else:
+        # load data
+        with time_measure_result(
+                f'load_samples_and_labels_from_all_csv_files', 
                 params.RESULTS_LOGGER, 
-                params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()), 
-                params.MAX_ML_WORKERS
+                params.get_results_writer(),
+                "data_loading_duration"
+            ):
+            origin_to_samples_and_labels = (
+                load(
+                    params.dataset_path, 
+                    params.COMMON_LOGGER, 
+                    params.RESULTS_LOGGER, 
+                    params.data_origins_training.union(params.data_origins_testing if params.data_origins_testing is not None else set()), 
+                    params.MAX_ML_WORKERS
+                    )
                 )
-            )
-    
-    # clean data
-    origin_to_samples_and_labels = clean_all(params, origin_to_samples_and_labels, INFO_COLUMNS)
+        
+        # clean data
+        origin_to_samples_and_labels = clean_all(params, origin_to_samples_and_labels, INFO_COLUMNS)
 
     # feature engineering
     with time_measure_result(
