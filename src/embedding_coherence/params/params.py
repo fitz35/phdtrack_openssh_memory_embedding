@@ -6,7 +6,7 @@ from .cli import CLIArguments
 from commons.data_loading.data_origin import convert_str_arg_to_data_origin
 
 # info column to drop
-INFO_COLUMNS = ["file_path", "f_dtns_addr"]
+INFO_COLUMNS = ["file_path", "chn_addr"]
 
 CLUSTERIZATION_METHOD = "xi"
 CLUSTERIZATION_METRIC = "cosine"
