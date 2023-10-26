@@ -16,7 +16,7 @@ from commons.data_loading.data_types import SamplesAndLabels
 
 
 from commons.data_loading.data_origin import DataOriginEnum
-from commons.params.common_params import FEATURE_CORRELATION_TYPE, NB_COLUMNS_TO_KEEP
+from params.common_params import FEATURE_CORRELATION_TYPE, NB_COLUMNS_TO_KEEP
 
 
 def __correlation_feature_selection( 

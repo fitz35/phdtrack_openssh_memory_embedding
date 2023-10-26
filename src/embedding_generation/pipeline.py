@@ -5,12 +5,19 @@ import time
 from commons.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
 from commons.data_loading.data_types import split_dataset_if_needed, split_preprocessed_data_by_origin
-from embedding_generation.params.pipeline_name_to_pipeline import PIPELINES_NAME_TO_PIPELINE
 from embedding_generation.embedding.word2vec import word2vec_pipeline
-from embedding_generation.params.params import ProgramParams
+from params.common_params import CommonProgramParams
+from embedding_generation.embedding.transformers import transformers_pipeline
+from embedding_generation.embedding.deeplearning_pipeline import DeeplearningPipelines
 
 
-def pipeline(params : ProgramParams):
+
+DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE = {
+    DeeplearningPipelines.Word2vec : word2vec_pipeline,
+    DeeplearningPipelines.Transformers : transformers_pipeline,
+}
+
+def pipeline(params : CommonProgramParams):
     
 
     # check that params.DATA_ORIGINS_TRAINING is not empty
@@ -48,15 +55,11 @@ def pipeline(params : ProgramParams):
     training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params.data_origins_training, params.data_origins_testing, origin_to_samples_and_labels)
     training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
-    for pipeline in params.pipelines:
+    for pipeline in DeeplearningPipelines:
         
-        PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels, testing_samples_and_labels)
+        DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels, testing_samples_and_labels)
 
     end_time = time.time()
     params.set_result_forall("end_time", str(end_time))
     params.set_result_forall("duration", str(end_time - start_time))
-
-    # save results
-    for pipeline in params.pipelines:
-        params.results_manager.save_results_for(pipeline)
     

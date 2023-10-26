@@ -1,12 +1,12 @@
 from sklearn.ensemble import RandomForestClassifier
 
 from research_base.utils.ml_utils.ml_evaluate import evaluate
-from embedding_quality.params.params import ProgramParams
 from commons.data_loading.data_types import SamplesAndLabels
+from params.common_params import CommonProgramParams
 
 
 def ml_random_forest_pipeline(
-        params: ProgramParams, 
+        params: CommonProgramParams, 
         samples_and_labels_train: SamplesAndLabels,
         samples_and_labels_test: SamplesAndLabels,
     ) -> None:

@@ -3,7 +3,6 @@
 
 import time
 from typing import Tuple
-from embedding_quality.params.params import INFO_COLUMNS, ProgramParams
 from commons.data_loading.data_loading import load
 from research_base.utils.results_utils import time_measure_result
 from commons.feature_engineering.correlation_feature_engineering import feature_engineering_correlation_measurement
@@ -12,9 +11,10 @@ from embedding_quality.data_balancing.data_balancing import apply_balancing
 from embedding_quality.classification.ml_random_forest import ml_random_forest_pipeline
 from commons.data_loading.data_cleaning import clean_all
 from commons.data_loading.data_origin import DataOriginEnum
+from params.common_params import INFO_COLUMNS, CommonProgramParams
 
 
-def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabels, SamplesAndLabels] | None = None):
+def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAndLabels, SamplesAndLabels] | None = None):
     
 
     # check that params.DATA_ORIGINS_TRAINING is not empty
@@ -42,9 +42,7 @@ def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabel
         # load data
         with time_measure_result(
                 f'load_samples_and_labels_from_all_csv_files', 
-                params.RESULTS_LOGGER, 
-                params.get_results_writer(),
-                "data_loading_duration"
+                params.RESULTS_LOGGER
             ):
             origin_to_samples_and_labels = (
                 load(
@@ -62,9 +60,7 @@ def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabel
     # feature engineering
     with time_measure_result(
             f'feature_engineering', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "feature_engineering_duration"
+            params.RESULTS_LOGGER
         ):
         column_to_keep = feature_engineering_correlation_measurement(
             origin_to_samples_and_labels,

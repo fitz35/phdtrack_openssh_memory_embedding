@@ -13,16 +13,14 @@ from research_base.utils.results_utils import time_measure_result
 
 
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
-from embedding_generation.params.pipelines import Pipeline
 from embedding_generation.data.hyperparams_transformers import TransformersHyperParams, get_transformers_hyperparams
-from commons.params.common_params import USER_DATA_COLUMN
 from embedding_generation.testing_pipeline import testing_pipeline
+from params.common_params import USER_DATA_COLUMN, CommonProgramParams
 
 
 def transformers_pipeline(
-        params : ProgramParams,
+        params : CommonProgramParams,
         samples_and_sample_str_train: SamplesAndLabels,
         samples_and_sample_str_test: SamplesAndLabels,
 ):
@@ -59,9 +57,7 @@ def transformers_pipeline(
         # train the model
         with time_measure_result(
                 f'transformers training : ', 
-                params.RESULTS_LOGGER, 
-                params.get_results_writer(pipeline=Pipeline.Transformers),
-                "model_training_duration"
+                params.RESULTS_LOGGER,
             ):
             
             embedded : np.ndarray[Any, Any] = encoder.predict(input_data, batch_size=params.TRANSFORMERS_BATCH_SIZE, verbose="1")
@@ -115,7 +111,7 @@ def __transform_hex_data(hyperparam : TransformersHyperParams, df: pd.DataFrame)
     transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, hyperparam.word_character_size))
     return transformed_df
 
-def __get_encoder(params: ProgramParams, hyperparams: TransformersHyperParams, input_size :int) -> tf.keras.Model:
+def __get_encoder(params: CommonProgramParams, hyperparams: TransformersHyperParams, input_size :int) -> tf.keras.Model:
     def transformer_encoder(units: int, num_heads: int) -> tf.keras.Model:
         # Input
         inputs = layers.Input(shape=(input_size, hyperparams.embedding_dim))

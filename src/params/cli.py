@@ -1,8 +1,11 @@
-# wrapped program flags
-import argparse
+# direct raw access to params
 import sys
+import argparse
+
+from params.pipelines import Pipeline
 
 
+# wrapped program flags
 class CLIArguments:
     args: argparse.Namespace
 
@@ -19,23 +22,19 @@ class CLIArguments:
     
     def __parse_argv(self) -> None:
         """
-        python src/embedding_quality/main.py [ARGUMENTS ...]
+        python main [ARGUMENTS ...]
 
         Parse program arguments.
             -w max ml workers (threads for ML threads pool, -1 for illimited)
-            -d debug
-            -p pipelines
+            --debug debug
+            -d dataset path to use
             -otr origins training
             -ots origins testing
-            -d dataset path to use
-            --no_balancing unactivate balancing
-            -h help
-        
-        usage example:
-            python3 main.py -t /home/onyr/Documents/code/phdtrack/phdtrack_data/Training/Training/scp/V_7_8_P1/16 -e /home/onyr/Documents/code/phdtrack/phdtrack_data/Validation/Validation/scp/V_7_8_P1/16 -d False
+            -o output folder
+            -p pipelines to run
+            
         """
         parser = argparse.ArgumentParser(description='Program [ARGUMENTS]')
-
         parser.add_argument(
             '--debug', 
             action='store_true',
@@ -47,6 +46,12 @@ class CLIArguments:
             type=int, 
             default=None,
             help="max ml workers (threads for ML threads pool, -1 for illimited)"
+        )
+        parser.add_argument(
+            "-d",
+            "--dataset_path",
+            type=str,
+            help="Dataset path to use."
         )
         parser.add_argument(
             '-otr',
@@ -65,17 +70,22 @@ class CLIArguments:
             help="Data origin (training, validation, testing) for testing"
         )
         parser.add_argument(
-            "-d",
-            "--dataset_path",
+            '-o',
+            '--output_folder',
             type=str,
-            help="Dataset path to use."
+            help="the path of the output folder (save the advancement)"
+        )
+        parser.add_argument(
+            '-p',
+            '--pipelines',
+            type=str,
+            default=None,
+            help="List of pipelines to run: " + str(list(map(lambda x: x.name.lower(), Pipeline)))
         )
         parser.add_argument(
             '--no_balancing', 
             action='store_true',
             help="unactivate balancing, True or False"
         )
-        
-
         # save parsed arguments
         self.args = parser.parse_args()

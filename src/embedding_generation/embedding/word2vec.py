@@ -7,18 +7,16 @@ import pandas as pd
 from research_base.utils.results_utils import time_measure_result
 
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_generation.params.pipelines import Pipeline
-from embedding_generation.params.params import ProgramParams
 from embedding_generation.data.data_processing import split_into_chunks
-from commons.params.common_params import USER_DATA_COLUMN
 from embedding_generation.data.hyperparams_word2vec import Word2vecHyperparams, get_word2vec_hyperparams_instances
 from embedding_generation.testing_pipeline import testing_pipeline
+from params.common_params import USER_DATA_COLUMN, CommonProgramParams
 
 
 
 
 def word2vec_pipeline(
-        params : ProgramParams,
+        params : CommonProgramParams,
         samples_and_sample_str_train: SamplesAndLabels,
         samples_and_sample_str_test: SamplesAndLabels,
 ):
@@ -71,9 +69,7 @@ def word2vec_pipeline(
         # generate the embedding
         with time_measure_result(
                 f'word2vec used to embedde : ', 
-                params.RESULTS_LOGGER, 
-                params.get_results_writer(Pipeline.Word2Vec),
-                "gen_embedding_duration"
+                params.RESULTS_LOGGER,
             ):
             train_embedded = __gen_embedding(
                 SamplesAndLabels(

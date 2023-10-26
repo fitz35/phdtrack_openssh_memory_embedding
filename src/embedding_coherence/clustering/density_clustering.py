@@ -10,12 +10,13 @@ from research_base.utils.data_utils import dict_to_csv_value, count_labels
 
 from commons.data_loading.data_types import SamplesAndLabels
 
-from embedding_coherence.params.params import CLUSTERIZATION_ALGORITHM, CLUSTERIZATION_METHOD, CLUSTERIZATION_METRIC, NB_VALUES_TO_TESTS_EPSILON, ProgramParams
+from embedding_coherence.data.hyperparams import CLUSTERIZATION_ALGORITHM, CLUSTERIZATION_METHOD, CLUSTERIZATION_METRIC, NB_VALUES_TO_TESTS_EPSILON
+from params.common_params import CommonProgramParams
 
 # $ python main_value_node.py -p ds_density_clustering -otr testing -b undersampling -d load_data_structure_dataset
 
 def density_clustering_pipeline(
-        params : ProgramParams,
+        params : CommonProgramParams,
         samples_and_sample_str_train: SamplesAndLabels,
 ):
     """
@@ -133,7 +134,7 @@ def density_clustering_pipeline(
 
 
 
-def balance_classes(params : ProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+def balance_classes(params : CommonProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """
     Balances the classes in the given DataFrame and Series by undersampling the majority class.
     
@@ -176,7 +177,7 @@ def balance_classes(params : ProgramParams, df: pd.DataFrame, labels: pd.Series)
 
 
 
-def limit_rows(params : ProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+def limit_rows(params : CommonProgramParams, df: pd.DataFrame, labels: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """
     Limits the number of rows in the DataFrame and Series while maintaining class ratios.
     

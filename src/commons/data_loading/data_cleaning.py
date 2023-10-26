@@ -2,7 +2,7 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 from commons.data_loading.data_types import SamplesAndLabels
-from commons.params.common_params import USER_DATA_COLUMN, CommonProgramParams
+from params.common_params import USER_DATA_COLUMN, CommonProgramParams
 from commons.data_loading.data_origin import DataOriginEnum
 
 

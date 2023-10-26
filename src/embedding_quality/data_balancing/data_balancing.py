@@ -7,7 +7,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler, SMOTE, ADASYN
 from embedding_quality.data_balancing.balancing_params import BalancingStrategies
 from commons.data_loading.data_types import SamplesAndLabels
-from embedding_quality.params.params import BALANCING_STRATEGY, ProgramParams
+from params.common_params import BALANCING_STRATEGY, CommonProgramParams
 
 
 SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION = {
@@ -19,7 +19,7 @@ SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION = {
 
 def resample_data(
     sampler_class, 
-    params: ProgramParams,
+    params: CommonProgramParams,
     samples: pd.DataFrame,
     labels: pd.Series,
 ) -> SamplesAndLabels:
@@ -34,7 +34,7 @@ def resample_data(
     return SamplesAndLabels(X_res, y_res)
 
 def apply_balancing(
-    params: ProgramParams,
+    params: CommonProgramParams,
     samples: pd.DataFrame,
     labels: pd.Series
 ) -> SamplesAndLabels:

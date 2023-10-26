@@ -4,7 +4,6 @@ from typing import Tuple
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
 
-from embedding_coherence.params.params import INFO_COLUMNS, ProgramParams
 from embedding_coherence.clustering.density_clustering import density_clustering_pipeline
 
 
@@ -13,9 +12,10 @@ from commons.feature_engineering.correlation_feature_engineering import feature_
 from commons.data_loading.data_types import SamplesAndLabels, split_dataset_if_needed, split_preprocessed_data_by_origin
 from commons.data_loading.data_cleaning import clean_all
 from commons.data_loading.data_origin import DataOriginEnum
+from params.common_params import INFO_COLUMNS, CommonProgramParams
 
 
-def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabels, SamplesAndLabels] | None = None):
+def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAndLabels, SamplesAndLabels] | None = None):
     """
     Pipeline for the embedding coherence project.
     if already_loaded_data is not None, then it is used instead of loading the data from the csv files.
@@ -47,9 +47,7 @@ def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabel
 
         with time_measure_result(
                 f'load_samples_and_labels_from_all_csv_files', 
-                params.RESULTS_LOGGER, 
-                params.get_results_writer(),
-                "data_loading_duration"
+                params.RESULTS_LOGGER,
             ):
             origin_to_samples_and_labels = (
                 load(
@@ -68,9 +66,7 @@ def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabel
     # feature engineering
     with time_measure_result(
             f'feature_engineering', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "feature_engineering_duration"
+            params.RESULTS_LOGGER,
         ):
         column_to_keep = feature_engineering_correlation_measurement(
             origin_to_samples_and_labels,
@@ -89,9 +85,7 @@ def pipeline(params : ProgramParams, already_loaded_data : Tuple[SamplesAndLabel
 
     with time_measure_result(
             f'clustering', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "clustering_duration"
+            params.RESULTS_LOGGER,
         ):
         clusters = density_clustering_pipeline(params, training_samples_and_labels)
     
