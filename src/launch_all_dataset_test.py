@@ -7,6 +7,10 @@ import argparse
 import os
 from commons.utils.utils import find_csv_dirs
 
+from dotenv import load_dotenv
+
+
+load_dotenv(".env")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input_folder", type=str, help = "The folder containing all the embedding.")
@@ -17,6 +21,10 @@ def main():
     args = parser.parse_args()
 
     all_dirs = find_csv_dirs(args.input_folder)
+
+    os.makedirs(os.environ["FEATURE_CORRELATION_MATRICES_RESULTS_DIR_PATH"], exist_ok=True)
+    os.makedirs(os.environ["COMMON_LOGGER_DIR_PATH"], exist_ok=True)
+    os.makedirs(os.environ["RESULTS_LOGGER_DIR_PATH"], exist_ok=True)
 
     i = 0
     for dir in all_dirs:

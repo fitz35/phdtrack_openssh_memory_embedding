@@ -103,7 +103,6 @@ def density_clustering_pipeline(
 
         # Number of clusters, ignoring noise if present
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-
         # Calculate silhouette score if there's more than one cluster
         if n_clusters > 1:
             score = silhouette_score(df_scaled, labels)
@@ -113,8 +112,11 @@ def density_clustering_pipeline(
                 best_eps = eps
                 best_n_clusters = n_clusters
                 best_labels = labels
+            params.RESULTS_LOGGER.info(f"eps: {eps}, number of clusters: {n_clusters}, silhouette score: {score}, noise points: {np.sum(labels == -1)}")
         else:
             params.RESULTS_LOGGER.warn(f"WARN: n_clusters <= 1 !!! eps: {eps}, number of clusters: {n_clusters}")
+        
+        
 
     # check that we found a good eps value
     if best_eps is None or best_n_clusters is None or best_labels is None:
