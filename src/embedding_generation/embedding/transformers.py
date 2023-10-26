@@ -15,8 +15,8 @@ from research_base.utils.results_utils import time_measure_result
 from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.data.data_processing import split_into_chunks
 from embedding_generation.data.hyperparams_transformers import TransformersHyperParams, get_transformers_hyperparams
-from embedding_generation.testing_pipeline import testing_pipeline
 from params.common_params import USER_DATA_COLUMN, CommonProgramParams
+from testing_pipelines.pipeline import pipeline as testing_pipeline
 
 
 def transformers_pipeline(
@@ -30,6 +30,7 @@ def transformers_pipeline(
     all_hyper_params = get_transformers_hyperparams()
 
     for hyperparam in all_hyper_params:
+        params.RESULTS_LOGGER.info(f"!!!!!!!!!!!!! Transformers instance : {hyperparam.to_dir_name()} !!!!!!!!!!!!!")
         
         # test if we have already computed this hyperparam
         embedding_folder_name = f"embedding_transformers_{hyperparam.to_dir_name()}"
@@ -85,7 +86,7 @@ def transformers_pipeline(
 
 
         # test the model
-        testing_pipeline(params, trained, tested)
+        testing_pipeline(params, (trained, tested))
 
 
     

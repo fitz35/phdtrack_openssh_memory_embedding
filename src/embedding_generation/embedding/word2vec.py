@@ -9,8 +9,8 @@ from research_base.utils.results_utils import time_measure_result
 from commons.data_loading.data_types import SamplesAndLabels
 from embedding_generation.data.data_processing import split_into_chunks
 from embedding_generation.data.hyperparams_word2vec import Word2vecHyperparams, get_word2vec_hyperparams_instances
-from embedding_generation.testing_pipeline import testing_pipeline
 from params.common_params import USER_DATA_COLUMN, CommonProgramParams
+from testing_pipelines.pipeline import pipeline as testing_pipeline
 
 
 
@@ -33,7 +33,7 @@ def word2vec_pipeline(
     os.makedirs(folder, exist_ok=True)
 
     for instance in instances:
-
+        params.RESULTS_LOGGER.info(f"!!!!!!!!!!!!! Word2vec instance : {instance.to_dir_name()} !!!!!!!!!!!!!")
         instance_folder_name = f"embedding_word2vec_{instance.to_dir_name()}"
         instance_folder = os.path.join(folder, instance_folder_name)
         if os.path.exists(instance_folder):
@@ -89,7 +89,7 @@ def word2vec_pipeline(
         os.makedirs(instance_folder, exist_ok=True)
 
         # test the model
-        testing_pipeline(params, train_embedded, test_embedded)
+        testing_pipeline(params, (train_embedded, test_embedded))
 
 
 def __transform_hex_data(params: Word2vecHyperparams, df: pd.DataFrame) -> pd.DataFrame:

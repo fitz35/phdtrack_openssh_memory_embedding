@@ -27,7 +27,7 @@ def main():
         else:
             filtered = ""
 
-        os.system(f"python3 main.py -d {dir} -o ../log -otr training -ots testing {filtered}")
+        os.system(f"python3 main.py -d {dir} -o ../log -otr training -ots validation {filtered} -p testingembedding")
 
         i += 1
 

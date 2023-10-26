@@ -1,10 +1,6 @@
 # number of column to keep after feature selection
 import os
 import resource
-from typing import Optional
-
-
-from research_base.results.base_result_writer import BaseResultWriter
 from research_base.params.base_program_params import BaseProgramParams
 from research_base.utils.enum_utils import convert_str_arg_to_enum_member
 from research_base.utils.ml_utils.ml_evaluate import EVALUATE_RESULT_KEYS
@@ -41,11 +37,11 @@ class _DummyResultsWriter(CommonResultsWriter):
         # data balancing results
     ]
 
-    def __init__(self):
+    def __init__(self, pipeline_name : str):
         super().__init__(
             'dummy.csv', 
             self.ADDITIONAL_HEADERS + EVALUATE_RESULT_KEYS, 
-            'dummy'
+            pipeline_name
         )
 
     def set_result(self, field: str, value: str | None) -> None:
@@ -182,4 +178,4 @@ class CommonProgramParams(BaseProgramParams[Pipeline, _DummyResultsWriter]):
         """
         get the dummy results writer (compatibilities with the old code)
         """
-        return super().results_manager.get_result_writer_for(Pipeline.DeepLearning)
+        return _DummyResultsWriter("dummy")

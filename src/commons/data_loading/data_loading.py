@@ -132,6 +132,8 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
                 all_samples_list.append(samples)
                 all_labels_list.append(labels)
             # The lock is released after the 'with' statement
+    
+    logger_result.info(f'Loading samples and labels from {len(csv_file_paths)} files')
 
     # multi-threaded loading and generation of samples and labels
     with ThreadPoolExecutor(max_workers=min(max_workers, 6)) as executor:
@@ -144,6 +146,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         for _ in results:
             pass
 
+    logger_result.info(f'Number of loaded files: {len(csv_file_paths)}')
     logger_result.info(f'Number of empty files: {len(list_of_empty_files)}')
 
     # Concatenate DataFrames and labels Series

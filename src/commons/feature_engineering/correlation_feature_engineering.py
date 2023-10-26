@@ -57,23 +57,35 @@ def __correlation_feature_selection(
     corr_matrix = scaled_samples_df.corr(correlation_algorithm)
 
     # Print the correlation matrix
-    logger.info(f"Correlation matrix (algorithm: {correlation_algorithm}): \n" + str(corr_matrix))
+   
 
     matrix_save_path: str = (
+        output_path +
+        "correlation_matrix_" + correlation_algorithm + "_" +
+        datetime.now().strftime(DATETIME_FORMAT) +
+        ".csv"
+    )
+
+    matrix_image_save_path: str = (
         output_path + 
         "correlation_matrix_" + correlation_algorithm + "_" +
         datetime.now().strftime(DATETIME_FORMAT) +
         ".png"
     )
 
+    corr_matrix.to_csv(matrix_save_path)
+
     # Visualize the correlation matrix
     plt.figure(figsize=(10, 10))
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", square=True, cmap='coolwarm')
     plt.title(f"Feature Correlation Matrix (algorithm: {correlation_algorithm})")
-    plt.savefig(matrix_save_path)
+    plt.savefig(matrix_image_save_path)
     plt.close()
 
-    logger.info(f"Correlation matrix saved at: {matrix_save_path}")
+
+    logger.info(f"Correlation matrix (algorithm: {correlation_algorithm}): \n" + str(corr_matrix))
+    logger.info(f"Correlation matrix saved at: {matrix_image_save_path} and {matrix_save_path}")
+
 
     # keep best columns
     # Calculate the sum of correlations for each column
