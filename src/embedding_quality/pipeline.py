@@ -29,11 +29,10 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             exit(1)
 
     start_time = time.time()
-    params.set_result_for("start_time", str(start_time))
+    params.RESULTS_LOGGER.info(f"Start time : {start_time}")
 
     if already_loaded_data is not None:
         params.RESULTS_LOGGER.info("Using already loaded data")
-        params.set_result_for("data_loading_duration", "0")
         origin_to_samples_and_labels = {
             DataOriginEnum.Training : already_loaded_data[0],
             DataOriginEnum.Validation : already_loaded_data[1]
@@ -83,18 +82,17 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
     # train and evaluate the model
     with time_measure_result(
             f'random forest : ', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "classification_duration"
+            params.RESULTS_LOGGER,
         ):
-        ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
-
+        try:
+            ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
+        except MemoryError:
+            params.RESULTS_LOGGER.error("Memory error on quality pipeline, skipping")
+        except Exception as e:
+            params.RESULTS_LOGGER.error(f"Error on quality pipeline: {e}")
 
     end_time = time.time()
-    params.set_result_for("end_time", str(end_time))
-    params.set_result_for("duration", str(end_time - start_time))
-
-    # save results
-    params.get_results_writer().save_results()
+    params.RESULTS_LOGGER.info(f"End time : {end_time}")
+    params.RESULTS_LOGGER.info(f"Total duration: {end_time - start_time}")
 
     

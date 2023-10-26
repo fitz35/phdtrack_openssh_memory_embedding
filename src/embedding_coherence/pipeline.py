@@ -34,11 +34,10 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             exit(1)
 
     start_time = time.time()
-    params.set_result_for("start_time", str(start_time))
+    params.RESULTS_LOGGER.info(f"Pipeline start time : {start_time} seconds")
 
     if already_loaded_data is not None:
         params.RESULTS_LOGGER.info("Using already loaded data")
-        params.set_result_for("data_loading_duration", "0")
         origin_to_samples_and_labels = {
             DataOriginEnum.Training : already_loaded_data[0],
             DataOriginEnum.Validation : already_loaded_data[1]
@@ -87,20 +86,24 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             f'clustering', 
             params.RESULTS_LOGGER,
         ):
-        clusters = density_clustering_pipeline(params, training_samples_and_labels)
+        try:
+            clusters = density_clustering_pipeline(params, training_samples_and_labels)
+            # zipping clusters and labels
+            associated_clusters_and_labels = zip_cluster_and_label(clusters, training_samples_and_labels.labels)
+            # Associate cluster to labels
+            params.RESULTS_LOGGER.info(f"Associating clusters to labels : \n {associated_clusters_and_labels}")
+        except MemoryError:
+            params.RESULTS_LOGGER.error("Memory error while clustering")
+        except Exception as e:
+            params.RESULTS_LOGGER.error(f"Error while clustering : {e}")
     
-    # zipping clusters and labels
-    associated_clusters_and_labels = zip_cluster_and_label(clusters, training_samples_and_labels.labels)
-    # Associate cluster to labels
-    params.RESULTS_LOGGER.info(f"Associating clusters to labels : \n {associated_clusters_and_labels}")
+    
 
 
     end_time = time.time()
-    params.set_result_for("end_time", str(end_time))
-    params.set_result_for("duration", str(end_time - start_time))
+    params.RESULTS_LOGGER.info(f"Pipeline end time : {end_time} seconds")
+    params.RESULTS_LOGGER.info(f"Pipeline duration : {end_time - start_time} seconds")
 
-    # save results
-    params.get_results_writer().save_results()
 
 def zip_cluster_and_label(clusters : pd.Series, labels : pd.Series):
     """

@@ -116,7 +116,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         """
         Load the samples and labels from one .csv file.
         """
-        logger_result.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
+        logger_common.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
 
         res = __load_samples_and_labels_from_csv( csv_file_path, header_types)
         if res is None:
@@ -144,7 +144,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         for _ in results:
             pass
 
-    logger_common.info(f'Number of empty files: {len(list_of_empty_files)}')
+    logger_result.info(f'Number of empty files: {len(list_of_empty_files)}')
 
     # Concatenate DataFrames and labels Series
     all_samples = pd.concat(all_samples_list, ignore_index=True)

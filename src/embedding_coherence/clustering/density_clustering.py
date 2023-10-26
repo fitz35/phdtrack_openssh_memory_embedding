@@ -35,9 +35,7 @@ def density_clustering_pipeline(
     # Scale data (required for DBSCAN)
     with time_measure_result(
             f'scaling_duration', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(),
-            "scaling_duration"
+            params.RESULTS_LOGGER,
         ):
         # But not for cosine similarity
         #scaler = StandardScaler()
@@ -72,7 +70,6 @@ def density_clustering_pipeline(
     # We get the labels for the training set, and get half the number of samble of the labels with less samples
     # because we have 2 structure with keynodes in each files
     min_samples = int(min(count_labels(labels_train).values())/2)
-    params.set_result_for("min_samples", str(min_samples))
     params.RESULTS_LOGGER.info(f"min_samples: {min_samples}")
 
     for eps in eps_values:
@@ -124,10 +121,7 @@ def density_clustering_pipeline(
         raise Exception("No good eps value found")
 
     n_noise = np.sum(best_labels == -1)
-    params.set_result_for("best_eps", str(best_eps))
-    params.set_result_for("best_n_clusters", str(best_n_clusters))
-    params.set_result_for("best_silhouette_score", str(best_score))
-    params.set_result_for("best_noise_number", str(n_noise))
+    
     params.RESULTS_LOGGER.info(f"Best eps: {best_eps}, number of clusters: {best_n_clusters}, silhouette score: {best_score}, noise points: {n_noise}")
     return pd.Series(best_labels, name='Cluster')
 

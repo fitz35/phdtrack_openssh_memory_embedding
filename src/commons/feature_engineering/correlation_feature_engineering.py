@@ -59,35 +59,31 @@ def __correlation_feature_selection(
     # Print the correlation matrix
     logger.info(f"Correlation matrix (algorithm: {correlation_algorithm}): \n" + str(corr_matrix))
 
-    # Visualize the correlation matrix
-    plt.figure(figsize=(10, 10))
-    sns.heatmap(corr_matrix, annot=True, fmt=".2f", square=True, cmap='coolwarm')
-    plt.title(f"Feature Correlation Matrix (algorithm: {correlation_algorithm})")
-    corr_matrix_save_path: str = (
+    matrix_save_path: str = (
         output_path + 
         "correlation_matrix_" + correlation_algorithm + "_" +
         datetime.now().strftime(DATETIME_FORMAT) +
         ".png"
     )
-    plt.savefig(corr_matrix_save_path)
+
+    # Visualize the correlation matrix
+    plt.figure(figsize=(10, 10))
+    sns.heatmap(corr_matrix, annot=True, fmt=".2f", square=True, cmap='coolwarm')
+    plt.title(f"Feature Correlation Matrix (algorithm: {correlation_algorithm})")
+    plt.savefig(matrix_save_path)
     plt.close()
+
+    logger.info(f"Correlation matrix saved at: {matrix_save_path}")
 
     # keep best columns
     # Calculate the sum of correlations for each column
     corr_sums = corr_matrix.abs().sum()
 
     # keep results
+    logger.info(f"Correlation sums: \n" + str(corr_sums))
     sorted_corr_sums = corr_sums.sort_values(ascending=False)
-    result_writer.set_result(
-        "descending_best_column_names",
-        " ".join(
-            sorted_corr_sums.index.tolist()
-        )
-    )
-    result_writer.set_result(
-        "descending_best_column_values",
-        " ".join(map(str, sorted_corr_sums.tolist()))
-    )
+    logger.info(f"Sorted correlation sums: \n" + str(sorted_corr_sums))
+    
     
     # Find the names of the columns that have the smallest sums
     # NOTE: We drop the 1 correlation of the column with itself by substracting 1 to the sums
@@ -95,6 +91,8 @@ def __correlation_feature_selection(
     best_columns_names = corr_sums.nsmallest(NB_COLUMNS_TO_KEEP, keep="first").index.tolist()
     
     logger.info(f"Keeping columns: {best_columns_names}")
+
+    logger.info("End feature engineering")
 
     assert len(best_columns_names) == NB_COLUMNS_TO_KEEP, "The number of best columns is not correct, it should be equal to FEATURE_ENGINEERING_NB_KEEP_BEST_COLUMNS. Maybe there are not enough columns in the dataset."
     assert (type(best_columns_names) == list) and (type(best_columns_names[0]) == str)

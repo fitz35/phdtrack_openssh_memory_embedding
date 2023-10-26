@@ -32,14 +32,12 @@ def pipeline(params : CommonProgramParams):
             exit(1)
 
     start_time = time.time()
-    params.set_result_forall("start_time", str(start_time))
+    params.RESULTS_LOGGER.info(f"Pipeline start time : {start_time} seconds")
 
     # load data
     with time_measure_result(
             f'load_samples_and_labels_from_all_csv_files', 
-            params.RESULTS_LOGGER, 
-            params.results_manager,
-            "data_loading_duration"
+            params.RESULTS_LOGGER
         ):
         origin_to_samples_and_labels = (
             load(
@@ -56,10 +54,14 @@ def pipeline(params : CommonProgramParams):
     training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
     for pipeline in DeeplearningPipelines:
-        
-        DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels, testing_samples_and_labels)
+        try:
+            DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels, testing_samples_and_labels)
+        except MemoryError:
+            params.COMMON_LOGGER.error(f"Memory error in pipeline {pipeline.name}")
+        except Exception as e:
+            params.COMMON_LOGGER.error(f"Exception in pipeline {pipeline.name}: {e}")
 
     end_time = time.time()
-    params.set_result_forall("end_time", str(end_time))
-    params.set_result_forall("duration", str(end_time - start_time))
+    params.RESULTS_LOGGER.info(f"Pipeline end time : {end_time} seconds")
+    params.RESULTS_LOGGER.info(f"Pipeline duration : {end_time - start_time} seconds")
     

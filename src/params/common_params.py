@@ -1,5 +1,6 @@
 # number of column to keep after feature selection
 import os
+import resource
 from typing import Optional
 
 
@@ -30,7 +31,7 @@ NB_COLUMNS_TO_KEEP = 8
 FEATURE_CORRELATION_TYPE = CorrelationType.FE_CORR_PEARSON
 
 
-class __DummyResultsWriter(CommonResultsWriter):
+class _DummyResultsWriter(CommonResultsWriter):
     """
     This class is used to write the results of a classification pipeline to a CSV file.
     It keeps track of the headers of the CSV file and the results to write.
@@ -51,7 +52,7 @@ class __DummyResultsWriter(CommonResultsWriter):
         pass
 
 # Cannot use ABCMeta because of the Generic type
-class CommonProgramParams(BaseProgramParams[Pipeline, __DummyResultsWriter]):
+class CommonProgramParams(BaseProgramParams[Pipeline, _DummyResultsWriter]):
     
     ### cli args
     cli_args: CLIArguments
@@ -59,6 +60,9 @@ class CommonProgramParams(BaseProgramParams[Pipeline, __DummyResultsWriter]):
     ### env vars
     # NOTE: all CAPITAL_PARAM_VALUES values NEED to be overwritten by the .env file
     # NOTE: lowercase values are from the CLI
+
+    # max memory usage (catch if not enough memory), in go
+    MAX_MEMORY_USAGE : int
 
 
     # dev variable
@@ -90,15 +94,16 @@ class CommonProgramParams(BaseProgramParams[Pipeline, __DummyResultsWriter]):
         super().__init__(
             app_name, 
             Pipeline, 
-            __DummyResultsWriter, 
+            _DummyResultsWriter, 
             load_program_argv, 
             debug, 
             dotenv_path,
             construct_log
             )
 
-        # keep results
-        self.__results_manager_init()
+        # prevent from memory killed
+        max_bytes = self.MAX_MEMORY_USAGE * 1024 * 1024 * 1024
+        resource.setrlimit(resource.RLIMIT_AS, (max_bytes, max_bytes))
 
 
     def _load_program_argv(self) -> None:
@@ -172,19 +177,6 @@ class CommonProgramParams(BaseProgramParams[Pipeline, __DummyResultsWriter]):
 
 
 # --------------------------------------------
-
-    def __results_manager_init(self):
-        """
-        Initialize results manager, and start keeping results-related information.
-        """
-        pass
-
-    def set_result_for(self, column_name: str, value: str):
-        """
-        Set the result for the given column name.
-        NOTE : This method must be implemented in the subclass, and call the _set_result_for_pipeline method.
-        """
-        pass
 
     def get_results_writer(self):
         """

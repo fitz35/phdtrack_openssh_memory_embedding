@@ -85,7 +85,7 @@ def transformers_pipeline(
 
 
         # test the model
-        testing_pipeline(embedding_folder, trained, tested)
+        testing_pipeline(params, trained, tested)
 
 
     

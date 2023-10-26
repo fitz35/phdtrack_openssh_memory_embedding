@@ -25,9 +25,7 @@ def resample_data(
 ) -> SamplesAndLabels:
     with time_measure_result(
             f'resample_data ({sampler_class.__name__})', 
-            params.RESULTS_LOGGER, 
-            params.get_results_writer(), 
-            "data_balancing_duration"
+            params.RESULTS_LOGGER,
         ):
         sampler = sampler_class(random_state=params.RANDOM_SEED)
         X_res, y_res = sampler.fit_resample(samples, labels)
@@ -42,10 +40,8 @@ def apply_balancing(
     Get the rebalanced data.
     """    
     
-    params.set_result_for(
-        "nb_samples_before_balancing",
-        dict_to_csv_value(count_labels(labels))
-    )
+    params.RESULTS_LOGGER.info(f"Number of samples before balancing: {dict_to_csv_value(count_labels(labels))}")
+
     if params.no_balancing or BALANCING_STRATEGY == BalancingStrategies.NO_BALANCING:
         sample_and_labels = SamplesAndLabels(samples, labels)
     elif BALANCING_STRATEGY in SAMPLING_STRATEGY_TO_RESAMPLING_FUNCTION.keys():
@@ -58,10 +54,7 @@ def apply_balancing(
     else:
         raise ValueError(f"Invalid balancing strategy: {BALANCING_STRATEGY}")
     
-    params.set_result_for(
-        "nb_samples_after_balancing",
-        dict_to_csv_value(count_labels(sample_and_labels.labels))
-    )
+    params.RESULTS_LOGGER.info(f"Number of samples after balancing: {dict_to_csv_value(count_labels(sample_and_labels.labels))}")
 
     return sample_and_labels
     

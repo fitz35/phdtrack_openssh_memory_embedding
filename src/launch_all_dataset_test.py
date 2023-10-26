@@ -27,9 +27,7 @@ def main():
         else:
             filtered = ""
 
-        os.system(f"python3 embedding_coherence_main.py -d {dir} -otr training -ots validation")
-
-        os.system(f"python3 embedding_quality_main.py -d {dir} -otr training -ots testing {filtered}")
+        os.system(f"python3 main.py -d {dir} -o ../log -otr training -ots testing {filtered}")
 
         i += 1
 
