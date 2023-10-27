@@ -59,7 +59,7 @@ def word2vec_pipeline(
             model = Word2Vec(
                 sentences, 
                 vector_size=instance.output_size, 
-                window=int(instance.window_bytes_size/instance.word_byte_size), 
+                window=int(instance.window_character_size/instance.word_character_size), 
                 min_count=instance.min_count, 
                 workers=params.MAX_ML_WORKERS,
                 seed=params.RANDOM_SEED
@@ -95,7 +95,7 @@ def word2vec_pipeline(
 def __transform_hex_data(params: Word2vecHyperparams, df: pd.DataFrame) -> pd.DataFrame:
     """Transforms the specified column of a DataFrame into lists of 2-byte length strings."""
     transformed_df = df.copy()
-    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, params.word_byte_size))
+    transformed_df[USER_DATA_COLUMN] = transformed_df[USER_DATA_COLUMN].apply(lambda x: split_into_chunks(x, params.word_character_size))
     return transformed_df
 
 def __gen_embedding(
