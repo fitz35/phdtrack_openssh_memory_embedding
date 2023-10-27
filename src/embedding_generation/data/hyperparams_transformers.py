@@ -65,31 +65,30 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
 
     index = 0
     word_character_sizes = [16, 8] # size of the word in bytes (take care to not overflow f64, so max 8 bytes, ie 16 characters)
-    embedding_dims = [8, 16, 100] # output of the embedding (result size)
-    transformer_units = [2, 4, 8] # dimension of the transformer units (see .md)
-    num_heads = [2, 4, 8] # attention heads
-    num_transformer_layers = [2, 4, 8] # number of transformer layers
-    dropout_rates = [0.1, 0.2, 0.3]
+    embedding_dims = [8, 16] # output of the embedding (result size)
+    transformer_units = [2, 4] # dimension of the transformer units (see .md)
+    num_heads = [2, 4] # attention heads
+    num_transformer_layers = [2, 4] # number of transformer layers
+    dropout_rates = [0.1, 0.3]
     activations = ["relu"]
+
+    zipped = zip(zip(zip(transformer_units, num_heads), num_transformer_layers), dropout_rates)
 
     for word_character_size in word_character_sizes:
         for embedding_dim in embedding_dims:
-            for transformer_unit in transformer_units:
-                for num_head in num_heads:
-                    for num_transformer_layer in num_transformer_layers:
-                            for dropout_rate in dropout_rates:
-                                for activation in activations:
-                                    all_hyperparams.append(TransformersHyperParams(
-                                        index=index,
-                                        word_character_size=word_character_size,
-                                        embedding_dim=embedding_dim,
-                                        transformer_units=transformer_unit,
-                                        num_heads=num_head,
-                                        num_transformer_layers=num_transformer_layer,
-                                        dropout_rate=dropout_rate,
-                                        activation=activation
-                                    ))
-                                    index += 1
+            for (((transformer_unit, num_head), num_transformer_layer), dropout_rate) in zipped:
+                for activation in activations:
+                    all_hyperparams.append(TransformersHyperParams(
+                        index=index,
+                        word_character_size=word_character_size,
+                        embedding_dim=embedding_dim,
+                        transformer_units=transformer_unit,
+                        num_heads=num_head,
+                        num_transformer_layers=num_transformer_layer,
+                        dropout_rate=dropout_rate,
+                        activation=activation
+                    ))
+                    index += 1
 
 
 
