@@ -101,6 +101,9 @@ class CommonProgramParams(BaseProgramParams[Pipeline, _DummyResultsWriter]):
         max_bytes = self.MAX_MEMORY_USAGE * 1024 * 1024 * 1024
         resource.setrlimit(resource.RLIMIT_AS, (max_bytes, max_bytes))
 
+        # log the program params
+        self.cli_args.log_raw_argv(self.RESULTS_LOGGER)
+
 
     def _load_program_argv(self) -> None:
             """

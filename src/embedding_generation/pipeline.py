@@ -13,8 +13,9 @@ from embedding_generation.embedding.deeplearning_pipeline import DeeplearningPip
 
 
 DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE = {
-    DeeplearningPipelines.Word2vec : word2vec_pipeline,
     DeeplearningPipelines.Transformers : transformers_pipeline,
+    DeeplearningPipelines.Word2vec : word2vec_pipeline,
+    
 }
 
 def pipeline(params : CommonProgramParams):
@@ -22,14 +23,18 @@ def pipeline(params : CommonProgramParams):
 
     # check that params.DATA_ORIGINS_TRAINING is not empty
     if params.data_origins_training is None or len(params.data_origins_training) == 0:
-        params.COMMON_LOGGER.warning(f"No training data origins (params.DATA_ORIGINS_TRAINING: {params.data_origins_training})")
+        params.RESULTS_LOGGER.warning(f"No training data origins (params.DATA_ORIGINS_TRAINING: {params.data_origins_training})")
         exit(1)
     
     # check that params.DATA_ORIGINS_TRAINING and params.DATA_ORIGINS_TESTING are disjoint
     if params.data_origins_testing is not None and len(params.data_origins_testing) > 0:
         if len(params.data_origins_training.intersection(params.data_origins_testing)) > 0:
-            params.COMMON_LOGGER.warning(f"Training and testing data origins are not disjoint (params.DATA_ORIGINS_TRAINING: {params.data_origins_training}, params.DATA_ORIGINS_TESTING: {params.data_origins_testing})")
+            params.RESULTS_LOGGER.warning(f"Training and testing data origins are not disjoint (params.DATA_ORIGINS_TRAINING: {params.data_origins_training}, params.DATA_ORIGINS_TESTING: {params.data_origins_testing})")
             exit(1)
+    
+    params.RESULTS_LOGGER.info(f"///---!!!! Launching embedding pipeline on dataset {params.dataset_path} !!!!----///")
+    params.RESULTS_LOGGER.info(f"Data origins training : {params.data_origins_training}")
+    params.RESULTS_LOGGER.info(f"Data origins testing : {params.data_origins_testing}")
 
     start_time = time.time()
     params.RESULTS_LOGGER.info(f"Pipeline start time : {start_time} seconds")
@@ -53,13 +58,13 @@ def pipeline(params : CommonProgramParams):
     training_samples_and_labels, maybe_testing_samples_and_labels = split_preprocessed_data_by_origin(params.data_origins_training, params.data_origins_testing, origin_to_samples_and_labels)
     training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
-    for pipeline in DeeplearningPipelines:
+    for pipeline in DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE.keys():
         try:
-            DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels, testing_samples_and_labels)
+            DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels.copy(), testing_samples_and_labels.copy())
         except MemoryError:
-            params.COMMON_LOGGER.error(f"Memory error in pipeline {pipeline.name}")
+            params.RESULTS_LOGGER.error(f"Memory error in pipeline {pipeline.name}")
         except Exception as e:
-            params.COMMON_LOGGER.error(f"Exception in pipeline {pipeline.name}: {e}")
+            params.RESULTS_LOGGER.error(f"Exception in pipeline {pipeline.name}: {e}")
 
     end_time = time.time()
     params.RESULTS_LOGGER.info(f"Pipeline end time : {end_time} seconds")

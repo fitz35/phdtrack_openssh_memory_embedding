@@ -21,14 +21,17 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
 
     # check that params.DATA_ORIGINS_TRAINING is not empty
     if params.data_origins_training is None or len(params.data_origins_training) == 0:
-        params.COMMON_LOGGER.warning(f"No training data origins (params.DATA_ORIGINS_TRAINING: {params.data_origins_training})")
+        params.RESULTS_LOGGER.warning(f"No training data origins (params.DATA_ORIGINS_TRAINING: {params.data_origins_training})")
         exit(1)
     
     # check that params.DATA_ORIGINS_TRAINING and params.DATA_ORIGINS_TESTING are disjoint
     if params.data_origins_testing is not None and len(params.data_origins_testing) > 0:
         if len(params.data_origins_training.intersection(params.data_origins_testing)) > 0:
-            params.COMMON_LOGGER.warning(f"Training and testing data origins are not disjoint (params.DATA_ORIGINS_TRAINING: {params.data_origins_training}, params.DATA_ORIGINS_TESTING: {params.data_origins_testing})")
+            params.RESULTS_LOGGER.warning(f"Training and testing data origins are not disjoint (params.DATA_ORIGINS_TRAINING: {params.data_origins_training}, params.DATA_ORIGINS_TESTING: {params.data_origins_testing})")
             exit(1)
+    params.RESULTS_LOGGER.info(f"///---!!!! Launching testing pipeline on dataset {params.dataset_path} !!!!----///")
+    params.RESULTS_LOGGER.info(f"Data origins training : {params.data_origins_training}")
+    params.RESULTS_LOGGER.info(f"Data origins testing : {params.data_origins_testing}")
 
     start_time = time.time()
     params.RESULTS_LOGGER.info(f"Start time : {start_time}")
@@ -80,6 +83,7 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
 
     # rebalancing
     training_samples_and_labels = apply_balancing(params, training_samples_and_labels.sample, training_samples_and_labels.labels)
+    
 
     # train and evaluate the model
     with time_measure_result(
@@ -87,7 +91,7 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             params.RESULTS_LOGGER,
         ):
         try:
-            ml_random_forest_pipeline(params, training_samples_and_labels, testing_samples_and_labels)
+            ml_random_forest_pipeline(params, training_samples_and_labels.copy(), testing_samples_and_labels.copy())
         except MemoryError:
             params.RESULTS_LOGGER.error("Memory error on quality pipeline, skipping")
         except Exception as e:
@@ -98,7 +102,7 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             params.RESULTS_LOGGER,
         ):
         try:
-            clusters = density_clustering_pipeline(params, training_samples_and_labels)
+            clusters = density_clustering_pipeline(params, training_samples_and_labels.copy())
             # zipping clusters and labels
             associated_clusters_and_labels = zip_cluster_and_label(clusters, training_samples_and_labels.labels)
             # Associate cluster to labels
@@ -107,6 +111,8 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             params.RESULTS_LOGGER.error("Memory error while clustering")
         except Exception as e:
             params.RESULTS_LOGGER.error(f"Error while clustering : {e}")
+
+    
 
     end_time = time.time()
     params.RESULTS_LOGGER.info(f"End time : {end_time}")

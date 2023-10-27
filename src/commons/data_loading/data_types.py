@@ -50,6 +50,12 @@ class SamplesAndLabels:
         embeddings_df["label"] = self.labels.astype("int16").tolist()
 
         embeddings_df.to_csv(file_path, index=False)
+    
+    def copy(self) -> 'SamplesAndLabels':
+        """
+        Copy the samples and labels.
+        """
+        return SamplesAndLabels(self.sample.copy(), self.labels.copy())
 
 
 def split_dataset_if_needed(

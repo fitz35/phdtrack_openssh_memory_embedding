@@ -1,0 +1,3 @@
+index,word_character_size,embedding_dim,transformer_units,num_heads,num_transformer_layers,dropout_rate,activation
+0,16,8,2,2,2,0.1,relu
+1,16,8,2,2,2,0.2,relu

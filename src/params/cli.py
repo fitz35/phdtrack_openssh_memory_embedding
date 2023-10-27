@@ -1,4 +1,5 @@
 # direct raw access to params
+from logging import Logger
 import sys
 import argparse
 
@@ -10,15 +11,23 @@ class CLIArguments:
     args: argparse.Namespace
 
     def __init__(self) -> None:
-        self.__log_raw_argv()
+        self.log_raw_argv()
         self.__parse_argv()
     
-    def __log_raw_argv(self) -> None:
-        print("Passed program params:")
-        for i in range(len(sys.argv)):
-            print("param[{0}]: {1}".format(
-                i, sys.argv[i]
-            ))
+    def log_raw_argv(self, logger : Logger | None = None) -> None:
+
+        if logger is None:
+            print("Passed program params:")
+            for i in range(len(sys.argv)):
+                print("param[{0}]: {1}".format(
+                    i, sys.argv[i]
+                ))
+        else:
+            logger.info("Passed program params:")
+            for i in range(len(sys.argv)):
+                logger.info("param[{0}]: {1}".format(
+                    i, sys.argv[i]
+                ))
     
     def __parse_argv(self) -> None:
         """

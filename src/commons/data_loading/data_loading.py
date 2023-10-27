@@ -19,22 +19,23 @@ PANDA_DTYPE_DEFAULT = "float64"
 
 def __load_samples_and_labels_from_csv(
     csv_file_path: str,
+    logger : Logger,
     column_dtypes: dict[str, str] | str = PANDA_DTYPE_DEFAULT,
 ) -> SamplesAndLabels | None:
     # Load the data from the CSV file
     try:
         data = pd.read_csv(csv_file_path, dtype=column_dtypes)
     except pd.errors.EmptyDataError:
-        print(f"The CSV {csv_file_path} file is empty.")
+        logger.warn(f"The CSV {csv_file_path} file is empty.")
         return None
     except pd.errors.ParserError:
-        print(f"Error during parsing the CSV {csv_file_path} file.")
+        logger.warn(f"Error during parsing the CSV {csv_file_path} file.")
         return None
     except FileNotFoundError:
-        print(f"The specified CSV {csv_file_path} file was not found.")
+        logger.warn(f"The specified CSV {csv_file_path} file was not found.")
         return None
     except Exception as e:
-        print(f"An error occurred while reading the CSV {csv_file_path} file: {e}")
+        logger.warn(f"An error occurred while reading the CSV {csv_file_path} file: {e}")
         return None
 
     # Check if data is empty
@@ -118,7 +119,7 @@ def __parallel_load_samples_and_labels_from_all_csv_files(
         """
         logger_common.info(f"📋 [{threadId}/{nb_threads}] Loading samples and labels from {csv_file_path}")
 
-        res = __load_samples_and_labels_from_csv( csv_file_path, header_types)
+        res = __load_samples_and_labels_from_csv( csv_file_path, logger_result, header_types)
         if res is None:
             list_of_empty_files.append(csv_file_path)
         else:
