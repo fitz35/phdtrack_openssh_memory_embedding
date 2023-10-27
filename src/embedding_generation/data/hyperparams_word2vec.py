@@ -13,9 +13,9 @@ class Word2vecHyperparams:
 
     output_size: int
     # word2vec window size, in bytes. To have the number of words in a window, divide by the word size in bytes
-    window_bytes_size: int
+    window_character_size: int
 
-    word_byte_size: int
+    word_character_size: int
 
     min_count: int = 1
 
@@ -58,20 +58,20 @@ def get_word2vec_hyperparams_instances() -> list[Word2vecHyperparams]:
     instances : list[Word2vecHyperparams] = []
 
     outputs_sizes = [8, 16, 100]
-    window_bytes_sizes = [8, 16]
-    word_byte_sizes = [2, 4] # size of the word in bytes
+    window_character_sizes = [8, 16]
+    word_character_sizes = [2, 4] # size of the word in bytes
     
 
     index = 0
 
     for output_size in outputs_sizes:
-        for window_bytes_size in window_bytes_sizes:
-            for word_byte_size in word_byte_sizes:
+        for window_character_size in window_character_sizes:
+            for word_character_size in word_character_sizes:
                 instances.append(Word2vecHyperparams(
                     index=index,
                     output_size=output_size,
-                    window_bytes_size=window_bytes_size,
-                    word_byte_size=word_byte_size
+                    window_character_size=window_character_size,
+                    word_character_size=word_character_size
                 ))
 
                 index += 1
