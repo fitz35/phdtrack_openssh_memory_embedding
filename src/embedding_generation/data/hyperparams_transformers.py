@@ -74,9 +74,10 @@ def get_transformers_hyperparams() -> list[TransformersHyperParams]:
 
     zipped = zip(zip(zip(transformer_units, num_heads), num_transformer_layers), dropout_rates)
 
-    for word_character_size in word_character_sizes:
-        for embedding_dim in embedding_dims:
-            for (((transformer_unit, num_head), num_transformer_layer), dropout_rate) in zipped:
+    for (((transformer_unit, num_head), num_transformer_layer), dropout_rate) in zipped:
+        for word_character_size in word_character_sizes:
+            for embedding_dim in embedding_dims:
+           
                 for activation in activations:
                     all_hyperparams.append(TransformersHyperParams(
                         index=index,
