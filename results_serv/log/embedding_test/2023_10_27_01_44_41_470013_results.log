@@ -1,0 +1,11 @@
+2023_10_27_01_44_41 - results_logger - INFO - Pipeline start time : 1698371081.477341 seconds
+2023_10_27_01_44_41 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_10_27_01_44_41 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_10_27_01_46_09 - results_logger - INFO - Number of loaded files: 3735
+2023_10_27_01_46_09 - results_logger - INFO - Number of empty files: 0
+2023_10_27_01_46_10 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_10_27_01_52_50 - results_logger - INFO - Number of loaded files: 20964
+2023_10_27_01_52_50 - results_logger - INFO - Number of empty files: 0
+2023_10_27_01_52_53 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 492.311109000 s
+2023_10_27_01_52_53 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_window_bytes_size8_word_byte_size2_min_count1 !!!!!!!!!!!!!
+2023_10_27_01_52_53 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=0, output_size=8, window_bytes_size=8, word_byte_size=2, min_count=1)
