@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Union
+from typing import Any, Dict, Union
 
 @dataclass
 class ClassificationMetrics:
@@ -36,6 +36,35 @@ class ClassificationResults:
         return ClassificationResults(dataset_path=dataset_path, instance=instance, class_metrics=class_metrics, 
                                      accuracy=accuracy, macro_avg=macro_avg, weighted_avg=weighted_avg, 
                                      duration=duration, **additional_metrics)
+    
+
+    @staticmethod
+    def from_json(json_data: Dict[str, Any], dataset_path: str, instance: str, true_positives: int, true_negatives: int,
+                false_positives: int, false_negatives: int, auc: float, duration: float) -> 'ClassificationResults':
+        # Helper function to adjust the key names in the dictionary
+        def adjust_keys(metrics_data: Dict[str, float]) -> Dict[str, float]:
+            if 'f1-score' in metrics_data:
+                metrics_data['f1_score'] = metrics_data.pop('f1-score')
+            return metrics_data
+        
+        # Construct class metrics
+        class_metrics = {key: ClassificationMetrics(**adjust_keys(value)) 
+                        for key, value in json_data.items() 
+                        if key not in {"accuracy", "macro avg", "weighted avg"}}
+        
+        # Construct macro average and weighted average metrics
+        macro_avg = ClassificationMetrics(**adjust_keys(json_data["macro avg"]))
+        weighted_avg = ClassificationMetrics(**adjust_keys(json_data["weighted avg"]))
+        
+        # Retrieve accuracy, defaulting to 0.0 if not present
+        accuracy = json_data.get("accuracy", 0.0)
+        
+        # Create and return the ClassificationResults object
+        return ClassificationResults(dataset_path=dataset_path, instance=instance, class_metrics=class_metrics,
+                                    accuracy=accuracy, macro_avg=macro_avg, weighted_avg=weighted_avg,
+                                    true_positives=true_positives, true_negatives=true_negatives,
+                                    false_positives=false_positives, false_negatives=false_negatives,
+                                    auc=auc, duration=duration)
     
 
     def to_latex(self):
