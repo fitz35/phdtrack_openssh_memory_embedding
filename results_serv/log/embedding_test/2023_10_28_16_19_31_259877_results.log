@@ -184,3 +184,6 @@ Name: label, dtype: float64
 2023_10_28_16_38_52 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 721.991280000 s
 2023_10_28_16_38_52 - results_logger - INFO - eps: 0.01, number of clusters: 4, silhouette score: 0.31215566396713257, noise points: 2001
 2023_10_28_16_38_52 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_28_16_50_48 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 715.054080000 s
+2023_10_28_16_50_48 - results_logger - INFO - eps: 0.02, number of clusters: 3, silhouette score: 0.14727181196212769, noise points: 3206
+2023_10_28_16_50_48 - results_logger - INFO - timer for clustering_duration_for_0.03 started
