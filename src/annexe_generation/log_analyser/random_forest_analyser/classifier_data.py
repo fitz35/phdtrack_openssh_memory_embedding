@@ -1,5 +1,9 @@
 from dataclasses import dataclass
-from typing import Any, Dict, Union
+import os
+from typing import Any, Dict, List
+import matplotlib.pyplot as plt
+
+import pandas as pd
 
 @dataclass
 class ClassificationMetrics:
@@ -104,3 +108,51 @@ class ClassificationResults:
         latex_str += "\\end{longtable}\n"
         return latex_str
 
+
+
+def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str):
+    if not classification_results_list:
+        raise ValueError("The list of classification results is empty.")
+
+    # Check that all instances have the same dataset name
+    dataset_names = {result.dataset_name for result in classification_results_list}
+    if len(dataset_names) != 1:
+        raise ValueError("All instances must have the same dataset name.")
+    dataset_name = dataset_names.pop()
+
+    # Prepare the data
+    data = []
+    for result in classification_results_list:
+        for label, metrics in result.class_metrics.items():
+            if label != '0.0':
+                data.append({
+                    'Instance': result.instance,
+                    'Class': label,
+                    'Precision': metrics.precision,
+                    'Recall': metrics.recall,
+                    'F1 Score': metrics.f1_score,
+                })
+
+    df = pd.DataFrame(data)
+
+    # Function to create a plot for a specific metric
+    def create_plot(metric_name):
+        fig, axs = plt.subplots(3, 1, figsize=(10, 15), sharex=True)
+        fig.suptitle(dataset_name.replace("_", " ").title())
+        
+        for i, metric in enumerate(['Precision', 'Recall', 'F1 Score']):
+            for class_label in df['Class'].unique():
+                class_df = df[df['Class'] == class_label]
+                axs[i].plot(class_df['Instance'], class_df[metric], marker='o', linestyle='-', label=f'Class {class_label}')
+            axs[i].set_ylabel(metric)
+            axs[i].legend()
+            axs[i].grid(True)
+        
+        axs[2].set_xlabel('Instance')
+        plt.xticks(rotation=45)
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.savefig(os.path.join(save_dir_path, f'{metric_name.lower().replace(" ", "_")}.png'))
+        plt.show()
+
+    # Create the plots and save them
+    create_plot('Metrics for the classes')

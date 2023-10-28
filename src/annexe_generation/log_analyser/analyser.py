@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.abspath('../..'))
 from annexe_generation.log_analyser.random_forest_analyser.extractor import extract_all_dataset_random_forest_results
-from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults
+from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, plot_metrics
 
 def read_file(file_path: str):
     try:
@@ -20,9 +20,10 @@ def read_file(file_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Read a file and print its contents.')
     parser.add_argument('file_path', type=str, help='Path to the file to be read')
+    parser.add_argument('output', type=str, help='Path to the output directory')
     args = parser.parse_args()
     
-    lines = read_file(args.file_path)
+    lines: list[str] = read_file(args.file_path)
 
     # extract classification results
     classification_results : list[ClassificationResults] =  extract_all_dataset_random_forest_results(lines)
@@ -30,3 +31,5 @@ if __name__ == "__main__":
     for result in classification_results:
         print(result.to_latex())
         print()
+    
+    plot_metrics(classification_results, args.output)
