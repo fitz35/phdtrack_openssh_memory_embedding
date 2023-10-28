@@ -213,6 +213,7 @@ def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_
         Raises:
         AssertionError: If the dataset path, instance name, or instance number is not found.
         """
+        dataset_name = os.path.basename(dataset_path)
         # get the random forest lines
         random_forest_lines, random_forest_start_index = __extract_random_forest_lines(all_lines, begin_index)
         #print(random_forest_start_index)
@@ -231,6 +232,8 @@ def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_
         assert instance_name is not None, "Instance name not found"
         assert instance_number is not None, "Instance number not found"
 
+        instance_name = instance_name + " " + str(instance_number)
+
         # extract the metrics from the random forest lines
         true_positives, true_negatives, false_positives, false_negatives, auc = __extract_metrics(random_forest_lines)
 
@@ -243,7 +246,7 @@ def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_
         # create the ClassificationResults object
         return ClassificationResults.from_json(
             json_data, 
-            dataset_path, 
+            dataset_name, 
             instance_name, 
             true_positives, 
             true_negatives,
