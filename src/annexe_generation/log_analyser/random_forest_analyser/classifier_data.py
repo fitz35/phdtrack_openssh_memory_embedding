@@ -122,6 +122,8 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
 
     # Prepare the data
     data = []
+    accuracies = []
+    durations = []
     for result in classification_results_list:
         for label, metrics in result.class_metrics.items():
             if label != '0.0':
@@ -132,27 +134,44 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
                     'Recall': metrics.recall,
                     'F1 Score': metrics.f1_score,
                 })
+        accuracies.append({
+            'Instance': result.instance,
+            'Accuracy': result.accuracy
+        })
+        durations.append({
+            'Instance': result.instance,
+            'Duration': result.duration
+        })
 
     df = pd.DataFrame(data)
+    accuracy_df = pd.DataFrame(accuracies)
+    duration_df = pd.DataFrame(durations)
 
     # Function to create a plot for a specific metric
     def create_plot(metric_name):
-        fig, axs = plt.subplots(3, 1, figsize=(10, 15), sharex=True)
-        fig.suptitle(dataset_name.replace("_", " ").title())
+        fig, axs = plt.subplots(5, 1, figsize=(10, 25), sharex=True)
+        fig.suptitle(f'{dataset_name.replace("_", " ").title()} - {metric_name}', fontsize=16)
         
-        for i, metric in enumerate(['Precision', 'Recall', 'F1 Score']):
-            for class_label in df['Class'].unique():
-                class_df = df[df['Class'] == class_label]
-                axs[i].plot(class_df['Instance'], class_df[metric], marker='o', linestyle='-', label=f'Class {class_label}')
+        for i, metric in enumerate(['Precision', 'Recall', 'F1 Score', 'Accuracy', 'Duration']):
+            if metric != 'Accuracy' and metric != 'Duration':
+                for class_label in df['Class'].unique():
+                    class_df = df[df['Class'] == class_label]
+                    axs[i].plot(class_df['Instance'], class_df[metric], marker='o', linestyle='-', label=f'Class {class_label}')
+            elif metric == 'Accuracy':
+                axs[i].plot(accuracy_df['Instance'], accuracy_df['Accuracy'], marker='o', linestyle='-', color='blue')
+                axs[i].legend(['Accuracy'])
+            else:
+                axs[i].plot(duration_df['Instance'], duration_df['Duration'], marker='o', linestyle='-', color='green')
+                axs[i].legend(['Duration (s)'])
+                
             axs[i].set_ylabel(metric)
-            axs[i].legend()
             axs[i].grid(True)
         
-        axs[2].set_xlabel('Instance')
+        axs[4].set_xlabel('Instance')
         plt.xticks(rotation=45)
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(os.path.join(save_dir_path, f'{metric_name.lower().replace(" ", "_")}.png'))
+        plt.savefig(os.path.join(save_dir_path, f'{dataset_name.lower().replace(" ", "_")}_{metric_name.lower().replace(" ", "_")}.png'))
         plt.show()
 
     # Create the plots and save them
-    create_plot('Metrics for the classes')
+    create_plot('Metrics')
