@@ -3,6 +3,7 @@
 
 import time
 from typing import Tuple
+from timeout_decorator import TimeoutError
 from commons.data_loading.data_loading import load
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
@@ -109,6 +110,8 @@ def pipeline(params : CommonProgramParams, already_loaded_data : Tuple[SamplesAn
             params.RESULTS_LOGGER.info(f"Associating clusters to labels : \n {associated_clusters_and_labels}")
         except MemoryError:
             params.RESULTS_LOGGER.error("Memory error while clustering")
+        except TimeoutError:
+            params.RESULTS_LOGGER.error("Timeout error while clustering")
         except Exception as e:
             params.RESULTS_LOGGER.error(f"Error while clustering : {e}")
 

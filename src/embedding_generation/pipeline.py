@@ -59,12 +59,9 @@ def pipeline(params : CommonProgramParams):
     training_samples_and_labels, testing_samples_and_labels = split_dataset_if_needed(training_samples_and_labels, maybe_testing_samples_and_labels)
 
     for pipeline in DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE.keys():
-        try:
-            DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels.copy(), testing_samples_and_labels.copy())
-        except MemoryError:
-            params.RESULTS_LOGGER.error(f"Memory error in pipeline {pipeline.name}")
-        except Exception as e:
-            params.RESULTS_LOGGER.error(f"Exception in pipeline {pipeline.name}: {e}")
+
+        DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE[pipeline](params, training_samples_and_labels.copy(), testing_samples_and_labels.copy())
+        
 
     end_time = time.time()
     params.RESULTS_LOGGER.info(f"Pipeline end time : {end_time} seconds")

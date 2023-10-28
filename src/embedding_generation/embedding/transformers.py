@@ -3,10 +3,14 @@ import contextlib
 import io
 import os
 from typing import Any
+
 import numpy as np
 import pandas as pd
+import timeout_decorator
+from timeout_decorator import TimeoutError
 import tensorflow as tf
 from keras import layers, models
+from keras.models import Model
 from keras.preprocessing.sequence import pad_sequences
 
 from research_base.utils.results_utils import time_measure_result
@@ -55,39 +59,50 @@ def transformers_pipeline(
         params.RESULTS_LOGGER.info(f"encoder summary : {__get_model_summary(encoder)}")
 
         
-        # train the model
-        with time_measure_result(
-                f'transformers training : ', 
-                params.RESULTS_LOGGER,
-            ):
-            
-            embedded : np.ndarray[Any, Any] = encoder.predict(input_data, batch_size=params.TRANSFORMERS_BATCH_SIZE, verbose="1")
+        @timeout_decorator.timeout(seconds=params.TIMEOUT_DURATION, timeout_exception=TimeoutError)
+        def train_model(encoder : Model, input_data : np.ndarray, params :CommonProgramParams):
+            embedded: np.ndarray = encoder.predict(input_data, batch_size=params.TRANSFORMERS_BATCH_SIZE, verbose="1")
+            return embedded
+
+        try:
+            # train the model
+            with time_measure_result(
+                    f'transformers training : ', 
+                    params.RESULTS_LOGGER,
+                ):
+                
+                embedded : np.ndarray[Any, Any] = train_model(encoder, input_data, params)
 
 
-        # split the embedded data into train and test
-        colums = [f'embedded_{i}' for i in range(hyperparam.embedding_dim)]
-        trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=colums)
-        assert len(trained_embedded) == len(samples_and_sample_str_train.labels), f"len(trained_embedded)={len(trained_embedded)} != len(samples_and_sample_str_train.labels)={len(samples_and_sample_str_train.labels)}"
+            # split the embedded data into train and test
+            colums = [f'embedded_{i}' for i in range(hyperparam.embedding_dim)]
+            trained_embedded = pd.DataFrame(embedded[:train_nb_samples], columns=colums)
+            assert len(trained_embedded) == len(samples_and_sample_str_train.labels), f"len(trained_embedded)={len(trained_embedded)} != len(samples_and_sample_str_train.labels)={len(samples_and_sample_str_train.labels)}"
 
-        tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=colums)
-        assert len(tested_embedded) == len(samples_and_sample_str_test.labels), f"len(tested_embedded)={len(tested_embedded)} != len(samples_and_sample_str_test.labels)={len(samples_and_sample_str_test.labels)}"
+            tested_embedded = pd.DataFrame(embedded[train_nb_samples:], columns=colums)
+            assert len(tested_embedded) == len(samples_and_sample_str_test.labels), f"len(tested_embedded)={len(tested_embedded)} != len(samples_and_sample_str_test.labels)={len(samples_and_sample_str_test.labels)}"
 
-        trained = SamplesAndLabels(trained_embedded, samples_and_sample_str_train.labels)
-        tested = SamplesAndLabels(tested_embedded, samples_and_sample_str_test.labels)
+            trained = SamplesAndLabels(trained_embedded, samples_and_sample_str_train.labels)
+            tested = SamplesAndLabels(tested_embedded, samples_and_sample_str_test.labels)
 
-        # save the embedded data
+            # save the embedded data
 
-        os.makedirs(embedding_folder, exist_ok=True)
+            os.makedirs(embedding_folder, exist_ok=True)
 
-        #save the run hyperparams
+            #save the run hyperparams
 
-        hyperparam.log(params.RESULTS_LOGGER)
-        hyperparam.append_to_csv(os.path.join(params.OUTPUT_FOLDER, f"hyperparams.csv"))
+            hyperparam.log(params.RESULTS_LOGGER)
+            hyperparam.append_to_csv(os.path.join(params.OUTPUT_FOLDER, f"hyperparams.csv"))
 
 
-        # test the model
-        testing_pipeline(params, (trained, tested))
-
+            # test the model
+            testing_pipeline(params, (trained, tested))
+        except TimeoutError:
+            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {hyperparam.index}, skipping")
+        except MemoryError:
+            params.RESULTS_LOGGER.error(f"Memory error in pipeline {hyperparam.index}, skipping")
+        except Exception as e:
+            params.RESULTS_LOGGER.error(f"Exception in pipeline {hyperparam.index}, skipping: {e}")
 
     
 

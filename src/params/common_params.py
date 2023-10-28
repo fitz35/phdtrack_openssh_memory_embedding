@@ -59,6 +59,8 @@ class CommonProgramParams(BaseProgramParams[Pipeline, _DummyResultsWriter]):
 
     # max memory usage (catch if not enough memory), in go
     MAX_MEMORY_USAGE : int
+    # timeout duration, in seconds
+    TIMEOUT_DURATION : int
 
 
     # dev variable

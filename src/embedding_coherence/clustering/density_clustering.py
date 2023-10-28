@@ -3,6 +3,8 @@
 from sklearn.cluster import OPTICS
 from sklearn.metrics import silhouette_score
 from sklearn.utils import shuffle
+import timeout_decorator
+from timeout_decorator import TimeoutError
 import numpy as np
 import pandas as pd
 from research_base.utils.results_utils import time_measure_result
@@ -91,12 +93,20 @@ def density_clustering_pipeline(
             cluster_method=CLUSTERIZATION_METHOD,
             xi=eps
         )
+
+        @timeout_decorator.timeout(seconds=params.TIMEOUT_DURATION, timeout_exception=TimeoutError)
+        def train_model(model :  OPTICS, input_data : pd.DataFrame, params :CommonProgramParams):
+            with np.errstate(divide='ignore'): # ignore divide by zero warning
+                model.fit_predict(input_data)
+
+            return model
+
         with time_measure_result(
             f'clustering_duration_for_{eps}', 
             params.RESULTS_LOGGER
         ):
-            with np.errstate(divide='ignore'): # ignore divide by zero warning
-                optics.fit_predict(df_scaled)
+            optics = train_model(optics, df_scaled, params)
+            
 
         # Get labels for training set
         labels = optics.labels_
