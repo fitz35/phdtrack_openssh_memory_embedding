@@ -7,68 +7,8 @@ import sys
 from typing import List, Tuple
 
 sys.path.append(os.path.abspath('../../..'))
-from annexe_generation.log_analyser.common_extractor import extract_lines_between
+from annexe_generation.log_analyser.common_extractor import extract_instance_name, extract_instance_number, extract_lines_between
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults
-
-def __extract_dataset_path(log_line: str):
-    """
-    Extracts the dataset path from a log line.
-    
-    The function searches for the pattern "Launching embedding pipeline on dataset " followed by a non-whitespace sequence.
-    If found, it returns the non-whitespace sequence (i.e., the dataset path).
-    If not found, it returns None.
-    
-    Args:
-    log_line (str): The log line to search in.
-    
-    Returns:
-    str or None: The extracted dataset path or None if not found.
-    """
-    match = re.search(r"- results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset (\S+)", log_line)
-    if not match:
-        return None
-    return match.group(1)
-
-
-def __extract_instance_name(log_line: str):
-    """
-    Extracts the instance name from a log line.
-    
-    The function searches for the pattern "INFO - !+  " followed by a non-whitespace sequence, ending with " instance : ".
-    If found, it returns the non-whitespace sequence (i.e., the instance name).
-    If not found, it returns None.
-    
-    Args:
-    log_line (str): The log line to search in.
-    
-    Returns:
-    str or None: The extracted instance name or None if not found.
-    """
-    match = re.search(r"results_logger - INFO - !!!!!!!!!!!!! (\S+) instance : ", log_line)
-    if not match:
-        return None
-    return match.group(1)
-
-
-def __extract_instance_number(log_line):
-    """
-    Extracts the instance number from a log line.
-    
-    The function searches for the pattern "index=" followed by one or more digits.
-    If found, it converts the digit sequence to an integer and returns it.
-    If not found, it returns None.
-    
-    Args:
-    log_line (str): The log line to search in.
-    
-    Returns:
-    int or None: The extracted instance number or None if not found.
-    """
-    match = re.search(r"index=(\d+)", log_line)
-    if not match:
-        return None
-    return int(match.group(1))
-
 
 
 def __extract_random_forest_lines(log_lines: list[str], start_index: int):
@@ -155,7 +95,6 @@ def __extract_metrics(log_lines: List[str]) -> Tuple[int, int, int, int, float]:
             # Convert the value to float if it contains a decimal point, otherwise convert to int
             metrics[metric.lower().replace(" ", "_")] = float(value) if '.' in value else int(value)
     
-    print(metrics)
     # Check if all required metrics were found
     required_metrics = ["true_positives", "true_negatives", "false_positives", "false_negatives", "auc"]
     if not all(key in metrics.keys() for key in required_metrics):
@@ -199,7 +138,7 @@ def __extract_time_elapsed(log_lines: List[str]) -> float:
 
 
 
-def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> Tuple[ClassificationResults, int] :
+def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> Tuple[ClassificationResults, int] :
         """
         Extracts information related to a random forest operation from log lines.
 
@@ -225,9 +164,9 @@ def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_
 
         for i in range(begin_index, random_forest_start_index, 1):
             if instance_name is None:
-                instance_name = __extract_instance_name(all_lines[i])
+                instance_name = extract_instance_name(all_lines[i])
             if instance_number is None:
-                instance_number = __extract_instance_number(all_lines[i])
+                instance_number = extract_instance_number(all_lines[i])
         
         assert instance_name is not None, "Instance name not found"
         assert instance_number is not None, "Instance number not found"
@@ -254,46 +193,3 @@ def __random_forest_extractor(all_lines : list[str], begin_index : int, dataset_
             false_negatives, 
             auc, 
             duration), random_forest_start_index + len(random_forest_lines) + 1
-
-
-def extract_all_dataset_random_forest_results(log_lines: list[str]) -> List[ClassificationResults]:
-    """
-    Extracts classification results from a list of log lines.
-
-    Args:
-    log_lines (list[str]): The list of log lines.
-
-    Returns:
-    List[ClassificationResults]: A list of ClassificationResults objects.
-    """
-    # List to store the extracted classification results
-    results : list[ClassificationResults] = []
-
-    dataset_path = None
-
-    # Index to start searching from
-    begin_index = 0
-
-    # Iterate through the log lines
-    while begin_index < len(log_lines):
-        if dataset_path is None:
-            dataset_path = __extract_dataset_path(log_lines[begin_index])
-            begin_index += 1
-        else:
-            try:
-                # Extract the classification results and the index of the next line
-                classification_results, next_index = __random_forest_extractor(log_lines, begin_index, dataset_path)
-                # Add the classification results to the list
-                results.append(classification_results)
-                # Set the begin_index to the index of the next line
-                begin_index = next_index
-            except AssertionError as e:
-                # If an error occurs, increment the begin_index and continue
-                begin_index += 1
-            except ValueError as e:
-                # If an error occurs, print it and continue
-                print(f"An error occurred: {e}")
-                begin_index += 1
-
-    # Return the list of classification results
-    return results

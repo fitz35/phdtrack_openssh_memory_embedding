@@ -4,8 +4,14 @@ import sys
 
 
 
+
+
+
+
 sys.path.append(os.path.abspath('../..'))
-from annexe_generation.log_analyser.random_forest_analyser.extractor import extract_all_dataset_random_forest_results
+from annexe_generation.log_analyser.clustering_analyser.extractor import clustering_extractor
+from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results
+from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, plot_metrics
 
 def read_file(file_path: str):
@@ -25,11 +31,19 @@ if __name__ == "__main__":
     
     lines: list[str] = read_file(args.file_path)
 
+    # extract the clustering results
+    clustering_results = extract_all_dataset_results(lines, clustering_extractor)
+    # print clustering results
+    print(clustering_results)
+
     # extract classification results
-    classification_results : list[ClassificationResults] =  extract_all_dataset_random_forest_results(lines)
+    classification_results : list[ClassificationResults] =  extract_all_dataset_results(lines, random_forest_extractor)
     # print classification results
     for result in classification_results:
-        print(result.to_latex())
-        print()
+        latex_content = result.to_latex()
+
+        output_file_path = f"{args.output}/{result.dataset_name}_random_forest_results.txt"
+        with open(output_file_path, 'a') as output_file:
+            output_file.write(latex_content + '\n\n')
     
     plot_metrics(classification_results, args.output)
