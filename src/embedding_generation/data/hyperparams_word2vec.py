@@ -21,7 +21,7 @@ class Word2vecHyperparams:
 
     def to_dir_name(self) -> str:
         attributes = [
-            "output_size", "window_bytes_size", "word_byte_size",
+            "output_size", "word_character_size", "word_character_size",
             "min_count"
         ]
         dir_name = "_".join(f"{attr}={getattr(self, attr)}" for attr in attributes)
