@@ -24,26 +24,45 @@ def read_file(file_path: str):
         exit(1)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Read a file and print its contents.')
+    parser = argparse.ArgumentParser(description='Read a file and process its contents.')
     parser.add_argument('file_path', type=str, help='Path to the file to be read')
     parser.add_argument('output', type=str, help='Path to the output directory')
     args = parser.parse_args()
     
     lines: list[str] = read_file(args.file_path)
 
-    # extract the clustering results
+    # Extract the clustering results
     clustering_results = extract_all_dataset_results(lines, clustering_extractor)
-    # print clustering results
-    print(clustering_results)
 
-    # extract classification results
+    # print and save clustering results to LaTeX file
+    dataset_name = None
+    clustering_latex_file_path = None
+
+    for result in clustering_results:
+        if dataset_name != result.dataset_name:
+            dataset_name = result.dataset_name
+            clustering_latex_file_path = os.path.join(args.output, f"{dataset_name}_clustering_results.txt")
+            with open(clustering_latex_file_path, 'w') as f:
+                f.write("")
+
+        with open(clustering_latex_file_path, 'a') as f:
+            f.write(result.to_latex() + "\n\n")
+
+    # Extract classification results
     classification_results : list[ClassificationResults] =  extract_all_dataset_results(lines, random_forest_extractor)
-    # print classification results
-    for result in classification_results:
-        latex_content = result.to_latex()
 
-        output_file_path = f"{args.output}/{result.dataset_name}_random_forest_results.txt"
-        with open(output_file_path, 'a') as output_file:
-            output_file.write(latex_content + '\n\n')
-    
+    # Print and save classification results to LaTeX file
+    dataset_name = None
+    classification_latex_file_path = None
+
+    for result in classification_results:
+        if dataset_name != result.dataset_name:
+            dataset_name = result.dataset_name
+            classification_latex_file_path = os.path.join(args.output, f"{dataset_name}_classification_results.txt")
+            with open(classification_latex_file_path, 'w') as f:
+                f.write("")
+
+        with open(classification_latex_file_path, 'a') as f:
+            f.write(result.to_latex() + "\n\n")
+
     plot_metrics(classification_results, args.output)
