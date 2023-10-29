@@ -40,8 +40,18 @@ def word2vec_pipeline(
         instance_folder_name = f"embedding_word2vec_{instance.to_dir_name()}"
         instance_folder = os.path.join(folder, instance_folder_name)
         if os.path.exists(instance_folder):
-            params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed")
-            continue
+            # check timeout error (continue if timeout is more than the current timeout)
+            if os.path.exists(os.path.join(instance_folder, "timeout_error.txt")):
+                with open(os.path.join(instance_folder, "timeout_error.txt"), "r") as f:
+                    timeout = float(f.read())
+                if timeout >= params.TIMEOUT_DURATION:
+                    params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed with timeout {timeout} >= {params.TIMEOUT_DURATION}, skipping")
+                    continue
+                else:
+                    params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed with timeout {timeout} < {params.TIMEOUT_DURATION}, recomputing")
+            else:
+                params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed")
+                continue
 
         params.RESULTS_LOGGER.info(f"Word2Vec instance : {instance}")
 
@@ -101,6 +111,8 @@ def word2vec_pipeline(
         except TimeoutError:
             params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {instance.index}, skipping (and marking)")
             os.makedirs(instance_folder, exist_ok=True)
+            with open(os.path.join(instance_folder, "timeout_error.txt"), "w") as f:
+                f.write(str(params.TIMEOUT_DURATION))
         except MemoryError:
             params.RESULTS_LOGGER.error(f"Memory error in pipeline {instance.index}, skipping")
         except Exception as e:

@@ -40,8 +40,18 @@ def transformers_pipeline(
         embedding_folder_name = f"embedding_transformers_{hyperparam.to_dir_name()}"
         embedding_folder = os.path.join(params.OUTPUT_FOLDER, embedding_folder_name)
         if os.path.exists(embedding_folder):
-            params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed")
-            continue
+            # check timeout error (continue if timeout is more than the current timeout)
+            if os.path.exists(os.path.join(embedding_folder, "timeout_error.txt")):
+                with open(os.path.join(embedding_folder, "timeout_error.txt"), "r") as f:
+                    timeout = float(f.read())
+                if timeout >= params.TIMEOUT_DURATION:
+                    params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed with timeout {timeout} >= {params.TIMEOUT_DURATION}, skipping")
+                    continue
+                else:
+                    params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed with timeout {timeout} < {params.TIMEOUT_DURATION}, recomputing")
+            else:
+                params.RESULTS_LOGGER.info(f"Transformers instance {hyperparam} already computed")
+                continue
         
         params.RESULTS_LOGGER.info(f"Transformers instance : {hyperparam}")
 
@@ -100,6 +110,8 @@ def transformers_pipeline(
         except TimeoutError:
             params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {hyperparam.index}, skipping (and marking)")
             os.makedirs(embedding_folder, exist_ok=True)
+            with open(os.path.join(embedding_folder, "timeout_error.txt"), "w") as f:
+                f.write(str(params.TIMEOUT_DURATION))
         except MemoryError:
             params.RESULTS_LOGGER.error(f"Memory error in pipeline {hyperparam.index}, skipping")
         except Exception as e:
