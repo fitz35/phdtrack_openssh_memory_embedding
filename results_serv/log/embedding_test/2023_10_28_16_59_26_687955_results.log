@@ -821,3 +821,20 @@ Name: label, dtype: float64
 2023_10_29_08_03_56 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 837.875930000 s
 2023_10_29_08_03_56 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
 2023_10_29_08_03_56 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_29_08_18_16 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 860.865517000 s
+2023_10_29_08_18_16 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_29_08_18_16 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_29_08_32_28 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 851.346715000 s
+2023_10_29_08_32_28 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_29_08_32_28 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_29_08_32_28 - results_logger - INFO - Time elapsed since the begining of clustering: 4261.943539000 s
+2023_10_29_08_32_28 - results_logger - INFO - End time : 1698568348.2727928
+2023_10_29_08_32_28 - results_logger - INFO - Total duration: 4264.969901800156
+2023_10_29_08_32_28 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_29_08_32_28 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=6, output_size=16, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_10_29_08_32_28 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_29_08_32_28 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=7, output_size=16, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_10_29_08_32_28 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_29_08_32_28 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=8, output_size=100, window_character_size=8, word_character_size=2, min_count=1)
+2023_10_29_08_33_09 - results_logger - INFO - max_length_train : 16392
+2023_10_29_08_33_09 - results_logger - INFO - timer for word2vec training :  started
