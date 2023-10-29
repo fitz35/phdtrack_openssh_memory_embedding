@@ -1,7 +1,6 @@
 
 
 import ast
-import datetime
 import os
 import re
 import sys
@@ -59,19 +58,19 @@ def __extract_cluster_info(log_lines: List[str]) -> List[ClusterInfo]:
     # Initialize a list to store the ClusterInfo instances
     cluster_infos = []
     # Initialize a variable to store the current duration of clustering
-    current_duration = 0.0
+    current_duration = None
 
     for line in log_lines:
         # Check for the line that contains the duration of clustering and extract it
-        duration_match = re.match(r".*Time elapsed since the begining of clustering_duration_for_(\d+\.\d+): (\d+\.\d+) s", line)
+        duration_match = re.match(r"- results_logger - INFO - Time elapsed since the begining of clustering_duration_for_(\d+\.\d+): (\d+\.\d+) s", line)
         if duration_match:
             # Update the current duration with the extracted value
             current_duration = float(duration_match.group(2))
             continue
 
         # Check for the line that contains cluster information and extract it
-        info_match = re.match(r".*eps: (\d+\.\d+), number of clusters: (\d+), silhouette score: ([\d.-]+), noise points: (\d+)", line)
-        if info_match:
+        info_match = re.match(r"- results_logger - INFO - eps: (\d+\.\d+), number of clusters: (\d+), silhouette score: ([\d.-]+), noise points: (\d+)", line)
+        if info_match and current_duration is not None:
             # Extract information from the log line
             eps = float(info_match.group(1))
             number_of_clusters = int(info_match.group(2))
@@ -81,6 +80,8 @@ def __extract_cluster_info(log_lines: List[str]) -> List[ClusterInfo]:
             cluster_info = ClusterInfo(eps, number_of_clusters, silhouette_score, noise_points, current_duration)
             # Add the ClusterInfo instance to the list
             cluster_infos.append(cluster_info)
+            # Reset the current duration
+            current_duration = None
 
     # Return the list of ClusterInfo instances
     return cluster_infos
@@ -135,7 +136,7 @@ def __extract_best_eps(log_text: str) -> float | None:
     Raises:
     ValueError: If the best eps value is not found in the log text.
     """
-    match = re.search(r"Best eps: (\d+\.\d+)", log_text)
+    match = re.search(r"- results_logger - INFO - Best eps: (\d+\.\d+)", log_text)
     if match:
         return float(match.group(1))
     else:
@@ -232,7 +233,6 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
     assert min_samples is not None, "Min samples not found"
 
     best_eps_info = next((info for info in cluster_info if info.eps == best_eps), None)
-    print(len(cluster_info))
 
     # Raise an error if the best_eps is not found in the cluster_info list
     if best_eps_info is None:
