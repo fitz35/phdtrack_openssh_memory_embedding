@@ -171,7 +171,7 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
         plt.xticks(rotation=45)
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         plt.savefig(os.path.join(save_dir_path, f'{dataset_name.lower().replace(" ", "_")}_{metric_name.lower().replace(" ", "_")}.png'))
-        plt.show()
+        #plt.show()
 
     # Create the plots and save them
     create_plot('Metrics')

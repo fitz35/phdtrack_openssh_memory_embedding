@@ -1,162 +1,188 @@
-\begin{array}{|c|c|}
+\begin{longtable}{|c|c|c|c|c|}
+\caption{Transformers 0 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_0_clustering_results}\\
 \hline
-Dataset & 26_filtered_chunk_extraction_-e_only-max-entropy_-s_none \\
+\multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
-Instance & Transformers 0 \\
+\multicolumn{2}{|c|}{Min Samples} & \multicolumn{3}{c|}{937} \\
+\multicolumn{2}{|c|}{Total Duration} & \multicolumn{3}{c|}{3867.070967 s} \\
 \hline
-Min Samples & 937 \\
-\hline
-Total Duration & 3867.070967 s\\
+\multicolumn{5}{|c|}{\textbf{Clustering Information}} \\
 \hline
 EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
-\hline
 0.01 & 3 & 0.6441521048545837 & 1362 & 778.859692 s\\
-\hline
 0.02 & 3 & 0.6441521048545837 & 1362 & 710.445135 s\\
-\hline
 0.03 & 3 & 0.6441521048545837 & 1362 & 769.276459 s\\
-\hline
 0.04 & 3 & 0.6441521048545837 & 1362 & 817.856428 s\\
-\hline
 0.05 & 3 & 0.6441521048545837 & 1362 & 786.591524 s\\
-\hline
 0.01 & 3 & 0.6441521048545837 & 1362 & 786.591524 s\\
 \hline
-Best EPS Info & \\
+\multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
 0.01 & 3 & 0.6441521048545837 & 1362 & 778.859692 s\\
 \hline
-Label Association & \\
+\multicolumn{5}{|c|}{\textbf{Label Association}} \\
 \hline
-Cluster ID: -1.0 & Label Counts: {0.0: 24, 1.0: 46, 2.0: 39, 4.0: 44} \\
+Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples} \\
 \hline
-Cluster ID: 0.0 & Label Counts: {0.0: 31, 1.0: 37, 2.0: 41, 4.0: 30} \\
+\multirow{4}{*}{-1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{24} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{46} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{39} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{44} \\
 \hline
-Cluster ID: 1.0 & Label Counts: {0.0: 78, 1.0: 84, 2.0: 80, 4.0: 83} \\
+\multirow{4}{*}{0.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{31} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{37} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{41} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{30} \\
 \hline
-Cluster ID: 2.0 & Label Counts: {0.0: 42, 1.0: 49, 2.0: 43, 4.0: 46} \\
+\multirow{4}{*}{1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{78} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{84} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{80} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{83} \\
 \hline
-\end{array}
+\multirow{4}{*}{2.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{42} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{49} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{43} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{46} \\
+\hline
+\end{longtable}
 
 
-\begin{array}{|c|c|}
+\begin{longtable}{|c|c|c|c|c|}
+\caption{Transformers 1 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_1_clustering_results}\\
 \hline
-Dataset & 26_filtered_chunk_extraction_-e_only-max-entropy_-s_none \\
+\multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
-Instance & Transformers 1 \\
+\multicolumn{2}{|c|}{Min Samples} & \multicolumn{3}{c|}{937} \\
+\multicolumn{2}{|c|}{Total Duration} & \multicolumn{3}{c|}{3914.111016 s} \\
 \hline
-Min Samples & 937 \\
-\hline
-Total Duration & 3914.111016 s\\
+\multicolumn{5}{|c|}{\textbf{Clustering Information}} \\
 \hline
 EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
-\hline
 0.01 & 2 & 0.2777276635169983 & 8 & 785.546961 s\\
-\hline
 0.02 & 2 & 0.2777276635169983 & 8 & 792.913712 s\\
-\hline
 0.03 & 2 & 0.2777276635169983 & 8 & 753.78547 s\\
-\hline
 0.04 & 2 & 0.2777276635169983 & 8 & 786.513502 s\\
-\hline
 0.05 & 2 & 0.2777276635169983 & 8 & 791.077206 s\\
-\hline
 0.01 & 2 & 0.2777276635169983 & 8 & 791.077206 s\\
 \hline
-Best EPS Info & \\
+\multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
 0.01 & 2 & 0.2777276635169983 & 8 & 785.546961 s\\
 \hline
-Label Association & \\
+\multicolumn{5}{|c|}{\textbf{Label Association}} \\
 \hline
-Cluster ID: -1.0 & Label Counts: {4.0: 1} \\
+Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples} \\
 \hline
-Cluster ID: 0.0 & Label Counts: {0.0: 97, 1.0: 132, 2.0: 122, 4.0: 119} \\
+\multirow{1}{*}{-1.0} & \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{1} \\
 \hline
-Cluster ID: 1.0 & Label Counts: {0.0: 78, 1.0: 84, 2.0: 81, 4.0: 83} \\
+\multirow{4}{*}{0.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{97} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{132} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{122} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{119} \\
 \hline
-\end{array}
+\multirow{4}{*}{1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{78} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{84} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{81} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{83} \\
+\hline
+\end{longtable}
 
 
-\begin{array}{|c|c|}
+\begin{longtable}{|c|c|c|c|c|}
+\caption{Transformers 2 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_2_clustering_results}\\
 \hline
-Dataset & 26_filtered_chunk_extraction_-e_only-max-entropy_-s_none \\
+\multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
-Instance & Transformers 2 \\
+\multicolumn{2}{|c|}{Min Samples} & \multicolumn{3}{c|}{937} \\
+\multicolumn{2}{|c|}{Total Duration} & \multicolumn{3}{c|}{3907.37416 s} \\
 \hline
-Min Samples & 937 \\
-\hline
-Total Duration & 3907.37416 s\\
+\multicolumn{5}{|c|}{\textbf{Clustering Information}} \\
 \hline
 EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
-\hline
 0.01 & 3 & 0.6490662097930908 & 884 & 792.851062 s\\
-\hline
 0.02 & 3 & 0.6409046649932861 & 958 & 786.802126 s\\
-\hline
 0.03 & 3 & 0.639912486076355 & 965 & 750.61848 s\\
-\hline
 0.04 & 2 & 0.6036707162857056 & 2478 & 786.248117 s\\
-\hline
 0.05 & 2 & 0.6036707162857056 & 2478 & 785.427151 s\\
-\hline
 0.01 & 3 & 0.6490662097930908 & 884 & 785.427151 s\\
 \hline
-Best EPS Info & \\
+\multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
 0.01 & 3 & 0.6490662097930908 & 884 & 792.851062 s\\
 \hline
-Label Association & \\
+\multicolumn{5}{|c|}{\textbf{Label Association}} \\
 \hline
-Cluster ID: -1.0 & Label Counts: {0.0: 14, 1.0: 27, 2.0: 28, 4.0: 28} \\
+Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples} \\
 \hline
-Cluster ID: 0.0 & Label Counts: {0.0: 46, 1.0: 58, 2.0: 55, 4.0: 54} \\
+\multirow{4}{*}{-1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{14} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{27} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{28} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{28} \\
 \hline
-Cluster ID: 1.0 & Label Counts: {0.0: 78, 1.0: 84, 2.0: 81, 4.0: 83} \\
+\multirow{4}{*}{0.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{46} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{58} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{55} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{54} \\
 \hline
-Cluster ID: 2.0 & Label Counts: {0.0: 37, 1.0: 47, 2.0: 39, 4.0: 38} \\
+\multirow{4}{*}{1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{78} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{84} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{81} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{83} \\
 \hline
-\end{array}
+\multirow{4}{*}{2.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{37} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{47} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{39} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{38} \\
+\hline
+\end{longtable}
 
 
-\begin{array}{|c|c|}
+\begin{longtable}{|c|c|c|c|c|}
+\caption{Transformers 3 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_3_clustering_results}\\
 \hline
-Dataset & 26_filtered_chunk_extraction_-e_only-max-entropy_-s_none \\
+\multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
-Instance & Transformers 3 \\
+\multicolumn{2}{|c|}{Min Samples} & \multicolumn{3}{c|}{937} \\
+\multicolumn{2}{|c|}{Total Duration} & \multicolumn{3}{c|}{3938.175488 s} \\
 \hline
-Min Samples & 937 \\
-\hline
-Total Duration & 3938.175488 s\\
+\multicolumn{5}{|c|}{\textbf{Clustering Information}} \\
 \hline
 EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
-\hline
 0.01 & 3 & 0.7589311003684998 & 1098 & 811.079931 s\\
-\hline
 0.02 & 3 & 0.7589311003684998 & 1098 & 781.574049 s\\
-\hline
 0.03 & 3 & 0.7589311003684998 & 1098 & 786.405334 s\\
-\hline
 0.04 & 3 & 0.7589311003684998 & 1098 & 749.913816 s\\
-\hline
 0.05 & 3 & 0.7589311003684998 & 1098 & 804.022042 s\\
-\hline
 0.01 & 3 & 0.7589311003684998 & 1098 & 804.022042 s\\
 \hline
-Best EPS Info & \\
+\multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
 0.01 & 3 & 0.7589311003684998 & 1098 & 811.079931 s\\
 \hline
-Label Association & \\
+\multicolumn{5}{|c|}{\textbf{Label Association}} \\
 \hline
-Cluster ID: -1.0 & Label Counts: {0.0: 18, 1.0: 36, 2.0: 36, 4.0: 32} \\
+Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples} \\
 \hline
-Cluster ID: 0.0 & Label Counts: {0.0: 35, 1.0: 42, 2.0: 41, 4.0: 39} \\
+\multirow{4}{*}{-1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{18} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{36} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{36} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{32} \\
 \hline
-Cluster ID: 1.0 & Label Counts: {0.0: 78, 1.0: 84, 2.0: 81, 4.0: 83} \\
+\multirow{4}{*}{0.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{35} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{42} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{41} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{39} \\
 \hline
-Cluster ID: 2.0 & Label Counts: {0.0: 44, 1.0: 54, 2.0: 45, 4.0: 49} \\
+\multirow{4}{*}{1.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{78} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{84} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{81} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{83} \\
 \hline
-\end{array}
+\multirow{4}{*}{2.0} & \multicolumn{2}{c|}{0.0} & \multicolumn{2}{c|}{44} \\
+& \multicolumn{2}{c|}{1.0} & \multicolumn{2}{c|}{54} \\
+& \multicolumn{2}{c|}{2.0} & \multicolumn{2}{c|}{45} \\
+& \multicolumn{2}{c|}{4.0} & \multicolumn{2}{c|}{49} \\
+\hline
+\end{longtable}
 
 

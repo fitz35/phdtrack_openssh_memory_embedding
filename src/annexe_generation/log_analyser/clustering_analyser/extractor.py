@@ -232,6 +232,7 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
     assert min_samples is not None, "Min samples not found"
 
     best_eps_info = next((info for info in cluster_info if info.eps == best_eps), None)
+    print(len(cluster_info))
 
     # Raise an error if the best_eps is not found in the cluster_info list
     if best_eps_info is None:
