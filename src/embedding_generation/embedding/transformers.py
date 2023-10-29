@@ -98,7 +98,8 @@ def transformers_pipeline(
             # test the model
             testing_pipeline(params, (trained, tested))
         except TimeoutError:
-            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {hyperparam.index}, skipping")
+            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {hyperparam.index}, skipping (and marking)")
+            os.makedirs(embedding_folder, exist_ok=True)
         except MemoryError:
             params.RESULTS_LOGGER.error(f"Memory error in pipeline {hyperparam.index}, skipping")
         except Exception as e:

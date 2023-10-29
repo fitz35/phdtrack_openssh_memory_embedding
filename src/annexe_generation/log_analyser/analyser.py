@@ -45,8 +45,9 @@ if __name__ == "__main__":
             with open(clustering_latex_file_path, 'w') as f:
                 f.write("")
 
-        with open(clustering_latex_file_path, 'a') as f:
-            f.write(result.to_latex() + "\n\n")
+        if clustering_latex_file_path is not None:
+            with open(clustering_latex_file_path, 'a') as f:
+                f.write(result.to_latex() + "\n\n")
 
     # Extract classification results
     classification_results : list[ClassificationResults] =  extract_all_dataset_results(lines, random_forest_extractor)
@@ -62,7 +63,8 @@ if __name__ == "__main__":
             with open(classification_latex_file_path, 'w') as f:
                 f.write("")
 
-        with open(classification_latex_file_path, 'a') as f:
-            f.write(result.to_latex() + "\n\n")
+        if classification_latex_file_path is not None:
+            with open(classification_latex_file_path, 'a') as f:
+                f.write(result.to_latex() + "\n\n")
 
     plot_metrics(classification_results, args.output)

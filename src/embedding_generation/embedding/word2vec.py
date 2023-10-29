@@ -99,7 +99,8 @@ def word2vec_pipeline(
             # test the model
             testing_pipeline(params, (train_embedded, test_embedded))
         except TimeoutError:
-            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {instance.index}, skipping")
+            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {instance.index}, skipping (and marking)")
+            os.makedirs(instance_folder, exist_ok=True)
         except MemoryError:
             params.RESULTS_LOGGER.error(f"Memory error in pipeline {instance.index}, skipping")
         except Exception as e:
