@@ -9,8 +9,8 @@ import numpy as np
 class ClusterInfo:
     eps: float
     number_of_clusters: int
-    silhouette_score: float
-    noise_points: int
+    silhouette_score: float | None
+    noise_points: int | None
     duration: float
 
 @dataclass(frozen=True)

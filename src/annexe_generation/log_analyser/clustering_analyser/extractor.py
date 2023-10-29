@@ -55,38 +55,36 @@ def __extract_cluster_info(log_lines: List[str]) -> List[ClusterInfo]:
     Returns:
     List[ClusterInfo]: A list of ClusterInfo dataclass instances containing extracted information.
     """
-    # Initialize a list to store the ClusterInfo instances
     cluster_infos = []
-    # Initialize a variable to store the current duration of clustering
     current_duration = None
 
     for line in log_lines:
-        # Check for the line that contains the duration of clustering and extract it
         duration_match = re.search(r"- results_logger - INFO - Time elapsed since the begining of clustering_duration_for_(\d+\.\d+): (\d+\.\d+) s", line)
-
-        if duration_match is not None:
-            # Update the current duration with the extracted value
+        if duration_match:
             current_duration = float(duration_match.group(2))
             continue
 
-        # Check for the line that contains cluster information and extract it
+        warning_match = re.search(r"- results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: (\d+\.\d+), number of clusters: (\d+)", line)
+        if warning_match and current_duration is not None:
+            eps = float(warning_match.group(1))
+            number_of_clusters = int(warning_match.group(2))
+            cluster_info = ClusterInfo(eps, number_of_clusters, None, None, current_duration)
+            cluster_infos.append(cluster_info)
+            current_duration = None
+            continue
+
         info_match = re.search(r"- results_logger - INFO - eps: (\d+\.\d+), number of clusters: (\d+), silhouette score: ([\d.-]+), noise points: (\d+)", line)
         if info_match and current_duration is not None:
-            # Extract information from the log line
             eps = float(info_match.group(1))
             number_of_clusters = int(info_match.group(2))
             silhouette_score = float(info_match.group(3))
             noise_points = int(info_match.group(4))
-            # Create a ClusterInfo instance with the extracted information and the current duration
             cluster_info = ClusterInfo(eps, number_of_clusters, silhouette_score, noise_points, current_duration)
-            # Add the ClusterInfo instance to the list
             cluster_infos.append(cluster_info)
-            # Reset the current duration
             current_duration = None
+            continue
 
-    # Return the list of ClusterInfo instances
     return cluster_infos
-
 
 
 
