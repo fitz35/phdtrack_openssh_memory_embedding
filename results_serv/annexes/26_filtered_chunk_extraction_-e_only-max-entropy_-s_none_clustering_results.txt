@@ -1,5 +1,5 @@
 \begin{longtable}{|c|c|c|c|c|}
-\caption{Transformers 0 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_0_clustering_results}\\
+\caption{Transformers 0 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_0_clustering_results}\\
 \hline
 \multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
@@ -14,7 +14,6 @@ EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
 0.03 & 3 & 0.6441521048545837 & 1362 & 769.276459 s\\
 0.04 & 3 & 0.6441521048545837 & 1362 & 817.856428 s\\
 0.05 & 3 & 0.6441521048545837 & 1362 & 786.591524 s\\
-0.01 & 3 & 0.6441521048545837 & 1362 & 786.591524 s\\
 \hline
 \multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
@@ -48,7 +47,7 @@ Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples}
 
 
 \begin{longtable}{|c|c|c|c|c|}
-\caption{Transformers 1 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_1_clustering_results}\\
+\caption{Transformers 1 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_1_clustering_results}\\
 \hline
 \multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
@@ -63,7 +62,6 @@ EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
 0.03 & 2 & 0.2777276635169983 & 8 & 753.78547 s\\
 0.04 & 2 & 0.2777276635169983 & 8 & 786.513502 s\\
 0.05 & 2 & 0.2777276635169983 & 8 & 791.077206 s\\
-0.01 & 2 & 0.2777276635169983 & 8 & 791.077206 s\\
 \hline
 \multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
@@ -89,7 +87,7 @@ Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples}
 
 
 \begin{longtable}{|c|c|c|c|c|}
-\caption{Transformers 2 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_2_clustering_results}\\
+\caption{Transformers 2 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_2_clustering_results}\\
 \hline
 \multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
@@ -104,7 +102,6 @@ EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
 0.03 & 3 & 0.639912486076355 & 965 & 750.61848 s\\
 0.04 & 2 & 0.6036707162857056 & 2478 & 786.248117 s\\
 0.05 & 2 & 0.6036707162857056 & 2478 & 785.427151 s\\
-0.01 & 3 & 0.6490662097930908 & 884 & 785.427151 s\\
 \hline
 \multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline
@@ -138,7 +135,7 @@ Cluster ID & \multicolumn{2}{c|}{Label} & \multicolumn{2}{c|}{Number of Samples}
 
 
 \begin{longtable}{|c|c|c|c|c|}
-\caption{Transformers 3 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_3_clustering_results}\\
+\caption{Transformers 3 Clustering Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_3_clustering_results}\\
 \hline
 \multicolumn{5}{|c|}{\textbf{General Information}} \\
 \hline
@@ -153,7 +150,6 @@ EPS & Number of Clusters & Silhouette Score & Noise Points & Duration \\
 0.03 & 3 & 0.7589311003684998 & 1098 & 786.405334 s\\
 0.04 & 3 & 0.7589311003684998 & 1098 & 749.913816 s\\
 0.05 & 3 & 0.7589311003684998 & 1098 & 804.022042 s\\
-0.01 & 3 & 0.7589311003684998 & 1098 & 804.022042 s\\
 \hline
 \multicolumn{5}{|c|}{\textbf{Best EPS Information}} \\
 \hline

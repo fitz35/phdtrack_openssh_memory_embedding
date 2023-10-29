@@ -77,7 +77,7 @@ class ClassificationResults:
 
     def to_latex(self):
         latex_str = "\\begin{longtable}{|c|c|c|}\n"
-        latex_str += "\\caption{" + self.instance + " Classification Results on " + self.dataset_name.replace("_", "\\_") + "} \\label{tab:" + self.instance.lower().replace(" ", "_") + "_classifiers_results} \\\\\n"
+        latex_str += "\\caption{" + self.instance + " Classification Results on " + self.dataset_name.replace("_", "\\_") + "} \\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_classifiers_results} \\\\\n"
         latex_str += "\\hline\n"
         latex_str += "Class & Metric Name & Metric Value \\\\\n"
         latex_str += "\\hline\n"

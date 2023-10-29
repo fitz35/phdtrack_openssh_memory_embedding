@@ -1,5 +1,9 @@
 from dataclasses import dataclass
+import os
 from typing import Dict, List
+import matplotlib.pyplot as plt
+
+import numpy as np
 
 @dataclass(frozen=True)
 class ClusterInfo:
@@ -31,7 +35,7 @@ class ClusteringResult:
         # Start longtable
         latex_str = "\\begin{longtable}{|c|c|c|c|c|}\n"
         latex_str += "\\caption{" + self.instance + " Clustering Results on " + self.dataset_name.replace("_", "\\_") + "} "
-        latex_str += "\\label{tab:" + self.instance.lower().replace(" ", "_") + "_clustering_results}\\\\\n"
+        latex_str += "\\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_clustering_results}\\\\\n"
         latex_str += "\\hline\n"
         
         # Part 1: General Information
@@ -78,3 +82,44 @@ class ClusteringResult:
         # End longtable
         latex_str += "\\end{longtable}\n"
         return latex_str
+    
+def clustering_pie_charts(clustering_results: List[ClusteringResult], save_dir_path: str):
+    for result in clustering_results:
+        num_clusters = len(result.label_association)
+        
+        # Calculate number of rows and columns for subplots
+        num_cols = 2  # for example, can be adjusted
+        num_rows = -(-num_clusters // num_cols)  # ceiling division
+
+        fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
+        fig.suptitle(f'Clusters for {result.instance} of the dataset {result.dataset_name}')
+
+        # Make axs a 2D array for consistency
+        axs = np.array(axs, ndmin=2)
+
+        for i, label_assoc in enumerate(result.label_association):
+            row = i // num_cols
+            col = i % num_cols
+            ax = axs[row, col]
+            
+            labels = list(label_assoc.label_counts.keys())
+            sizes = list(label_assoc.label_counts.values())
+
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')
+            ax.set_title(f'Cluster : {label_assoc.cluster_id}')
+
+        # If there is an odd number of clusters, remove the last subplot
+        if num_clusters % num_cols != 0:
+            fig.delaxes(axs[-1, -1])
+
+        # Adjust the layout to make sure everything fits
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        
+        # Create directory if not exists
+        save_dir = os.path.join(save_dir_path, f'{result.dataset_name}_clustering')
+        os.makedirs(save_dir, exist_ok=True)
+
+        # Save the figure
+        plt.savefig(os.path.join(save_dir, f'{result.instance}.png'))
+        plt.close()

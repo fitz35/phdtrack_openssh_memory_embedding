@@ -1,5 +1,5 @@
 \begin{longtable}{|c|c|c|}
-\caption{Transformers 0 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_0_classifiers_results} \\
+\caption{Transformers 0 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_0_classifiers_results} \\
 \hline
 Class & Metric Name & Metric Value \\
 \hline
@@ -44,7 +44,7 @@ Class & Metric Name & Metric Value \\
 
 
 \begin{longtable}{|c|c|c|}
-\caption{Transformers 1 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_1_classifiers_results} \\
+\caption{Transformers 1 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_1_classifiers_results} \\
 \hline
 Class & Metric Name & Metric Value \\
 \hline
@@ -89,7 +89,7 @@ Class & Metric Name & Metric Value \\
 
 
 \begin{longtable}{|c|c|c|}
-\caption{Transformers 2 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_2_classifiers_results} \\
+\caption{Transformers 2 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_2_classifiers_results} \\
 \hline
 Class & Metric Name & Metric Value \\
 \hline
@@ -134,7 +134,7 @@ Class & Metric Name & Metric Value \\
 
 
 \begin{longtable}{|c|c|c|}
-\caption{Transformers 3 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:transformers_3_classifiers_results} \\
+\caption{Transformers 3 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_3_classifiers_results} \\
 \hline
 Class & Metric Name & Metric Value \\
 \hline

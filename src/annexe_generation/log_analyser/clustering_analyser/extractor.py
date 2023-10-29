@@ -62,14 +62,15 @@ def __extract_cluster_info(log_lines: List[str]) -> List[ClusterInfo]:
 
     for line in log_lines:
         # Check for the line that contains the duration of clustering and extract it
-        duration_match = re.match(r"- results_logger - INFO - Time elapsed since the begining of clustering_duration_for_(\d+\.\d+): (\d+\.\d+) s", line)
-        if duration_match:
+        duration_match = re.search(r"- results_logger - INFO - Time elapsed since the begining of clustering_duration_for_(\d+\.\d+): (\d+\.\d+) s", line)
+
+        if duration_match is not None:
             # Update the current duration with the extracted value
             current_duration = float(duration_match.group(2))
             continue
 
         # Check for the line that contains cluster information and extract it
-        info_match = re.match(r"- results_logger - INFO - eps: (\d+\.\d+), number of clusters: (\d+), silhouette score: ([\d.-]+), noise points: (\d+)", line)
+        info_match = re.search(r"- results_logger - INFO - eps: (\d+\.\d+), number of clusters: (\d+), silhouette score: ([\d.-]+), noise points: (\d+)", line)
         if info_match and current_duration is not None:
             # Extract information from the log line
             eps = float(info_match.group(1))

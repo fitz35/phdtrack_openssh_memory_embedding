@@ -4,15 +4,12 @@ import sys
 
 
 
-
-
-
-
 sys.path.append(os.path.abspath('../..'))
 from annexe_generation.log_analyser.clustering_analyser.extractor import clustering_extractor
 from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results
 from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, plot_metrics
+from annexe_generation.log_analyser.clustering_analyser.clustering_data import clustering_pie_charts
 
 def read_file(file_path: str):
     try:
@@ -31,7 +28,7 @@ if __name__ == "__main__":
     
     lines: list[str] = read_file(args.file_path)
 
-    # Extract the clustering results
+    # ------------------------- Extract the clustering results
     clustering_results = extract_all_dataset_results(lines, clustering_extractor)
 
     # print and save clustering results to LaTeX file
@@ -48,8 +45,8 @@ if __name__ == "__main__":
         if clustering_latex_file_path is not None:
             with open(clustering_latex_file_path, 'a') as f:
                 f.write(result.to_latex() + "\n\n")
-
-    # Extract classification results
+    clustering_pie_charts(clustering_results, args.output)
+    # ----------------------- Extract classification results
     classification_results : list[ClassificationResults] =  extract_all_dataset_results(lines, random_forest_extractor)
 
     # Print and save classification results to LaTeX file
