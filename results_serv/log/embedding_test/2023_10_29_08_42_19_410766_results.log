@@ -1,0 +1,1579 @@
+2023_10_29_08_42_19 - results_logger - INFO - Passed program params:
+2023_10_29_08_42_19 - results_logger - INFO - param[0]: main.py
+2023_10_29_08_42_19 - results_logger - INFO - param[1]: -d
+2023_10_29_08_42_19 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none
+2023_10_29_08_42_19 - results_logger - INFO - param[3]: -p
+2023_10_29_08_42_19 - results_logger - INFO - param[4]: deeplearning
+2023_10_29_08_42_19 - results_logger - INFO - param[5]: -o
+2023_10_29_08_42_19 - results_logger - INFO - param[6]: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/output/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none
+2023_10_29_08_42_19 - results_logger - INFO - param[7]: -otr
+2023_10_29_08_42_19 - results_logger - INFO - param[8]: training
+2023_10_29_08_42_19 - results_logger - INFO - param[9]: -ots
+2023_10_29_08_42_19 - results_logger - INFO - param[10]: validation
+2023_10_29_08_42_19 - results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_29_08_42_19 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_29_08_42_19 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_29_08_42_19 - results_logger - INFO - Pipeline start time : 1698568939.4185615 seconds
+2023_10_29_08_42_19 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_10_29_08_42_19 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_10_29_08_44_13 - results_logger - INFO - Number of loaded files: 20964
+2023_10_29_08_44_13 - results_logger - INFO - Number of empty files: 0
+2023_10_29_08_44_15 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_10_29_08_44_35 - results_logger - INFO - Number of loaded files: 3735
+2023_10_29_08_44_35 - results_logger - INFO - Number of empty files: 0
+2023_10_29_08_44_35 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 136.214647000 s
+2023_10_29_08_44_35 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim8_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_29_08_44_35 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=0, word_character_size=16, embedding_dim=8, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu')
+2023_10_29_08_44_59 - results_logger - INFO - token number for instance 0 (with padding) : 2049
+2023_10_29_08_45_00 - results_logger - INFO - encoder summary : Model: "model_2"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, None, 1)]         0         
+                                                                 
+ dense (Dense)               (None, None, 8)           16        
+                                                                 
+ model (Functional)          (None, 2049, 8)           222       
+                                                                 
+ model_1 (Functional)        (None, 2049, 8)           222       
+                                                                 
+ global_average_pooling1d (  (None, 8)                 0         
+ GlobalAveragePooling1D)                                         
+                                                                 
+ dense_5 (Dense)             (None, 8)                 72        
+                                                                 
+=================================================================
+Total params: 532 (2.08 KB)
+Trainable params: 532 (2.08 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_08_45_00 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_10_07_27 - results_logger - INFO - Time elapsed since the begining of transformers training : : 4947.369620000 s
+2023_10_29_10_07_27 - results_logger - INFO - TransformersHyperParams : {'index': 0, 'word_character_size': 16, 'embedding_dim': 8, 'transformer_units': 2, 'num_heads': 2, 'num_transformer_layers': 2, 'dropout_rate': 0.1, 'activation': 'relu'}
+2023_10_29_10_07_27 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_29_10_07_27 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_29_10_07_27 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_29_10_07_27 - results_logger - INFO - Start time : 1698574047.6117747
+2023_10_29_10_07_27 - results_logger - INFO - Using already loaded data
+2023_10_29_10_07_27 - results_logger - INFO - timer for feature_engineering started
+2023_10_29_10_07_27 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_29_10_07_28 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+            embedded_0  embedded_1  ...  embedded_6  embedded_7
+embedded_0    1.000000   -0.898938  ...         NaN   -0.926806
+embedded_1   -0.898938    1.000000  ...         NaN    0.963944
+embedded_2   -0.908254    0.958782  ...         NaN    0.992756
+embedded_3   -0.547591    0.758727  ...         NaN    0.657704
+embedded_4   -0.795346    0.904002  ...         NaN    0.953678
+embedded_5    0.785327   -0.869871  ...         NaN   -0.936627
+embedded_6         NaN         NaN  ...         NaN         NaN
+embedded_7   -0.926806    0.963944  ...         NaN    1.000000
+
+[8 rows x 8 columns]
+2023_10_29_10_07_28 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_10_07_28_022578.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_10_07_28_022508.csv
+2023_10_29_10_07_28 - results_logger - INFO - Correlation sums: 
+embedded_0    5.862261
+embedded_1    6.354263
+embedded_2    6.398629
+embedded_3    4.575845
+embedded_4    6.169437
+embedded_5    6.016708
+embedded_6    0.000000
+embedded_7    6.431515
+dtype: float64
+2023_10_29_10_07_28 - results_logger - INFO - Sorted correlation sums: 
+embedded_7    6.431515
+embedded_2    6.398629
+embedded_1    6.354263
+embedded_4    6.169437
+embedded_5    6.016708
+embedded_0    5.862261
+embedded_3    4.575845
+embedded_6    0.000000
+dtype: float64
+2023_10_29_10_07_28 - results_logger - INFO - Keeping columns: ['embedded_6', 'embedded_3', 'embedded_0', 'embedded_5', 'embedded_4', 'embedded_1', 'embedded_2', 'embedded_7']
+2023_10_29_10_07_28 - results_logger - INFO - End feature engineering
+2023_10_29_10_07_28 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 0.640231000 s
+2023_10_29_10_07_28 - results_logger - INFO - Keeping 8 : ['embedded_6', 'embedded_3', 'embedded_0', 'embedded_5', 'embedded_4', 'embedded_1', 'embedded_2', 'embedded_7']
+2023_10_29_10_07_28 - results_logger - INFO - Keeping 8 : ['embedded_6', 'embedded_3', 'embedded_0', 'embedded_5', 'embedded_4', 'embedded_1', 'embedded_2', 'embedded_7']
+2023_10_29_10_07_28 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_29_10_07_28 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_29_10_07_28 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.161468000 s
+2023_10_29_10_07_28 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_10_07_28 - results_logger - INFO - timer for random forest :  started
+2023_10_29_10_07_29 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_29_10_07_29 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_29_10_07_29 - results_logger - INFO - Number of predicted 1 labels: 46876.0 
+ versus number of predicted 0 labels: 93202.0
+2023_10_29_10_07_29 - results_logger - INFO - Accuracy: 98.40%
+2023_10_29_10_07_29 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9991307725028203,
+        "recall": 0.9804896640592389,
+        "f1-score": 0.9897224512228635,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.9121229461293223,
+        "recall": 0.9958054439982151,
+        "f1-score": 0.9521290212475467,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "accuracy": 0.9839803538028813,
+    "macro avg": {
+        "precision": 0.9778134296580356,
+        "recall": 0.9940737770143635,
+        "f1-score": 0.9854628681176025,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9852574143764466,
+        "recall": 0.9839803538028813,
+        "f1-score": 0.9842562432788491,
+        "support": 140078.0
+    }
+}
+2023_10_29_10_07_29 - results_logger - INFO - Confusion Matrix: 
+2023_10_29_10_07_29 - results_logger - INFO - True Positives: 22316
+2023_10_29_10_07_29 - results_logger - INFO - True Negatives: 108048
+2023_10_29_10_07_29 - results_logger - INFO - False Positives: 2150
+2023_10_29_10_07_29 - results_logger - INFO - False Negatives: 94
+2023_10_29_10_07_29 - results_logger - INFO - AUC: 0.93
+2023_10_29_10_07_29 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.653571000 s
+2023_10_29_10_07_29 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.381033000 s
+2023_10_29_10_07_29 - results_logger - INFO - timer for clustering started
+2023_10_29_10_07_29 - results_logger - INFO - timer for scaling_duration started
+2023_10_29_10_07_29 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000706000 s
+2023_10_29_10_07_29 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_10_07_29 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_29_10_07_29 - results_logger - INFO - min_samples: 937
+2023_10_29_10_07_29 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_29_10_18_44 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 674.165730000 s
+2023_10_29_10_18_44 - results_logger - INFO - eps: 0.01, number of clusters: 3, silhouette score: 0.5749053359031677, noise points: 1369
+2023_10_29_10_18_44 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_29_10_29_49 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 664.292675000 s
+2023_10_29_10_29_49 - results_logger - INFO - eps: 0.02, number of clusters: 3, silhouette score: 0.5749053359031677, noise points: 1369
+2023_10_29_10_29_49 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_29_10_41_29 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 699.778419000 s
+2023_10_29_10_41_30 - results_logger - INFO - eps: 0.03, number of clusters: 3, silhouette score: 0.574790894985199, noise points: 1371
+2023_10_29_10_41_30 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_29_10_54_20 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 770.278420000 s
+2023_10_29_10_54_21 - results_logger - INFO - eps: 0.04, number of clusters: 3, silhouette score: 0.574790894985199, noise points: 1371
+2023_10_29_10_54_21 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_29_11_07_17 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 776.637103000 s
+2023_10_29_11_07_18 - results_logger - INFO - eps: 0.05, number of clusters: 3, silhouette score: 0.574790894985199, noise points: 1371
+2023_10_29_11_07_18 - results_logger - INFO - Best eps: 0.01, number of clusters: 3, silhouette score: 0.5749053359031677, noise points: 1369
+2023_10_29_11_07_18 - results_logger - INFO - Associating clusters to labels : 
+ {-1.0: {0.0: 31, 1.0: 40, 2.0: 56, 4.0: 33}, 0.0: {0.0: 35, 1.0: 40, 2.0: 26, 4.0: 32}, 1.0: {0.0: 77, 1.0: 91, 2.0: 76, 4.0: 96}, 2.0: {0.0: 32, 1.0: 45, 2.0: 45, 4.0: 42}}
+2023_10_29_11_07_18 - results_logger - INFO - Time elapsed since the begining of clustering: 3588.869441000 s
+2023_10_29_11_07_18 - results_logger - INFO - End time : 1698577638.697475
+2023_10_29_11_07_18 - results_logger - INFO - Total duration: 3591.085700273514
+2023_10_29_11_07_18 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim16_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_29_11_07_18 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=1, word_character_size=16, embedding_dim=16, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu')
+2023_10_29_11_07_38 - results_logger - INFO - token number for instance 1 (with padding) : 2049
+2023_10_29_11_07_38 - results_logger - INFO - encoder summary : Model: "model_5"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_4 (InputLayer)        [(None, None, 1)]         0         
+                                                                 
+ dense_6 (Dense)             (None, None, 16)          32        
+                                                                 
+ model_3 (Functional)        (None, 2049, 16)          430       
+                                                                 
+ model_4 (Functional)        (None, 2049, 16)          430       
+                                                                 
+ global_average_pooling1d_1  (None, 16)                0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_11 (Dense)            (None, 16)                272       
+                                                                 
+=================================================================
+Total params: 1164 (4.55 KB)
+Trainable params: 1164 (4.55 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_11_07_38 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_12_27_29 - results_logger - INFO - Time elapsed since the begining of transformers training : : 4790.740848000 s
+2023_10_29_12_27_29 - results_logger - INFO - TransformersHyperParams : {'index': 1, 'word_character_size': 16, 'embedding_dim': 16, 'transformer_units': 2, 'num_heads': 2, 'num_transformer_layers': 2, 'dropout_rate': 0.1, 'activation': 'relu'}
+2023_10_29_12_27_29 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_29_12_27_29 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_29_12_27_29 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_29_12_27_29 - results_logger - INFO - Start time : 1698582449.472572
+2023_10_29_12_27_29 - results_logger - INFO - Using already loaded data
+2023_10_29_12_27_29 - results_logger - INFO - timer for feature_engineering started
+2023_10_29_12_27_29 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_29_12_27_31 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+             embedded_0  embedded_1  ...  embedded_14  embedded_15
+embedded_0     1.000000   -0.705513  ...          NaN     0.999905
+embedded_1    -0.705513    1.000000  ...          NaN    -0.705456
+embedded_2          NaN         NaN  ...          NaN          NaN
+embedded_3    -0.943959    0.898746  ...          NaN    -0.943915
+embedded_4     0.967737   -0.848356  ...          NaN     0.967606
+embedded_5    -0.198247    0.739666  ...          NaN    -0.198231
+embedded_6    -0.522897    0.948268  ...          NaN    -0.522850
+embedded_7     0.999995   -0.705511  ...          NaN     0.999943
+embedded_8          NaN         NaN  ...          NaN          NaN
+embedded_9     0.999988   -0.705508  ...          NaN     0.999960
+embedded_10   -0.916367    0.912897  ...          NaN    -0.916255
+embedded_11   -0.867815    0.963655  ...          NaN    -0.867746
+embedded_12   -0.779121    0.981073  ...          NaN    -0.779058
+embedded_13    0.999514   -0.705146  ...          NaN     0.998988
+embedded_14         NaN         NaN  ...          NaN          NaN
+embedded_15    0.999905   -0.705456  ...          NaN     1.000000
+
+[16 rows x 16 columns]
+2023_10_29_12_27_31 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_12_27_30_991129.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_12_27_30_991074.csv
+2023_10_29_12_27_31 - results_logger - INFO - Correlation sums: 
+embedded_0     10.901057
+embedded_1     10.819793
+embedded_2      0.000000
+embedded_3     11.763542
+embedded_4     11.657091
+embedded_5      6.273246
+embedded_6      9.523379
+embedded_7     10.900971
+embedded_8      0.000000
+embedded_9     10.900889
+embedded_10    11.767376
+embedded_11    11.675884
+embedded_12    11.307687
+embedded_13    10.896002
+embedded_14     0.000000
+embedded_15    10.899913
+dtype: float64
+2023_10_29_12_27_31 - results_logger - INFO - Sorted correlation sums: 
+embedded_10    11.767376
+embedded_3     11.763542
+embedded_11    11.675884
+embedded_4     11.657091
+embedded_12    11.307687
+embedded_0     10.901057
+embedded_7     10.900971
+embedded_9     10.900889
+embedded_15    10.899913
+embedded_13    10.896002
+embedded_1     10.819793
+embedded_6      9.523379
+embedded_5      6.273246
+embedded_2      0.000000
+embedded_8      0.000000
+embedded_14     0.000000
+dtype: float64
+2023_10_29_12_27_31 - results_logger - INFO - Keeping columns: ['embedded_2', 'embedded_8', 'embedded_14', 'embedded_5', 'embedded_6', 'embedded_1', 'embedded_13', 'embedded_15']
+2023_10_29_12_27_31 - results_logger - INFO - End feature engineering
+2023_10_29_12_27_31 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 1.877904000 s
+2023_10_29_12_27_31 - results_logger - INFO - Keeping 8 : ['embedded_2', 'embedded_8', 'embedded_14', 'embedded_5', 'embedded_6', 'embedded_1', 'embedded_13', 'embedded_15']
+2023_10_29_12_27_31 - results_logger - INFO - Keeping 8 : ['embedded_2', 'embedded_8', 'embedded_14', 'embedded_5', 'embedded_6', 'embedded_1', 'embedded_13', 'embedded_15']
+2023_10_29_12_27_31 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_29_12_27_31 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_29_12_27_31 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.148764000 s
+2023_10_29_12_27_31 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_12_27_31 - results_logger - INFO - timer for random forest :  started
+2023_10_29_12_27_32 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_29_12_27_32 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_29_12_27_32 - results_logger - INFO - Number of predicted 1 labels: 46782.0 
+ versus number of predicted 0 labels: 93296.0
+2023_10_29_12_27_32 - results_logger - INFO - Accuracy: 98.44%
+2023_10_29_12_27_32 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9989467459994826,
+        "recall": 0.9811611825985953,
+        "f1-score": 0.9899740882829596,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.9148202855736091,
+        "recall": 0.9949129852744311,
+        "f1-score": 0.953187123252533,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "accuracy": 0.9843658533102986,
+    "macro avg": {
+        "precision": 0.9784417578932729,
+        "recall": 0.9940185419682566,
+        "f1-score": 0.9857903028838731,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.985544169072628,
+        "recall": 0.9843658533102986,
+        "f1-score": 0.9846234812939566,
+        "support": 140078.0
+    }
+}
+2023_10_29_12_27_32 - results_logger - INFO - Confusion Matrix: 
+2023_10_29_12_27_32 - results_logger - INFO - True Positives: 22296
+2023_10_29_12_27_32 - results_logger - INFO - True Negatives: 108122
+2023_10_29_12_27_32 - results_logger - INFO - False Positives: 2076
+2023_10_29_12_27_32 - results_logger - INFO - False Negatives: 114
+2023_10_29_12_27_32 - results_logger - INFO - AUC: 0.93
+2023_10_29_12_27_32 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.644376000 s
+2023_10_29_12_27_32 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.309276000 s
+2023_10_29_12_27_32 - results_logger - INFO - timer for clustering started
+2023_10_29_12_27_32 - results_logger - INFO - timer for scaling_duration started
+2023_10_29_12_27_32 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000674000 s
+2023_10_29_12_27_32 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_12_27_32 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_29_12_27_32 - results_logger - INFO - min_samples: 937
+2023_10_29_12_27_32 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_29_12_40_13 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 760.134469000 s
+2023_10_29_12_40_13 - results_logger - INFO - eps: 0.01, number of clusters: 3, silhouette score: 0.7379494309425354, noise points: 1299
+2023_10_29_12_40_13 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_29_12_52_25 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 731.259721000 s
+2023_10_29_12_52_25 - results_logger - INFO - eps: 0.02, number of clusters: 3, silhouette score: 0.7379494309425354, noise points: 1299
+2023_10_29_12_52_25 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_29_13_04_44 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 738.923279000 s
+2023_10_29_13_04_45 - results_logger - INFO - eps: 0.03, number of clusters: 3, silhouette score: 0.7379494309425354, noise points: 1299
+2023_10_29_13_04_45 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_29_13_17_27 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 761.430407000 s
+2023_10_29_13_17_27 - results_logger - INFO - eps: 0.04, number of clusters: 3, silhouette score: 0.7379494309425354, noise points: 1299
+2023_10_29_13_17_27 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_29_13_29_51 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 743.313265000 s
+2023_10_29_13_29_52 - results_logger - INFO - eps: 0.05, number of clusters: 3, silhouette score: 0.3740614056587219, noise points: 2696
+2023_10_29_13_29_52 - results_logger - INFO - Best eps: 0.01, number of clusters: 3, silhouette score: 0.7379494309425354, noise points: 1299
+2023_10_29_13_29_52 - results_logger - INFO - Associating clusters to labels : 
+ {-1.0: {0.0: 29, 1.0: 37, 2.0: 56, 4.0: 32}, 0.0: {0.0: 37, 1.0: 43, 2.0: 26, 4.0: 33}, 1.0: {0.0: 77, 1.0: 91, 2.0: 76, 4.0: 96}, 2.0: {0.0: 32, 1.0: 45, 2.0: 45, 4.0: 42}}
+2023_10_29_13_29_52 - results_logger - INFO - Time elapsed since the begining of clustering: 3739.406415000 s
+2023_10_29_13_29_52 - results_logger - INFO - End time : 1698586192.2533853
+2023_10_29_13_29_52 - results_logger - INFO - Total duration: 3742.780813217163
+2023_10_29_13_29_52 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size8_embedding_dim8_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_29_13_29_52 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=2, word_character_size=8, embedding_dim=8, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu')
+2023_10_29_13_30_26 - results_logger - INFO - token number for instance 2 (with padding) : 4098
+2023_10_29_13_30_26 - results_logger - INFO - encoder summary : Model: "model_8"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_7 (InputLayer)        [(None, None, 1)]         0         
+                                                                 
+ dense_12 (Dense)            (None, None, 8)           16        
+                                                                 
+ model_6 (Functional)        (None, 4098, 8)           222       
+                                                                 
+ model_7 (Functional)        (None, 4098, 8)           222       
+                                                                 
+ global_average_pooling1d_2  (None, 8)                 0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_17 (Dense)            (None, 8)                 72        
+                                                                 
+=================================================================
+Total params: 532 (2.08 KB)
+Trainable params: 532 (2.08 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_13_30_26 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_15_03_47 - results_logger - ERROR - Timeout error in transformers pipeline 2, skipping (and marking)
+2023_10_29_15_03_47 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size8_embedding_dim16_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_29_15_03_47 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=3, word_character_size=8, embedding_dim=16, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu')
+2023_10_29_15_04_24 - results_logger - INFO - token number for instance 3 (with padding) : 4098
+2023_10_29_15_04_24 - results_logger - INFO - encoder summary : Model: "model_11"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_10 (InputLayer)       [(None, None, 1)]         0         
+                                                                 
+ dense_18 (Dense)            (None, None, 16)          32        
+                                                                 
+ model_9 (Functional)        (None, 4098, 16)          430       
+                                                                 
+ model_10 (Functional)       (None, 4098, 16)          430       
+                                                                 
+ global_average_pooling1d_3  (None, 16)                0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_23 (Dense)            (None, 16)                272       
+                                                                 
+=================================================================
+Total params: 1164 (4.55 KB)
+Trainable params: 1164 (4.55 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_15_04_24 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_16_37_44 - results_logger - ERROR - Timeout error in transformers pipeline 3, skipping (and marking)
+2023_10_29_16_37_45 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim8_transformer_units4_num_heads4_num_transformer_layers4_dropout_rate03_activationrelu !!!!!!!!!!!!!
+2023_10_29_16_37_45 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=4, word_character_size=16, embedding_dim=8, transformer_units=4, num_heads=4, num_transformer_layers=4, dropout_rate=0.3, activation='relu')
+2023_10_29_16_38_06 - results_logger - INFO - token number for instance 4 (with padding) : 2049
+2023_10_29_16_38_06 - results_logger - INFO - encoder summary : Model: "model_16"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_13 (InputLayer)       [(None, None, 1)]         0         
+                                                                 
+ dense_24 (Dense)            (None, None, 8)           16        
+                                                                 
+ model_12 (Functional)       (None, 2049, 8)           676       
+                                                                 
+ model_13 (Functional)       (None, 2049, 8)           676       
+                                                                 
+ model_14 (Functional)       (None, 2049, 8)           676       
+                                                                 
+ model_15 (Functional)       (None, 2049, 8)           676       
+                                                                 
+ global_average_pooling1d_4  (None, 8)                 0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_33 (Dense)            (None, 8)                 72        
+                                                                 
+=================================================================
+Total params: 2792 (10.91 KB)
+Trainable params: 2792 (10.91 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_16_38_06 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_18_11_27 - results_logger - ERROR - Timeout error in transformers pipeline 4, skipping (and marking)
+2023_10_29_18_11_27 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim16_transformer_units4_num_heads4_num_transformer_layers4_dropout_rate03_activationrelu !!!!!!!!!!!!!
+2023_10_29_18_11_27 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=5, word_character_size=16, embedding_dim=16, transformer_units=4, num_heads=4, num_transformer_layers=4, dropout_rate=0.3, activation='relu')
+2023_10_29_18_11_45 - results_logger - INFO - token number for instance 5 (with padding) : 2049
+2023_10_29_18_11_46 - results_logger - INFO - encoder summary : Model: "model_21"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_18 (InputLayer)       [(None, None, 1)]         0         
+                                                                 
+ dense_34 (Dense)            (None, None, 16)          32        
+                                                                 
+ model_17 (Functional)       (None, 2049, 16)          1300      
+                                                                 
+ model_18 (Functional)       (None, 2049, 16)          1300      
+                                                                 
+ model_19 (Functional)       (None, 2049, 16)          1300      
+                                                                 
+ model_20 (Functional)       (None, 2049, 16)          1300      
+                                                                 
+ global_average_pooling1d_5  (None, 16)                0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_43 (Dense)            (None, 16)                272       
+                                                                 
+=================================================================
+Total params: 5504 (21.50 KB)
+Trainable params: 5504 (21.50 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_18_11_46 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_19_45_07 - results_logger - ERROR - Timeout error in transformers pipeline 5, skipping (and marking)
+2023_10_29_19_45_07 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size8_embedding_dim8_transformer_units4_num_heads4_num_transformer_layers4_dropout_rate03_activationrelu !!!!!!!!!!!!!
+2023_10_29_19_45_07 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=6, word_character_size=8, embedding_dim=8, transformer_units=4, num_heads=4, num_transformer_layers=4, dropout_rate=0.3, activation='relu')
+2023_10_29_19_45_46 - results_logger - INFO - token number for instance 6 (with padding) : 4098
+2023_10_29_19_45_47 - results_logger - INFO - encoder summary : Model: "model_26"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_23 (InputLayer)       [(None, None, 1)]         0         
+                                                                 
+ dense_44 (Dense)            (None, None, 8)           16        
+                                                                 
+ model_22 (Functional)       (None, 4098, 8)           676       
+                                                                 
+ model_23 (Functional)       (None, 4098, 8)           676       
+                                                                 
+ model_24 (Functional)       (None, 4098, 8)           676       
+                                                                 
+ model_25 (Functional)       (None, 4098, 8)           676       
+                                                                 
+ global_average_pooling1d_6  (None, 8)                 0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_53 (Dense)            (None, 8)                 72        
+                                                                 
+=================================================================
+Total params: 2792 (10.91 KB)
+Trainable params: 2792 (10.91 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_19_45_47 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_21_19_09 - results_logger - ERROR - Timeout error in transformers pipeline 6, skipping (and marking)
+2023_10_29_21_19_09 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size8_embedding_dim16_transformer_units4_num_heads4_num_transformer_layers4_dropout_rate03_activationrelu !!!!!!!!!!!!!
+2023_10_29_21_19_09 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=7, word_character_size=8, embedding_dim=16, transformer_units=4, num_heads=4, num_transformer_layers=4, dropout_rate=0.3, activation='relu')
+2023_10_29_21_19_43 - results_logger - INFO - token number for instance 7 (with padding) : 4098
+2023_10_29_21_19_44 - results_logger - INFO - encoder summary : Model: "model_31"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_28 (InputLayer)       [(None, None, 1)]         0         
+                                                                 
+ dense_54 (Dense)            (None, None, 16)          32        
+                                                                 
+ model_27 (Functional)       (None, 4098, 16)          1300      
+                                                                 
+ model_28 (Functional)       (None, 4098, 16)          1300      
+                                                                 
+ model_29 (Functional)       (None, 4098, 16)          1300      
+                                                                 
+ model_30 (Functional)       (None, 4098, 16)          1300      
+                                                                 
+ global_average_pooling1d_7  (None, 16)                0         
+  (GlobalAveragePooling1D)                                       
+                                                                 
+ dense_63 (Dense)            (None, 16)                272       
+                                                                 
+=================================================================
+Total params: 5504 (21.50 KB)
+Trainable params: 5504 (21.50 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_29_21_19_44 - results_logger - INFO - timer for transformers training :  started
+2023_10_29_22_53_04 - results_logger - ERROR - Timeout error in transformers pipeline 7, skipping (and marking)
+2023_10_29_22_53_05 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_29_22_53_05 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=0, output_size=8, window_character_size=8, word_character_size=2, min_count=1)
+2023_10_29_22_53_37 - results_logger - INFO - max_length_train : 16392
+2023_10_29_22_53_37 - results_logger - INFO - timer for word2vec training :  started
+2023_10_29_23_00_54 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 437.220526000 s
+2023_10_29_23_00_54 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_29_23_05_25 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 270.063062000 s
+2023_10_29_23_05_25 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_29_23_05_25 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_29_23_05_25 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_29_23_05_25 - results_logger - INFO - Start time : 1698620725.0554302
+2023_10_29_23_05_25 - results_logger - INFO - Using already loaded data
+2023_10_29_23_05_25 - results_logger - INFO - timer for feature_engineering started
+2023_10_29_23_05_25 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_29_23_05_30 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+           feature_0  feature_1  feature_2  ...  feature_5  feature_6  feature_7
+feature_0   1.000000  -0.071199   0.196856  ...   0.438117  -0.286889  -0.618882
+feature_1  -0.071199   1.000000   0.213390  ...   0.100484   0.399205   0.137939
+feature_2   0.196856   0.213390   1.000000  ...  -0.384833   0.015220  -0.533192
+feature_3   0.309217  -0.277454   0.292054  ...  -0.383493  -0.063895  -0.536183
+feature_4  -0.314328  -0.163850   0.323651  ...  -0.499885  -0.522874  -0.144094
+feature_5   0.438117   0.100484  -0.384833  ...   1.000000  -0.299836  -0.081815
+feature_6  -0.286889   0.399205   0.015220  ...  -0.299836   1.000000   0.134599
+feature_7  -0.618882   0.137939  -0.533192  ...  -0.081815   0.134599   1.000000
+
+[8 rows x 8 columns]
+2023_10_29_23_05_30 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_23_05_25_330075.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_29_23_05_25_330010.csv
+2023_10_29_23_05_30 - results_logger - INFO - Correlation sums: 
+feature_0    3.235488
+feature_1    2.363521
+feature_2    2.959196
+feature_3    3.183322
+feature_4    3.289707
+feature_5    3.188463
+feature_6    2.722517
+feature_7    3.186704
+dtype: float64
+2023_10_29_23_05_30 - results_logger - INFO - Sorted correlation sums: 
+feature_4    3.289707
+feature_0    3.235488
+feature_5    3.188463
+feature_7    3.186704
+feature_3    3.183322
+feature_2    2.959196
+feature_6    2.722517
+feature_1    2.363521
+dtype: float64
+2023_10_29_23_05_30 - results_logger - INFO - Keeping columns: ['feature_1', 'feature_6', 'feature_2', 'feature_3', 'feature_7', 'feature_5', 'feature_0', 'feature_4']
+2023_10_29_23_05_30 - results_logger - INFO - End feature engineering
+2023_10_29_23_05_30 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 5.173562000 s
+2023_10_29_23_05_30 - results_logger - INFO - Keeping 8 : ['feature_1', 'feature_6', 'feature_2', 'feature_3', 'feature_7', 'feature_5', 'feature_0', 'feature_4']
+2023_10_29_23_05_30 - results_logger - INFO - Keeping 8 : ['feature_1', 'feature_6', 'feature_2', 'feature_3', 'feature_7', 'feature_5', 'feature_0', 'feature_4']
+2023_10_29_23_05_30 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_29_23_05_30 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_29_23_05_30 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.169147000 s
+2023_10_29_23_05_30 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_23_05_30 - results_logger - INFO - timer for random forest :  started
+2023_10_29_23_05_31 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_29_23_05_31 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 1. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_29_23_05_31 - results_logger - INFO - Number of predicted 1 labels: 50022.0 
+ versus number of predicted 0 labels: 90056.0
+2023_10_29_23_05_31 - results_logger - INFO - Accuracy: 96.57%
+2023_10_29_23_05_32 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9986210934917502,
+        "recall": 0.9595001724169223,
+        "f1-score": 0.9786698383461604,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.8397348484848485,
+        "recall": 0.9892458723784024,
+        "f1-score": 0.908379430444581,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.9672217816547714,
+        "recall": 0.9796519410977242,
+        "f1-score": 0.9733971801010907,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9235176880916791,
+        "recall": 0.9925033467202142,
+        "f1-score": 0.9567686153052006,
+        "support": 3735.0
+    },
+    "accuracy": 0.9656762660803266,
+    "macro avg": {
+        "precision": 0.9322738529307623,
+        "recall": 0.9802253331533157,
+        "f1-score": 0.9543037660492582,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9703623490815999,
+        "recall": 0.9656762660803266,
+        "f1-score": 0.9667000608816212,
+        "support": 140078.0
+    }
+}
+2023_10_29_23_05_32 - results_logger - INFO - Confusion Matrix: 
+2023_10_29_23_05_32 - results_logger - INFO - True Positives: 22169
+2023_10_29_23_05_32 - results_logger - INFO - True Negatives: 105735
+2023_10_29_23_05_32 - results_logger - INFO - False Positives: 4220
+2023_10_29_23_05_32 - results_logger - INFO - False Negatives: 146
+2023_10_29_23_05_32 - results_logger - INFO - AUC: 0.91
+2023_10_29_23_05_32 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.661417000 s
+2023_10_29_23_05_32 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.709033000 s
+2023_10_29_23_05_32 - results_logger - INFO - timer for clustering started
+2023_10_29_23_05_32 - results_logger - INFO - timer for scaling_duration started
+2023_10_29_23_05_32 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000560000 s
+2023_10_29_23_05_32 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_29_23_05_32 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_29_23_05_32 - results_logger - INFO - min_samples: 937
+2023_10_29_23_05_32 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_29_23_21_08 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 936.207143000 s
+2023_10_29_23_21_08 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_29_23_21_08 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_29_23_35_38 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 869.910205000 s
+2023_10_29_23_35_38 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_29_23_35_38 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_29_23_51_26 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 948.106213000 s
+2023_10_29_23_51_26 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_29_23_51_26 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_00_07_27 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 961.156023000 s
+2023_10_30_00_07_27 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_00_07_27 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_00_23_22 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 954.667794000 s
+2023_10_30_00_23_22 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_00_23_22 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_00_23_22 - results_logger - INFO - Time elapsed since the begining of clustering: 4670.078544000 s
+2023_10_30_00_23_22 - results_logger - INFO - End time : 1698625402.221312
+2023_10_30_00_23_22 - results_logger - INFO - Total duration: 4677.165881872177
+2023_10_30_00_23_22 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_00_23_22 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=1, output_size=8, window_character_size=8, word_character_size=4, min_count=1)
+2023_10_30_00_23_49 - results_logger - INFO - max_length_train : 8196
+2023_10_30_00_23_49 - results_logger - INFO - timer for word2vec training :  started
+2023_10_30_00_28_59 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 310.022659000 s
+2023_10_30_00_28_59 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_30_00_31_29 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 149.739097000 s
+2023_10_30_00_31_29 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_30_00_31_29 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_30_00_31_29 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_30_00_31_29 - results_logger - INFO - Start time : 1698625889.458332
+2023_10_30_00_31_29 - results_logger - INFO - Using already loaded data
+2023_10_30_00_31_29 - results_logger - INFO - timer for feature_engineering started
+2023_10_30_00_31_29 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_30_00_31_29 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+           feature_0  feature_1  feature_2  ...  feature_5  feature_6  feature_7
+feature_0   1.000000   0.613271  -0.013545  ...   0.523853  -0.378901  -0.181915
+feature_1   0.613271   1.000000  -0.257601  ...  -0.172111  -0.601541  -0.024516
+feature_2  -0.013545  -0.257601   1.000000  ...   0.029082   0.330819  -0.213684
+feature_3  -0.343015  -0.325565   0.299575  ...  -0.074593   0.271216  -0.333728
+feature_4  -0.080366  -0.056857   0.302932  ...   0.152173  -0.245778  -0.068165
+feature_5   0.523853  -0.172111   0.029082  ...   1.000000   0.069019  -0.315679
+feature_6  -0.378901  -0.601541   0.330819  ...   0.069019   1.000000  -0.010618
+feature_7  -0.181915  -0.024516  -0.213684  ...  -0.315679  -0.010618   1.000000
+
+[8 rows x 8 columns]
+2023_10_30_00_31_29 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_00_31_29_714929.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_00_31_29_714877.csv
+2023_10_30_00_31_29 - results_logger - INFO - Correlation sums: 
+feature_0    3.134866
+feature_1    3.051462
+feature_2    2.447238
+feature_3    2.694482
+feature_4    1.953060
+feature_5    2.336510
+feature_6    2.907892
+feature_7    2.148305
+dtype: float64
+2023_10_30_00_31_29 - results_logger - INFO - Sorted correlation sums: 
+feature_0    3.134866
+feature_1    3.051462
+feature_6    2.907892
+feature_3    2.694482
+feature_2    2.447238
+feature_5    2.336510
+feature_7    2.148305
+feature_4    1.953060
+dtype: float64
+2023_10_30_00_31_29 - results_logger - INFO - Keeping columns: ['feature_4', 'feature_7', 'feature_5', 'feature_2', 'feature_3', 'feature_6', 'feature_1', 'feature_0']
+2023_10_30_00_31_29 - results_logger - INFO - End feature engineering
+2023_10_30_00_31_29 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 0.494492000 s
+2023_10_30_00_31_29 - results_logger - INFO - Keeping 8 : ['feature_4', 'feature_7', 'feature_5', 'feature_2', 'feature_3', 'feature_6', 'feature_1', 'feature_0']
+2023_10_30_00_31_29 - results_logger - INFO - Keeping 8 : ['feature_4', 'feature_7', 'feature_5', 'feature_2', 'feature_3', 'feature_6', 'feature_1', 'feature_0']
+2023_10_30_00_31_29 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_30_00_31_29 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_30_00_31_30 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.176894000 s
+2023_10_30_00_31_30 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_00_31_30 - results_logger - INFO - timer for random forest :  started
+2023_10_30_00_31_31 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_30_00_31_31 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_30_00_31_31 - results_logger - INFO - Number of predicted 1 labels: 48772.0 
+ versus number of predicted 0 labels: 91306.0
+2023_10_30_00_31_31 - results_logger - INFO - Accuracy: 97.09%
+2023_10_30_00_31_31 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9992568692560226,
+        "recall": 0.963973937821013,
+        "f1-score": 0.9812983533867577,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.8497981567522279,
+        "recall": 0.9957161981258367,
+        "f1-score": 0.9169885756554614,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.9893871053329796,
+        "recall": 0.9983935742971888,
+        "f1-score": 0.9938699360341151,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9975961538461539,
+        "recall": 1.0,
+        "f1-score": 0.9987966305655837,
+        "support": 3735.0
+    },
+    "accuracy": 0.9709304815888291,
+    "macro avg": {
+        "precision": 0.9590095712968459,
+        "recall": 0.9895209275610096,
+        "f1-score": 0.9727383739104796,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9750386759100407,
+        "recall": 0.9709304815888291,
+        "f1-score": 0.9718117017176336,
+        "support": 140078.0
+    }
+}
+2023_10_30_00_31_31 - results_logger - INFO - Confusion Matrix: 
+2023_10_30_00_31_31 - results_logger - INFO - True Positives: 22314
+2023_10_30_00_31_31 - results_logger - INFO - True Negatives: 106228
+2023_10_30_00_31_31 - results_logger - INFO - False Positives: 3940
+2023_10_30_00_31_31 - results_logger - INFO - False Negatives: 78
+2023_10_30_00_31_31 - results_logger - INFO - AUC: 0.92
+2023_10_30_00_31_31 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.669233000 s
+2023_10_30_00_31_31 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.607247000 s
+2023_10_30_00_31_31 - results_logger - INFO - timer for clustering started
+2023_10_30_00_31_31 - results_logger - INFO - timer for scaling_duration started
+2023_10_30_00_31_31 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000881000 s
+2023_10_30_00_31_31 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_00_31_31 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_30_00_31_31 - results_logger - INFO - min_samples: 937
+2023_10_30_00_31_31 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_30_00_47_06 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 934.991492000 s
+2023_10_30_00_47_06 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_30_00_47_06 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_30_01_01_32 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 866.160618000 s
+2023_10_30_01_01_32 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_30_01_01_32 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_30_01_15_35 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 842.744876000 s
+2023_10_30_01_15_35 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_30_01_15_35 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_01_29_22 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 826.449586000 s
+2023_10_30_01_29_22 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_01_29_22 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_01_43_01 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 819.657228000 s
+2023_10_30_01_43_01 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_01_43_01 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_01_43_01 - results_logger - INFO - Time elapsed since the begining of clustering: 4290.037825000 s
+2023_10_30_01_43_01 - results_logger - INFO - End time : 1698630181.8025682
+2023_10_30_01_43_01 - results_logger - INFO - Total duration: 4292.344236135483
+2023_10_30_01_43_01 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_30_01_43_01 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=2, output_size=8, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_10_30_01_43_01 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_01_43_01 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=3, output_size=8, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_10_30_01_43_01 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_30_01_43_01 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=4, output_size=16, window_character_size=8, word_character_size=2, min_count=1)
+2023_10_30_01_43_45 - results_logger - INFO - max_length_train : 16392
+2023_10_30_01_43_45 - results_logger - INFO - timer for word2vec training :  started
+2023_10_30_01_51_30 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 465.336581000 s
+2023_10_30_01_51_30 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_30_01_56_09 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 278.616629000 s
+2023_10_30_01_56_09 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_30_01_56_09 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_30_01_56_09 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_30_01_56_09 - results_logger - INFO - Start time : 1698630969.0535955
+2023_10_30_01_56_09 - results_logger - INFO - Using already loaded data
+2023_10_30_01_56_09 - results_logger - INFO - timer for feature_engineering started
+2023_10_30_01_56_09 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_30_01_56_10 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+            feature_0  feature_1  feature_2  ...  feature_13  feature_14  feature_15
+feature_0    1.000000   0.489683   0.159164  ...   -0.491823    0.261751   -0.022793
+feature_1    0.489683   1.000000   0.022286  ...    0.133761   -0.248919   -0.102581
+feature_2    0.159164   0.022286   1.000000  ...    0.039104    0.752529    0.718163
+feature_3    0.047290  -0.496662  -0.179679  ...   -0.325759    0.262287   -0.091491
+feature_4    0.247311  -0.038846   0.670109  ...   -0.250703    0.781071    0.709470
+feature_5    0.218191  -0.272514   0.661962  ...   -0.194746    0.660007    0.378406
+feature_6   -0.251205  -0.751639  -0.239555  ...   -0.234001    0.073245   -0.084027
+feature_7   -0.149888  -0.228120  -0.608865  ...   -0.145242   -0.232573   -0.187472
+feature_8   -0.215151  -0.022452  -0.640483  ...    0.101352   -0.583126   -0.359036
+feature_9    0.118001   0.463048  -0.266543  ...    0.102229   -0.476814   -0.305423
+feature_10   0.291578   0.495882   0.068943  ...    0.024104   -0.204346   -0.122318
+feature_11   0.544553   0.399377   0.134866  ...   -0.439064   -0.012576    0.016375
+feature_12  -0.630879  -0.533704  -0.564630  ...    0.062724   -0.309389   -0.240546
+feature_13  -0.491823   0.133761   0.039104  ...    1.000000   -0.264399   -0.046917
+feature_14   0.261751  -0.248919   0.752529  ...   -0.264399    1.000000    0.745402
+feature_15  -0.022793  -0.102581   0.718163  ...   -0.046917    0.745402    1.000000
+
+[16 rows x 16 columns]
+2023_10_30_01_56_10 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_01_56_09_886994.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_01_56_09_886930.csv
+2023_10_30_01_56_10 - results_logger - INFO - Correlation sums: 
+feature_0     5.139261
+feature_1     5.699473
+feature_2     6.726880
+feature_3     5.577772
+feature_4     5.430683
+feature_5     5.924251
+feature_6     5.224939
+feature_7     6.045397
+feature_8     6.267470
+feature_9     4.731070
+feature_10    5.471088
+feature_11    5.265897
+feature_12    6.867043
+feature_13    3.855928
+feature_14    6.868434
+feature_15    5.130419
+dtype: float64
+2023_10_30_01_56_10 - results_logger - INFO - Sorted correlation sums: 
+feature_14    6.868434
+feature_12    6.867043
+feature_2     6.726880
+feature_8     6.267470
+feature_7     6.045397
+feature_5     5.924251
+feature_1     5.699473
+feature_3     5.577772
+feature_10    5.471088
+feature_4     5.430683
+feature_11    5.265897
+feature_6     5.224939
+feature_0     5.139261
+feature_15    5.130419
+feature_9     4.731070
+feature_13    3.855928
+dtype: float64
+2023_10_30_01_56_10 - results_logger - INFO - Keeping columns: ['feature_13', 'feature_9', 'feature_15', 'feature_0', 'feature_6', 'feature_11', 'feature_4', 'feature_10']
+2023_10_30_01_56_10 - results_logger - INFO - End feature engineering
+2023_10_30_01_56_10 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 1.265532000 s
+2023_10_30_01_56_10 - results_logger - INFO - Keeping 8 : ['feature_13', 'feature_9', 'feature_15', 'feature_0', 'feature_6', 'feature_11', 'feature_4', 'feature_10']
+2023_10_30_01_56_10 - results_logger - INFO - Keeping 8 : ['feature_13', 'feature_9', 'feature_15', 'feature_0', 'feature_6', 'feature_11', 'feature_4', 'feature_10']
+2023_10_30_01_56_10 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_30_01_56_10 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_30_01_56_10 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.175730000 s
+2023_10_30_01_56_10 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_01_56_10 - results_logger - INFO - timer for random forest :  started
+2023_10_30_01_56_11 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_30_01_56_11 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_30_01_56_11 - results_logger - INFO - Number of predicted 1 labels: 52740.0 
+ versus number of predicted 0 labels: 87338.0
+2023_10_30_01_56_11 - results_logger - INFO - Accuracy: 94.49%
+2023_10_30_01_56_12 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9975897083450299,
+        "recall": 0.9352075355269606,
+        "f1-score": 0.9653919111964592,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.7609236725663717,
+        "recall": 0.9822400713966979,
+        "f1-score": 0.8575324321165608,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.9481481481481482,
+        "recall": 0.9595716198125837,
+        "f1-score": 0.9538256819693947,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9106571498892444,
+        "recall": 0.9906291834002677,
+        "f1-score": 0.9489612721210566,
+        "support": 3735.0
+    },
+    "accuracy": 0.9448592926797927,
+    "macro avg": {
+        "precision": 0.9043296697371985,
+        "recall": 0.9669121025341274,
+        "f1-score": 0.9314278243508678,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9560910918958555,
+        "recall": 0.9448592926797927,
+        "f1-score": 0.9473898035900525,
+        "support": 140078.0
+    }
+}
+2023_10_30_01_56_12 - results_logger - INFO - Confusion Matrix: 
+2023_10_30_01_56_12 - results_logger - INFO - True Positives: 22012
+2023_10_30_01_56_12 - results_logger - INFO - True Negatives: 103058
+2023_10_30_01_56_12 - results_logger - INFO - False Positives: 6882
+2023_10_30_01_56_12 - results_logger - INFO - False Negatives: 249
+2023_10_30_01_56_12 - results_logger - INFO - AUC: 0.90
+2023_10_30_01_56_12 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.777708000 s
+2023_10_30_01_56_12 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.976551000 s
+2023_10_30_01_56_12 - results_logger - INFO - timer for clustering started
+2023_10_30_01_56_12 - results_logger - INFO - timer for scaling_duration started
+2023_10_30_01_56_12 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.001026000 s
+2023_10_30_01_56_12 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_01_56_12 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_30_01_56_12 - results_logger - INFO - min_samples: 937
+2023_10_30_01_56_12 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_30_02_11_31 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 918.607782000 s
+2023_10_30_02_11_31 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_30_02_11_31 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_30_02_28_36 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 1025.651433000 s
+2023_10_30_02_28_36 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_30_02_28_36 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_30_02_44_41 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 964.725040000 s
+2023_10_30_02_44_41 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_30_02_44_41 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_03_01_59 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 1037.539299000 s
+2023_10_30_03_01_59 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_03_01_59 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_03_18_28 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 989.228145000 s
+2023_10_30_03_18_28 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_03_18_28 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_03_18_28 - results_logger - INFO - Time elapsed since the begining of clustering: 4935.790898000 s
+2023_10_30_03_18_28 - results_logger - INFO - End time : 1698635908.2954204
+2023_10_30_03_18_28 - results_logger - INFO - Total duration: 4939.241824865341
+2023_10_30_03_18_28 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_03_18_28 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=5, output_size=16, window_character_size=8, word_character_size=4, min_count=1)
+2023_10_30_03_18_58 - results_logger - INFO - max_length_train : 8196
+2023_10_30_03_18_58 - results_logger - INFO - timer for word2vec training :  started
+2023_10_30_03_24_24 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 326.012800000 s
+2023_10_30_03_24_24 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_30_03_26_55 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 151.256347000 s
+2023_10_30_03_26_55 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_30_03_26_55 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_30_03_26_55 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_30_03_26_55 - results_logger - INFO - Start time : 1698636415.6677053
+2023_10_30_03_26_55 - results_logger - INFO - Using already loaded data
+2023_10_30_03_26_55 - results_logger - INFO - timer for feature_engineering started
+2023_10_30_03_26_55 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_30_03_26_56 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+            feature_0  feature_1  feature_2  ...  feature_13  feature_14  feature_15
+feature_0    1.000000  -0.306295  -0.455973  ...    0.239725    0.042304   -0.048580
+feature_1   -0.306295   1.000000   0.216725  ...    0.007719    0.277309    0.465306
+feature_2   -0.455973   0.216725   1.000000  ...    0.314781   -0.235871   -0.241210
+feature_3   -0.063657  -0.356599  -0.327828  ...   -0.512737   -0.183476    0.164682
+feature_4    0.441051  -0.430628  -0.150295  ...    0.462818   -0.190284   -0.412952
+feature_5   -0.469529   0.108985   0.216439  ...   -0.272154    0.016387    0.099365
+feature_6    0.147206  -0.392246  -0.015404  ...   -0.139919   -0.394649    0.118666
+feature_7    0.100729  -0.062745  -0.230622  ...   -0.041078    0.064465   -0.094166
+feature_8    0.191919   0.363990  -0.131513  ...    0.109243    0.015599    0.310358
+feature_9    0.003999   0.006779   0.134698  ...    0.081351    0.199243   -0.081984
+feature_10  -0.166513  -0.135488   0.105888  ...    0.271612    0.232089   -0.262929
+feature_11   0.288222  -0.409740  -0.387231  ...    0.156259   -0.156671   -0.532091
+feature_12   0.200681  -0.576539  -0.443303  ...   -0.026192   -0.203404   -0.178051
+feature_13   0.239725   0.007719   0.314781  ...    1.000000   -0.146603   -0.231308
+feature_14   0.042304   0.277309  -0.235871  ...   -0.146603    1.000000    0.211065
+feature_15  -0.048580   0.465306  -0.241210  ...   -0.231308    0.211065    1.000000
+
+[16 rows x 16 columns]
+2023_10_30_03_26_56 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_03_26_56_432486.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_03_26_56_432427.csv
+2023_10_30_03_26_56 - results_logger - INFO - Correlation sums: 
+feature_0     4.166384
+feature_1     5.117093
+feature_2     4.607781
+feature_3     4.396701
+feature_4     4.869401
+feature_5     4.811334
+feature_6     4.241548
+feature_7     3.822636
+feature_8     3.420052
+feature_9     3.579699
+feature_10    4.002727
+feature_11    5.012346
+feature_12    4.346266
+feature_13    4.013498
+feature_14    3.569418
+feature_15    4.452712
+dtype: float64
+2023_10_30_03_26_56 - results_logger - INFO - Sorted correlation sums: 
+feature_1     5.117093
+feature_11    5.012346
+feature_4     4.869401
+feature_5     4.811334
+feature_2     4.607781
+feature_15    4.452712
+feature_3     4.396701
+feature_12    4.346266
+feature_6     4.241548
+feature_0     4.166384
+feature_13    4.013498
+feature_10    4.002727
+feature_7     3.822636
+feature_9     3.579699
+feature_14    3.569418
+feature_8     3.420052
+dtype: float64
+2023_10_30_03_26_56 - results_logger - INFO - Keeping columns: ['feature_8', 'feature_14', 'feature_9', 'feature_7', 'feature_10', 'feature_13', 'feature_0', 'feature_6']
+2023_10_30_03_26_56 - results_logger - INFO - End feature engineering
+2023_10_30_03_26_56 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 1.190586000 s
+2023_10_30_03_26_56 - results_logger - INFO - Keeping 8 : ['feature_8', 'feature_14', 'feature_9', 'feature_7', 'feature_10', 'feature_13', 'feature_0', 'feature_6']
+2023_10_30_03_26_56 - results_logger - INFO - Keeping 8 : ['feature_8', 'feature_14', 'feature_9', 'feature_7', 'feature_10', 'feature_13', 'feature_0', 'feature_6']
+2023_10_30_03_26_56 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_30_03_26_56 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_30_03_26_57 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.149847000 s
+2023_10_30_03_26_57 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_03_26_57 - results_logger - INFO - timer for random forest :  started
+2023_10_30_03_26_57 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_30_03_26_58 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_30_03_26_58 - results_logger - INFO - Number of predicted 1 labels: 49677.0 
+ versus number of predicted 0 labels: 90401.0
+2023_10_30_03_26_58 - results_logger - INFO - Accuracy: 96.36%
+2023_10_30_03_26_58 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9986910994764397,
+        "recall": 0.9554982849053522,
+        "f1-score": 0.9766173538004915,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.82029145914038,
+        "recall": 0.9921463632307006,
+        "f1-score": 0.8980712915278198,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.9810326659641728,
+        "recall": 0.9970548862115127,
+        "f1-score": 0.9889788872659673,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9970627503337783,
+        "recall": 0.9997322623828648,
+        "f1-score": 0.9983957219251337,
+        "support": 3735.0
+    },
+    "accuracy": 0.9636488242265023,
+    "macro avg": {
+        "precision": 0.9492694937286927,
+        "recall": 0.9861079491826075,
+        "f1-score": 0.9655158136298531,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.969636058191247,
+        "recall": 0.9636488242265023,
+        "f1-score": 0.9649616710873499,
+        "support": 140078.0
+    }
+}
+2023_10_30_03_26_58 - results_logger - INFO - Confusion Matrix: 
+2023_10_30_03_26_58 - results_logger - INFO - True Positives: 22234
+2023_10_30_03_26_58 - results_logger - INFO - True Negatives: 105294
+2023_10_30_03_26_58 - results_logger - INFO - False Positives: 4861
+2023_10_30_03_26_58 - results_logger - INFO - False Negatives: 136
+2023_10_30_03_26_58 - results_logger - INFO - AUC: 0.91
+2023_10_30_03_26_58 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.682577000 s
+2023_10_30_03_26_58 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.588889000 s
+2023_10_30_03_26_58 - results_logger - INFO - timer for clustering started
+2023_10_30_03_26_58 - results_logger - INFO - timer for scaling_duration started
+2023_10_30_03_26_58 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000632000 s
+2023_10_30_03_26_58 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_03_26_58 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_30_03_26_58 - results_logger - INFO - min_samples: 937
+2023_10_30_03_26_58 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_30_03_41_30 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 872.005797000 s
+2023_10_30_03_41_30 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_30_03_41_30 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_30_03_55_04 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 813.355077000 s
+2023_10_30_03_55_04 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_30_03_55_04 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_30_04_09_27 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 863.573455000 s
+2023_10_30_04_09_27 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_30_04_09_27 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_04_23_45 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 857.413105000 s
+2023_10_30_04_23_45 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_04_23_45 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_04_38_45 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 900.115125000 s
+2023_10_30_04_38_45 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_04_38_45 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_04_38_45 - results_logger - INFO - Time elapsed since the begining of clustering: 4306.497069000 s
+2023_10_30_04_38_45 - results_logger - INFO - End time : 1698640725.1225638
+2023_10_30_04_38_45 - results_logger - INFO - Total duration: 4309.454858541489
+2023_10_30_04_38_45 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_30_04_38_45 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=6, output_size=16, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_10_30_04_38_45 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_04_38_45 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=7, output_size=16, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_10_30_04_38_45 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_30_04_38_45 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=8, output_size=100, window_character_size=8, word_character_size=2, min_count=1)
+2023_10_30_04_39_23 - results_logger - INFO - max_length_train : 16392
+2023_10_30_04_39_23 - results_logger - INFO - timer for word2vec training :  started
+2023_10_30_04_47_27 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 483.406054000 s
+2023_10_30_04_47_27 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_30_04_52_23 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 296.261410000 s
+2023_10_30_04_52_23 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_30_04_52_23 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_30_04_52_23 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_30_04_52_23 - results_logger - INFO - Start time : 1698641543.479593
+2023_10_30_04_52_23 - results_logger - INFO - Using already loaded data
+2023_10_30_04_52_23 - results_logger - INFO - timer for feature_engineering started
+2023_10_30_04_52_23 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_30_04_52_59 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+            feature_0  feature_1  feature_2  ...  feature_97  feature_98  feature_99
+feature_0    1.000000   0.315532  -0.600439  ...    0.377965    0.357484    0.188986
+feature_1    0.315532   1.000000  -0.063224  ...    0.215410    0.274956    0.561274
+feature_2   -0.600439  -0.063224   1.000000  ...   -0.644554   -0.430440    0.272219
+feature_3    0.577358   0.376374  -0.688638  ...    0.640059    0.431770   -0.007525
+feature_4    0.782263   0.195487  -0.582771  ...    0.350538    0.208466    0.140864
+...               ...        ...        ...  ...         ...         ...         ...
+feature_95   0.006575  -0.176874  -0.171934  ...    0.290156    0.183857   -0.206435
+feature_96   0.642304   0.668963  -0.455161  ...    0.444356    0.268780    0.335646
+feature_97   0.377965   0.215410  -0.644554  ...    1.000000    0.271017   -0.167338
+feature_98   0.357484   0.274956  -0.430440  ...    0.271017    1.000000    0.022247
+feature_99   0.188986   0.561274   0.272219  ...   -0.167338    0.022247    1.000000
+
+[100 rows x 100 columns]
+2023_10_30_04_52_59 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_04_52_47_154899.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_04_52_47_154783.csv
+2023_10_30_04_52_59 - results_logger - INFO - Correlation sums: 
+feature_0     38.401804
+feature_1     38.927786
+feature_2     33.592330
+feature_3     37.460638
+feature_4     35.913964
+                ...    
+feature_95    20.611222
+feature_96    40.855127
+feature_97    28.936165
+feature_98    28.956696
+feature_99    33.824525
+Length: 100, dtype: float64
+2023_10_30_04_52_59 - results_logger - INFO - Sorted correlation sums: 
+feature_20    43.894554
+feature_62    43.710181
+feature_53    42.791456
+feature_46    42.238209
+feature_52    41.766846
+                ...    
+feature_83    18.273065
+feature_61    18.121117
+feature_78    17.856470
+feature_75    16.600306
+feature_91    15.597636
+Length: 100, dtype: float64
+2023_10_30_04_52_59 - results_logger - INFO - Keeping columns: ['feature_91', 'feature_75', 'feature_78', 'feature_61', 'feature_83', 'feature_71', 'feature_22', 'feature_33']
+2023_10_30_04_52_59 - results_logger - INFO - End feature engineering
+2023_10_30_04_52_59 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 35.910753000 s
+2023_10_30_04_52_59 - results_logger - INFO - Keeping 8 : ['feature_91', 'feature_75', 'feature_78', 'feature_61', 'feature_83', 'feature_71', 'feature_22', 'feature_33']
+2023_10_30_04_52_59 - results_logger - INFO - Keeping 8 : ['feature_91', 'feature_75', 'feature_78', 'feature_61', 'feature_83', 'feature_71', 'feature_22', 'feature_33']
+2023_10_30_04_52_59 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_30_04_52_59 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_30_04_52_59 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.169083000 s
+2023_10_30_04_52_59 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_04_52_59 - results_logger - INFO - timer for random forest :  started
+2023_10_30_04_53_00 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_30_04_53_01 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 1. 0. 1. 1. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_30_04_53_01 - results_logger - INFO - Number of predicted 1 labels: 55259.0 
+ versus number of predicted 0 labels: 84819.0
+2023_10_30_04_53_01 - results_logger - INFO - Accuracy: 92.56%
+2023_10_30_04_53_01 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9966467042314462,
+        "recall": 0.9197081616726256,
+        "f1-score": 0.9566329540466942,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.7136362105546762,
+        "recall": 0.9455600178491744,
+        "f1-score": 0.8133888643648158,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.7435396308360478,
+        "recall": 0.9167336010709505,
+        "f1-score": 0.8211031175059952,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9029102470041575,
+        "recall": 0.9884872824631861,
+        "f1-score": 0.943762781186094,
+        "support": 3735.0
+    },
+    "accuracy": 0.9255985950684619,
+    "macro avg": {
+        "precision": 0.8391831981565819,
+        "recall": 0.9426222657639842,
+        "f1-score": 0.8837219292758998,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9421218984077468,
+        "recall": 0.9255985950684619,
+        "f1-score": 0.9297595400567403,
+        "support": 140078.0
+    }
+}
+2023_10_30_04_53_01 - results_logger - INFO - Confusion Matrix: 
+2023_10_30_04_53_01 - results_logger - INFO - True Positives: 21190
+2023_10_30_04_53_01 - results_logger - INFO - True Negatives: 101350
+2023_10_30_04_53_01 - results_logger - INFO - False Positives: 8295
+2023_10_30_04_53_01 - results_logger - INFO - False Negatives: 339
+2023_10_30_04_53_01 - results_logger - INFO - AUC: 0.89
+2023_10_30_04_53_01 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.694099000 s
+2023_10_30_04_53_01 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.914060000 s
+2023_10_30_04_53_01 - results_logger - INFO - timer for clustering started
+2023_10_30_04_53_01 - results_logger - INFO - timer for scaling_duration started
+2023_10_30_04_53_01 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000522000 s
+2023_10_30_04_53_01 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_04_53_01 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_30_04_53_01 - results_logger - INFO - min_samples: 937
+2023_10_30_04_53_01 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_30_05_08_59 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 958.117555000 s
+2023_10_30_05_08_59 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_30_05_08_59 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_30_05_24_36 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 936.954803000 s
+2023_10_30_05_24_36 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_30_05_24_36 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_30_05_40_56 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 979.485905000 s
+2023_10_30_05_40_56 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_30_05_40_56 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_05_56_52 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 956.620507000 s
+2023_10_30_05_56_52 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_05_56_52 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_06_13_51 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 1018.395839000 s
+2023_10_30_06_13_51 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_06_13_51 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_06_13_51 - results_logger - INFO - Time elapsed since the begining of clustering: 4849.607168000 s
+2023_10_30_06_13_51 - results_logger - INFO - End time : 1698646431.1341968
+2023_10_30_06_13_51 - results_logger - INFO - Total duration: 4887.654603719711
+2023_10_30_06_13_51 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_06_13_51 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=9, output_size=100, window_character_size=8, word_character_size=4, min_count=1)
+2023_10_30_06_14_20 - results_logger - INFO - max_length_train : 8196
+2023_10_30_06_14_20 - results_logger - INFO - timer for word2vec training :  started
+2023_10_30_06_19_51 - results_logger - INFO - Time elapsed since the begining of word2vec training : : 331.854417000 s
+2023_10_30_06_19_51 - results_logger - INFO - timer for word2vec used to embedde :  started
+2023_10_30_06_22_54 - results_logger - INFO - Time elapsed since the begining of word2vec used to embedde : : 182.523774000 s
+2023_10_30_06_22_54 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/data/26_filtered_chunk_extraction_-e_only-max-entropy_-s_none !!!!----///
+2023_10_30_06_22_54 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_30_06_22_54 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_30_06_22_54 - results_logger - INFO - Start time : 1698646974.4889922
+2023_10_30_06_22_54 - results_logger - INFO - Using already loaded data
+2023_10_30_06_22_54 - results_logger - INFO - timer for feature_engineering started
+2023_10_30_06_22_54 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_10_30_06_23_28 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+            feature_0  feature_1  feature_2  ...  feature_97  feature_98  feature_99
+feature_0    1.000000   0.022770   0.034892  ...    0.220986   -0.064468    0.360875
+feature_1    0.022770   1.000000  -0.474297  ...   -0.021991   -0.559595    0.081728
+feature_2    0.034892  -0.474297   1.000000  ...   -0.058487    0.635216   -0.176626
+feature_3   -0.109397  -0.036300   0.184229  ...    0.312373    0.312241   -0.253843
+feature_4   -0.069486  -0.568860   0.274924  ...   -0.390327    0.356944   -0.017745
+...               ...        ...        ...  ...         ...         ...         ...
+feature_95   0.143143   0.087315  -0.045917  ...   -0.185537    0.084195   -0.032468
+feature_96  -0.111564  -0.429315   0.449205  ...   -0.113896    0.715969   -0.029347
+feature_97   0.220986  -0.021991  -0.058487  ...    1.000000    0.105095    0.293014
+feature_98  -0.064468  -0.559595   0.635216  ...    0.105095    1.000000    0.064780
+feature_99   0.360875   0.081728  -0.176626  ...    0.293014    0.064780    1.000000
+
+[100 rows x 100 columns]
+2023_10_30_06_23_28 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_06_23_18_153508.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_10_30_06_23_18_153440.csv
+2023_10_30_06_23_28 - results_logger - INFO - Correlation sums: 
+feature_0     20.194533
+feature_1     28.869471
+feature_2     27.008874
+feature_3     21.196172
+feature_4     24.760791
+                ...    
+feature_95    18.394645
+feature_96    30.211897
+feature_97    20.369725
+feature_98    30.641985
+feature_99    17.922501
+Length: 100, dtype: float64
+2023_10_30_06_23_28 - results_logger - INFO - Sorted correlation sums: 
+feature_47    32.365323
+feature_67    30.895277
+feature_80    30.701059
+feature_98    30.641985
+feature_15    30.471504
+                ...    
+feature_99    17.922501
+feature_32    17.831799
+feature_14    17.201043
+feature_18    15.627029
+feature_73    15.148307
+Length: 100, dtype: float64
+2023_10_30_06_23_28 - results_logger - INFO - Keeping columns: ['feature_73', 'feature_18', 'feature_14', 'feature_32', 'feature_99', 'feature_7', 'feature_94', 'feature_19']
+2023_10_30_06_23_28 - results_logger - INFO - End feature engineering
+2023_10_30_06_23_28 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 33.900464000 s
+2023_10_30_06_23_28 - results_logger - INFO - Keeping 8 : ['feature_73', 'feature_18', 'feature_14', 'feature_32', 'feature_99', 'feature_7', 'feature_94', 'feature_19']
+2023_10_30_06_23_28 - results_logger - INFO - Keeping 8 : ['feature_73', 'feature_18', 'feature_14', 'feature_32', 'feature_99', 'feature_7', 'feature_94', 'feature_19']
+2023_10_30_06_23_28 - results_logger - INFO - Number of samples before balancing: class-0.0=620669 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_10_30_06_23_28 - results_logger - INFO - timer for resample_data (RandomUnderSampler) started
+2023_10_30_06_23_28 - results_logger - INFO - Time elapsed since the begining of resample_data (RandomUnderSampler): 0.182831000 s
+2023_10_30_06_23_28 - results_logger - INFO - Number of samples after balancing: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_06_23_28 - results_logger - INFO - timer for random forest :  started
+2023_10_30_06_23_29 - results_logger - INFO - timer for evaluate_model_score started
+2023_10_30_06_23_30 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 1. 0. 0. 2. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_10_30_06_23_30 - results_logger - INFO - Number of predicted 1 labels: 52044.0 
+ versus number of predicted 0 labels: 88034.0
+2023_10_30_06_23_30 - results_logger - INFO - Accuracy: 94.93%
+2023_10_30_06_23_30 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9966116011864196,
+        "recall": 0.9421768090164976,
+        "f1-score": 0.9686300302737701,
+        "support": 110198.0
+    },
+    "1.0": {
+        "precision": 0.7915847710562713,
+        "recall": 0.9704596162427488,
+        "f1-score": 0.8719429075455055,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 0.8063526834611172,
+        "recall": 0.9855421686746988,
+        "f1-score": 0.8869879518072289,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 0.9652849740932643,
+        "recall": 0.9975903614457832,
+        "f1-score": 0.9811718235681369,
+        "support": 3735.0
+    },
+    "accuracy": 0.9493353702936935,
+    "macro avg": {
+        "precision": 0.8899585074492682,
+        "recall": 0.9739422388449321,
+        "f1-score": 0.9271831782986604,
+        "support": 140078.0
+    },
+    "weighted avg": {
+        "precision": 0.9579026442259151,
+        "recall": 0.9493353702936935,
+        "f1-score": 0.9513193320523615,
+        "support": 140078.0
+    }
+}
+2023_10_30_06_23_30 - results_logger - INFO - Confusion Matrix: 
+2023_10_30_06_23_30 - results_logger - INFO - True Positives: 21748
+2023_10_30_06_23_30 - results_logger - INFO - True Negatives: 103826
+2023_10_30_06_23_30 - results_logger - INFO - False Positives: 5707
+2023_10_30_06_23_30 - results_logger - INFO - False Negatives: 350
+2023_10_30_06_23_30 - results_logger - INFO - AUC: 0.90
+2023_10_30_06_23_30 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.687629000 s
+2023_10_30_06_23_30 - results_logger - INFO - Time elapsed since the begining of random forest : : 1.896320000 s
+2023_10_30_06_23_30 - results_logger - INFO - timer for clustering started
+2023_10_30_06_23_30 - results_logger - INFO - timer for scaling_duration started
+2023_10_30_06_23_30 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000552000 s
+2023_10_30_06_23_30 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20964 class-1.0=20964 class-2.0=20964 class-4.0=20964
+2023_10_30_06_23_30 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
+2023_10_30_06_23_30 - results_logger - INFO - min_samples: 937
+2023_10_30_06_23_30 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_10_30_06_39_07 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 937.229162000 s
+2023_10_30_06_39_07 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
+2023_10_30_06_39_07 - results_logger - INFO - timer for clustering_duration_for_0.02 started
