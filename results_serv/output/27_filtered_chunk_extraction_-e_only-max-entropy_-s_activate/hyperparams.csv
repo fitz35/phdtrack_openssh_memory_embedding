@@ -3,3 +3,7 @@ index,word_character_size,embedding_dim,transformer_units,num_heads,num_transfor
 1,16,16,2,2,2,0.1,relu
 2,8,8,2,2,2,0.1,relu
 3,8,16,2,2,2,0.1,relu
+4,16,8,4,4,4,0.3,relu
+5,16,16,4,4,4,0.3,relu
+6,8,8,4,4,4,0.3,relu
+7,8,16,4,4,4,0.3,relu
