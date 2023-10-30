@@ -1577,3 +1577,24 @@ Name: label, dtype: float64
 2023_10_30_06_39_07 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 937.229162000 s
 2023_10_30_06_39_07 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.01, number of clusters: 1
 2023_10_30_06_39_07 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_10_30_06_53_34 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 866.822815000 s
+2023_10_30_06_53_34 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.02, number of clusters: 1
+2023_10_30_06_53_34 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_10_30_07_08_49 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 915.390656000 s
+2023_10_30_07_08_49 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.03, number of clusters: 1
+2023_10_30_07_08_49 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_10_30_07_23_45 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 895.444037000 s
+2023_10_30_07_23_45 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_10_30_07_23_45 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_10_30_07_38_56 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 911.542842000 s
+2023_10_30_07_38_56 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_10_30_07_38_56 - results_logger - ERROR - Error while clustering : No good eps value found
+2023_10_30_07_38_56 - results_logger - INFO - Time elapsed since the begining of clustering: 4526.462559000 s
+2023_10_30_07_38_56 - results_logger - INFO - End time : 1698651536.9642682
+2023_10_30_07_38_56 - results_logger - INFO - Total duration: 4562.475275993347
+2023_10_30_07_38_56 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size2_word_character_size2_min_count1 !!!!!!!!!!!!!
+2023_10_30_07_38_56 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=10, output_size=100, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_10_30_07_38_56 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size4_word_character_size4_min_count1 !!!!!!!!!!!!!
+2023_10_30_07_38_56 - results_logger - INFO - Transformers instance Word2vecHyperparams(index=11, output_size=100, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_10_30_07_39_00 - results_logger - INFO - Pipeline end time : 1698651540.043717 seconds
+2023_10_30_07_39_00 - results_logger - INFO - Pipeline duration : 82600.62515544891 seconds
