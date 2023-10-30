@@ -26,7 +26,7 @@ class ClusteringResult:
     final_samples: Dict[float, int]
     min_samples: int
     clustering_info: List[ClusterInfo]
-    best_eps_info: ClusterInfo
+    best_eps_info: ClusterInfo | None
     label_association: List[LabelAssociation]
     total_duration: float
 
@@ -56,12 +56,13 @@ class ClusteringResult:
         latex_str += "\\hline\n"
         
         # Part 3: Best EPS Information
-        latex_str += "\\multicolumn{5}{|c|}{\\textbf{Best EPS Information}} \\\\\n"
-        latex_str += "\\hline\n"
-        latex_str += f"{self.best_eps_info.eps} & {self.best_eps_info.number_of_clusters} & "
-        latex_str += f"{self.best_eps_info.silhouette_score} & {self.best_eps_info.noise_points} & "
-        latex_str += f"{self.best_eps_info.duration} s\\\\\n"
-        latex_str += "\\hline\n"
+        if self.best_eps_info is not None:
+            latex_str += "\\multicolumn{5}{|c|}{\\textbf{Best EPS Information}} \\\\\n"
+            latex_str += "\\hline\n"
+            latex_str += f"{self.best_eps_info.eps} & {self.best_eps_info.number_of_clusters} & "
+            latex_str += f"{self.best_eps_info.silhouette_score} & {self.best_eps_info.noise_points} & "
+            latex_str += f"{self.best_eps_info.duration} s\\\\\n"
+            latex_str += "\\hline\n"
         
         # Part 4: Label Association
         latex_str += "\\multicolumn{5}{|c|}{\\textbf{Label Association}} \\\\\n"

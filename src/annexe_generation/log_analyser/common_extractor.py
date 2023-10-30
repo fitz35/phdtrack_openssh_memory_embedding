@@ -1,6 +1,7 @@
 
 
 from typing import Callable, List, Type, TypeVar
+import traceback
 import re
 
 
@@ -42,44 +43,57 @@ def extract_lines_between(log_lines: list[str], start_index: int, start_delimite
     return extracted_lines, start_delimiter_index
 
 
-def extract_instance_name(log_line: str):
+def extract_instance_name(log_lines: List[str], start_index: int, end_index: int) -> str:
     """
-    Extracts the instance name from a log line.
-    
-    The function searches for the pattern "INFO - !+  " followed by a non-whitespace sequence, ending with " instance : ".
-    If found, it returns the non-whitespace sequence (i.e., the instance name).
-    If not found, it returns None.
-    
-    Args:
-    log_line (str): The log line to search in.
-    
-    Returns:
-    str or None: The extracted instance name or None if not found.
-    """
-    match = re.search(r"results_logger - INFO - !!!!!!!!!!!!! (\S+) instance : ", log_line)
-    if not match:
-        return None
-    return match.group(1)
+    Extracts the instance name from a subset of log lines.
 
+    Iterates over a specified subset of log lines to find a line that matches the pattern "INFO - !+  [InstanceName] instance : ".
+    If a match is found, the function returns the extracted instance name. 
+    If no match is found within the specified lines, an AssertionError is raised.
 
-def extract_instance_number(log_line):
-    """
-    Extracts the instance number from a log line.
-    
-    The function searches for the pattern "index=" followed by one or more digits.
-    If found, it converts the digit sequence to an integer and returns it.
-    If not found, it returns None.
-    
     Args:
-    log_line (str): The log line to search in.
-    
+        log_lines (List[str]): The list of log lines.
+        start_index (int): The starting index for the subset of lines to search.
+        end_index (int): The ending index for the subset of lines to search.
+
     Returns:
-    int or None: The extracted instance number or None if not found.
+        str: The extracted instance name.
+
+    Raises:
+        AssertionError: If no instance name is found in the specified lines.
     """
-    match = re.search(r"index=(\d+)", log_line)
-    if not match:
-        return None
-    return int(match.group(1))
+    for line in log_lines[start_index:end_index]:
+        match = re.search(r"results_logger - INFO - !+ (\S+) instance : ", line)
+        if match:
+            return str(match.group(1))
+    
+    assert False, "Instance name not found"
+
+def extract_instance_number(log_lines: List[str], start_index: int, end_index: int) -> int:
+    """
+    Extracts the instance number from a subset of log lines.
+
+    Iterates over a specified subset of log lines to find a line that contains the pattern "index=[number]".
+    If a match is found, the function returns the extracted number as an integer. 
+    If no match is found within the specified lines, an AssertionError is raised.
+
+    Args:
+        log_lines (List[str]): The list of log lines.
+        start_index (int): The starting index for the subset of lines to search.
+        end_index (int): The ending index for the subset of lines to search.
+
+    Returns:
+        int: The extracted instance number.
+
+    Raises:
+        AssertionError: If no instance number is found in the specified lines.
+    """
+    for line in log_lines[start_index:end_index]:
+        match = re.search(r"index=(\d+)", line)
+        if match:
+            return int(match.group(1))
+    
+    assert False, "Instance number not found"
 
 
 def __extract_dataset_path(log_line: str):
@@ -130,8 +144,8 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 results.append(result)
                 begin_index = next_index
             except AssertionError as e:
-                begin_index += 1
-            except ValueError as e:
-                begin_index += 1
+                print(f"An error occurred: {e}")
+                traceback.print_exc()
+                return results
 
     return results

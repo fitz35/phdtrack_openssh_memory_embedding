@@ -83,6 +83,8 @@ def __extract_cluster_info(log_lines: List[str]) -> List[ClusterInfo]:
             cluster_infos.append(cluster_info)
             current_duration = None
             continue
+    
+    assert len(cluster_infos) > 0, "No cluster information found in the log lines."
 
     return cluster_infos
 
@@ -96,7 +98,7 @@ def __extract_label_association(log_lines: List[str]) -> List[LabelAssociation]:
     log_lines (List[str]): A list of log lines as strings.
 
     Returns:
-    Set[LabelAssociation]: A set of LabelAssociation dataclass instances containing extracted information.
+    Set[LabelAssociation]: A set of LabelAssociation dataclass instances containing extracted information (If it exists).
 
     Raises:
     ValueError: If no label association information is found in the log lines.
@@ -116,9 +118,6 @@ def __extract_label_association(log_lines: List[str]) -> List[LabelAssociation]:
             next_line_contains_data = False
         elif "Associating clusters to labels :" in line:
             next_line_contains_data = True
-
-    if not label_associations:
-        raise ValueError("No label association information found in the log lines.")
 
     return label_associations
 
@@ -189,17 +188,8 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
 
     # iterate through the line preceding the random forest lines to get the dataset path and instance name
     
-    instance_name = None
-    instance_number = None
-
-    for i in range(begin_index, clustering_index, 1):
-        if instance_name is None:
-            instance_name = extract_instance_name(all_lines[i])
-        if instance_number is None:
-            instance_number = extract_instance_number(all_lines[i])
-    
-    assert instance_name is not None, "Instance name not found"
-    assert instance_number is not None, "Instance number not found"
+    instance_name = extract_instance_name(all_lines, begin_index, clustering_index)
+    instance_number = extract_instance_number(all_lines, begin_index, clustering_index)
 
     instance_name = instance_name + " " + str(instance_number)
 
@@ -227,15 +217,14 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
         if min_samples is None:
             min_samples = __extract_min_samples(line)
 
-    assert best_eps is not None, "Best eps not found"
     assert total_duration is not None, "Total duration not found"
     assert min_samples is not None, "Min samples not found"
 
-    best_eps_info = next((info for info in cluster_info if info.eps == best_eps), None)
+    best_eps_info = None
 
-    # Raise an error if the best_eps is not found in the cluster_info list
-    if best_eps_info is None:
-        raise ValueError(f"Best eps value {best_eps} not found in clustering info.")
+    if best_eps is not None:
+        best_eps_info = next((info for info in cluster_info if info.eps == best_eps), None)
+        assert best_eps_info is not None, "Best eps info not found"
 
 
     clustering_result = ClusteringResult(

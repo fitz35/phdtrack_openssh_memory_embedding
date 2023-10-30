@@ -60,10 +60,10 @@ def __extract_and_decode_json(log_lines: list[str]) -> dict:
             if brace_count == 0:
                 break
 
-    if json_string:
-        return json.loads(json_string)
-    else:
-        raise ValueError("No JSON string found in log lines")
+    assert json_string != "", "No JSON string found in log lines"
+
+    return json.loads(json_string)
+    
 
 def __extract_metrics(log_lines: List[str]) -> Tuple[int, int, int, int, float]:
     """
@@ -97,8 +97,7 @@ def __extract_metrics(log_lines: List[str]) -> Tuple[int, int, int, int, float]:
     
     # Check if all required metrics were found
     required_metrics = ["true_positives", "true_negatives", "false_positives", "false_negatives", "auc"]
-    if not all(key in metrics.keys() for key in required_metrics):
-        raise ValueError("Not all required metrics were found in the log lines, found metrics: " + str(metrics))
+    assert not all(key in metrics.keys() for key in required_metrics), "Not all required metrics were found in the log lines, found metrics: " + str(metrics)
 
     # Return the extracted metrics as a tuple
     return (
@@ -134,7 +133,7 @@ def __extract_time_elapsed(log_lines: List[str]) -> float:
             return float(match.group(1))
 
     # If the time elapsed information was not found, raise an error
-    raise ValueError("Time elapsed information not found in log lines")
+    assert False, "Time elapsed information not found in log lines"
 
 
 
@@ -159,17 +158,8 @@ def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_pa
 
         # iterate through the line preceding the random forest lines to get the dataset path and instance name
         
-        instance_name = None
-        instance_number = None
-
-        for i in range(begin_index, random_forest_start_index, 1):
-            if instance_name is None:
-                instance_name = extract_instance_name(all_lines[i])
-            if instance_number is None:
-                instance_number = extract_instance_number(all_lines[i])
-        
-        assert instance_name is not None, "Instance name not found"
-        assert instance_number is not None, "Instance number not found"
+        instance_name = extract_instance_name(all_lines, begin_index, random_forest_start_index)
+        instance_number = extract_instance_number(all_lines, begin_index, random_forest_start_index)
 
         instance_name = instance_name + " " + str(instance_number)
 
