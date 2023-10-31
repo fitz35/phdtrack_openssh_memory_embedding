@@ -11,6 +11,19 @@ from annexe_generation.log_analyser.random_forest_analyser.extractor import rand
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, get_best_instances, plot_metrics, save_classification_results_to_json
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
 
+def compare_list_of_dicts(list1: list[dict[str, str]], list2: list[dict[str, str]]) -> bool:
+    """
+    Compare if two lists of dictionaries contain the same values.
+
+    Args:
+    list1 (list[dict[str, str]]): The first list of dictionaries.
+    list2 (list[dict[str, str]]): The second list of dictionaries.
+
+    Returns:
+    bool: True if both lists contain the same dictionaries, False otherwise.
+    """
+    return all(dict_item in list2 for dict_item in list1) and len(list1) == len(list2)
+
 def read_file(file_path: str):
     try:
         with open(file_path, 'r') as file:
@@ -19,6 +32,49 @@ def read_file(file_path: str):
     except Exception as e:
         print(f"An error occurred: {e}")
         exit(1)
+
+def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: str = "Table caption", label: str = "tab:mytable") -> str:
+    """
+    Convert a list of dictionaries to a LaTeX tabular environment.
+
+    Args:
+    list_of_dicts (list[dict[str, str]]): List of dictionaries to convert.
+    caption (str, optional): Caption for the LaTeX table. Defaults to "Table caption".
+    label (str, optional): Label for the LaTeX table. Defaults to "tab:mytable".
+
+    Returns:
+    str: LaTeX code for the table.
+    """
+    if not list_of_dicts:
+        return "The list is empty."
+
+    # Extracting the column names from the keys of the first dictionary
+    columns = list(list_of_dicts[0].keys())
+    num_columns = len(columns)
+
+    # Creating the LaTeX tabular environment
+    latex_code = "\\begin{table}[h]\n"
+    latex_code += "\\centering\n"
+    latex_code += "\\begin{tabular}{" + "l" * num_columns + "}\n"
+    latex_code += "\\hline\n"
+
+    # Adding the column headers
+    latex_code += " & ".join(columns) + " \\\\ \n"
+    latex_code += "\\hline\n"
+
+    # Adding the rows
+    for item in list_of_dicts:
+        row = " & ".join(item.values()) + " \\\\"
+        latex_code += row + "\n"
+
+    latex_code += "\\hline\n"
+    latex_code += "\\end{tabular}\n"
+    latex_code += f"\\caption{{{caption}}}\n"
+    latex_code += f"\\label{{{label}}}\n"
+    latex_code += "\\end{table}"
+
+    return latex_code
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Read a file and process its contents.')
@@ -33,6 +89,9 @@ if __name__ == "__main__":
 
 
 
+    clustering_timeouts : list[dict[str, str]] = []
+    classification_timeouts : list[dict[str, str]] = []
+
     clustering_results : list[ClusteringResult] = []
     classification_results : list[ClassificationResults] = []
 
@@ -46,9 +105,16 @@ if __name__ == "__main__":
     # Read all files
     for file in files:
         lines: list[str] = read_file(file)
-        clustering_results += extract_all_dataset_results(lines, clustering_extractor)
-        classification_results += extract_all_dataset_results(lines, random_forest_extractor)
+        clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor)
+        classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor)
 
+        clustering_results.extend(clustering)
+        classification_results.extend(classification)
+
+        clustering_timeouts.extend(clustering_timeout)
+        classification_timeouts.extend(classification_timeout)
+
+    assert compare_list_of_dicts(clustering_timeouts, classification_timeouts), "Clustering and classification timeouts are not the same"
     # extract the instance by dataset
     # Organize clustering and classification results by dataset
     for result in clustering_results:
@@ -64,6 +130,9 @@ if __name__ == "__main__":
         classification_results_by_dataset[dataset_name].append(result)
 
     # ------------------------- Extract the clustering results
+
+    # make the list of timeout instances as latex
+
     
     for dataset_name, results in clustering_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)

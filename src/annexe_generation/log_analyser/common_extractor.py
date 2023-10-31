@@ -1,6 +1,6 @@
 
 
-from typing import Callable, List, Type, TypeVar
+from typing import Callable, List, Tuple, Type, TypeVar
 import traceback
 import re
 
@@ -152,7 +152,7 @@ def __is_end(log_lines: List[str], begin_line: int) -> bool:
 
 T = TypeVar('T')
 
-def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str], T]) -> List[T]:
+def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str], T]) -> Tuple[List[T], List[dict[str, str]]]:
     """
     Extracts results from a list of log lines using a specified extractor function and data class.
 
@@ -163,8 +163,10 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
 
     Returns:
     List[T]: A list of results as instances of the specified data class.
+    List[dict[str, str]]: A list of dictionaries containing the dataset path and instance name for each timeout instance.
     """
     results = []
+    timeout_instances = []
     dataset_path = None
     i = 0
     while dataset_path is None and i < len(log_lines):
@@ -172,23 +174,30 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
         i += 1
 
     if dataset_path is None:
-        return results
+        return results, timeout_instances
 
     begin_index = __get_next_instance(log_lines, 0)
     if begin_index is None:
-        return results
+        return results, timeout_instances
 
     while begin_index < len(log_lines):
         try:
             if __is_already_computed(log_lines, begin_index):
                 begin_index += 2
                 if __is_end(log_lines, begin_index):
-                    return results
+                    return results, timeout_instances
                 continue
 
             maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
 
             if maybe_next_instance is not None and __is_timeout_lines(log_lines, begin_index, maybe_next_instance):
+                instance_name = extract_instance_name(log_lines, begin_index, maybe_next_instance)
+                instance_number = extract_instance_number(log_lines, begin_index, maybe_next_instance)
+                timeout_instances.append({
+                    "instance" : instance_name + "_" + str(instance_number),
+                    "dataset" : dataset_path
+                })
+                
                 begin_index = maybe_next_instance
                 continue
 
@@ -199,22 +208,22 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                     continue
             else:
                 if len(log_lines) - begin_index < 10:
-                    return results
+                    return results, timeout_instances
 
             result = extractor(log_lines, begin_index, dataset_path)
             results.append(result)
             
             # check end of file
             if maybe_next_instance is None:
-                return results
+                return results, timeout_instances
             
             if __is_end(log_lines, maybe_next_instance):
-                return results
+                return results, timeout_instances
                 
             begin_index = maybe_next_instance
         except AssertionError as e:
             print(f"An error occurred: {e}, line {begin_index}")
             traceback.print_exc()
-            return results
+            return results, timeout_instances
 
-    return results
+    return results, timeout_instances

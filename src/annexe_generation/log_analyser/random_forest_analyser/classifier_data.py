@@ -1,6 +1,7 @@
 from dataclasses import asdict, dataclass
 import json
 import os
+import re
 from typing import Any, Dict, List
 import matplotlib.pyplot as plt
 
@@ -186,27 +187,47 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
 def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str, file_name: str):
     if not classification_results_list:
         raise ValueError("The list of classification results is empty.")
+    
+    def extract_leading_number(text: str) -> int:
+        """
+        Extracts the leading number from a string.
+        
+        Args:
+        text (str): The input string from which to extract the number.
+        
+        Returns:
+        int: The extracted number.
+        
+        Raises:
+        ValueError: If no leading number is found in the string.
+        """
+        match = re.match(r"(\d+)_", text)
+        if match:
+            return int(match.group(1))
+        else:
+            raise ValueError("No leading number found in the string")
 
     # Prepare the data
     data = []
     accuracies = []
     durations = []
     for result in classification_results_list:
+        instance = str(extract_leading_number(result.dataset_name)) + "." + result.instance
         for label, metrics in result.class_metrics.items():
             if label != '0.0':
                 data.append({
-                    'Instance': result.instance,
+                    'Instance': instance,
                     'Class': label,
                     'Precision': metrics.precision,
                     'Recall': metrics.recall,
                     'F1 Score': metrics.f1_score,
                 })
         accuracies.append({
-            'Instance': result.instance,
+            'Instance': instance,
             'Accuracy': result.accuracy
         })
         durations.append({
-            'Instance': result.instance,
+            'Instance': instance,
             'Duration': result.duration
         })
 
