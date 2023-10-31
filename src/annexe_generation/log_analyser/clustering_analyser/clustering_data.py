@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+import json
 import os
 from typing import Dict, List
 import matplotlib.pyplot as plt
@@ -12,6 +13,7 @@ class ClusterInfo:
     silhouette_score: float | None
     noise_points: int | None
     duration: float
+
 
 @dataclass(frozen=True)
 class LabelAssociation:
@@ -84,6 +86,32 @@ class ClusteringResult:
         latex_str += "\\end{longtable}\n"
         return latex_str
     
+
+    def to_dict(self) -> Dict:
+        """
+        Convert the ClusteringResult instance to a dictionary, converting nested objects as well.
+        
+        Returns:
+            Dict: Dictionary representation of the ClusteringResult instance.
+        """
+        result_dict = asdict(self)
+        return result_dict
+
+def save_clustering_results_to_json(results_list: List[ClusteringResult], file_path: str) -> None:
+    """
+    Save a list of ClusteringResult instances to a JSON file.
+
+    Args:
+        results_list (List[ClusteringResult]): List of ClusteringResult instances.
+        file_path (str): The path to the file where the data will be saved.
+    """
+    # Convert each ClusteringResult instance to a dictionary
+    results_dicts = [result.to_dict() for result in results_list]
+
+    # Save the list of dictionaries to a JSON file
+    with open(file_path, 'w') as f:
+        json.dump(results_dicts, f, indent=4)
+    
 def clustering_pie_charts(clustering_results: List[ClusteringResult], save_dir_path: str):
     for result in clustering_results:
         num_clusters = len(result.label_association)
@@ -118,9 +146,8 @@ def clustering_pie_charts(clustering_results: List[ClusteringResult], save_dir_p
         plt.tight_layout(rect=[0, 0, 1, 0.96])
         
         # Create directory if not exists
-        save_dir = os.path.join(save_dir_path, f'{result.dataset_name}_clustering')
-        os.makedirs(save_dir, exist_ok=True)
+        os.makedirs(save_dir_path, exist_ok=True)
 
         # Save the figure
-        plt.savefig(os.path.join(save_dir, f'{result.instance}.png'))
+        plt.savefig(os.path.join(save_dir_path, f'{result.instance}.png'))
         plt.close()

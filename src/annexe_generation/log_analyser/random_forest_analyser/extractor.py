@@ -97,8 +97,10 @@ def __extract_metrics(log_lines: List[str]) -> Tuple[int, int, int, int, float]:
     
     # Check if all required metrics were found
     required_metrics = ["true_positives", "true_negatives", "false_positives", "false_negatives", "auc"]
-    assert not all(key in metrics.keys() for key in required_metrics), "Not all required metrics were found in the log lines, found metrics: " + str(metrics)
-
+    for metric in required_metrics:
+        if metric not in metrics:
+            # If any of the required metrics were not found, raise an error
+            assert False, f"Metric {metric} not found in log lines"
     # Return the extracted metrics as a tuple
     return (
         metrics["true_positives"],

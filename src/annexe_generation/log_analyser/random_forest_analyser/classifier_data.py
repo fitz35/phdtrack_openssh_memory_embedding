@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+import json
 import os
 from typing import Any, Dict, List
 import matplotlib.pyplot as plt
@@ -107,8 +108,31 @@ class ClassificationResults:
 
         latex_str += "\\end{longtable}\n"
         return latex_str
+    
+    def to_dict(self) -> Dict:
+        """
+        Convert the ClassificationResults instance to a dictionary, converting nested ClassificationMetrics as well.
+        
+        Returns:
+            Dict: Dictionary representation of the ClassificationResults instance.
+        """
+        result_dict = asdict(self)
+        return result_dict
 
+def save_classification_results_to_json(results_list: List[ClassificationResults], file_path: str) -> None:
+    """
+    Save a list of ClassificationResults instances to a JSON file.
 
+    Args:
+        results_list (List[ClassificationResults]): List of ClassificationResults instances.
+        file_path (str): The path to the file where the data will be saved.
+    """
+    # Convert each ClassificationResults instance to a dictionary
+    results_dicts = [result.to_dict() for result in results_list]
+
+    # Save the list of dictionaries to a JSON file
+    with open(file_path, 'w') as f:
+        json.dump(results_dicts, f, indent=4)
 
 def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str):
     if not classification_results_list:
@@ -157,6 +181,7 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
                 for class_label in df['Class'].unique():
                     class_df = df[df['Class'] == class_label]
                     axs[i].plot(class_df['Instance'], class_df[metric], marker='o', linestyle='-', label=f'Class {class_label}')
+                    axs[i].legend()
             elif metric == 'Accuracy':
                 axs[i].plot(accuracy_df['Instance'], accuracy_df['Accuracy'], marker='o', linestyle='-', color='blue')
                 axs[i].legend(['Accuracy'])
@@ -170,7 +195,7 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
         axs[4].set_xlabel('Instance')
         plt.xticks(rotation=45)
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(os.path.join(save_dir_path, f'{dataset_name.lower().replace(" ", "_")}_{metric_name.lower().replace(" ", "_")}.png'))
+        plt.savefig(os.path.join(save_dir_path, f'{metric_name.lower().replace(" ", "_")}.png'))
         #plt.show()
 
     # Create the plots and save them

@@ -125,6 +125,17 @@ def __get_next_instance(log_lines: list[str], begin_line : int) -> int | None:
 
     return None
 
+
+def __is_timeout_lines(log_lines: List[str], begin_line : int, next_instance_line : int) -> bool:
+
+    for line in log_lines[begin_line:next_instance_line]:
+        match = re.search(r"- results_logger - ERROR - Timeout error in transformers pipeline \d+, skipping \(and marking\)", line)
+        if match:
+            return True
+        
+    return False
+
+
 def __is_already_computed(log_lines: List[str], begin_line : int) -> bool:
     pattern = re.search(r"- results_logger - INFO - \S+ instance .+ already computed", log_lines[begin_line + 1])
     return pattern is not None
@@ -170,18 +181,32 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
     while begin_index < len(log_lines):
         try:
             if __is_already_computed(log_lines, begin_index):
-                print(begin_index)
                 begin_index += 2
                 if __is_end(log_lines, begin_index):
                     return results
                 continue
 
+            maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
+
+            if maybe_next_instance is not None and __is_timeout_lines(log_lines, begin_index, maybe_next_instance):
+                begin_index = maybe_next_instance
+                continue
+
+            # check if we have minimum 10 lines (remove corrupted files)
+            if maybe_next_instance is not None:
+                if maybe_next_instance - begin_index < 10:
+                    begin_index = maybe_next_instance
+                    continue
+            else:
+                if len(log_lines) - begin_index < 10:
+                    return results
+
             result = extractor(log_lines, begin_index, dataset_path)
             results.append(result)
-            maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
+            
             # check end of file
             if maybe_next_instance is None:
-                break
+                return results
             
             if __is_end(log_lines, maybe_next_instance):
                 return results

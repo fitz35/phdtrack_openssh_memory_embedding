@@ -1,0 +1,360 @@
+\begin{longtable}{|c|c|c|}
+\caption{Transformers 0 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_0_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9991307725028203 \\
+ & Recall & 0.9804896640592389 \\
+ & F1 Score & 0.9897224512228635 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.9121229461293223 \\
+ & Recall & 0.9958054439982151 \\
+ & F1 Score & 0.9521290212475467 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 1.0 \\
+ & Recall & 1.0 \\
+ & F1 Score & 1.0 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 1.0 \\
+ & Recall & 1.0 \\
+ & F1 Score & 1.0 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9778134296580356 \\
+ & Recall & 0.9940737770143635 \\
+ & F1 Score & 0.9854628681176025 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9852574143764466 \\
+ & Recall & 0.9839803538028813 \\
+ & F1 Score & 0.9842562432788491 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9839803538028813 \\ \hline
+& True Positives & 22316 \\ \hline
+& True Negatives & 108048 \\ \hline
+& False Positives & 2150 \\ \hline
+& False Negatives & 94 \\ \hline
+& AUC & 0.93 \\ \hline
+& Duration (seconds) & 1.381033 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Transformers 1 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_transformers_1_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9989467459994826 \\
+ & Recall & 0.9811611825985953 \\
+ & F1 Score & 0.9899740882829596 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.9148202855736091 \\
+ & Recall & 0.9949129852744311 \\
+ & F1 Score & 0.953187123252533 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 1.0 \\
+ & Recall & 1.0 \\
+ & F1 Score & 1.0 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 1.0 \\
+ & Recall & 1.0 \\
+ & F1 Score & 1.0 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9784417578932729 \\
+ & Recall & 0.9940185419682566 \\
+ & F1 Score & 0.9857903028838731 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.985544169072628 \\
+ & Recall & 0.9843658533102986 \\
+ & F1 Score & 0.9846234812939566 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9843658533102986 \\ \hline
+& True Positives & 22296 \\ \hline
+& True Negatives & 108122 \\ \hline
+& False Positives & 2076 \\ \hline
+& False Negatives & 114 \\ \hline
+& AUC & 0.93 \\ \hline
+& Duration (seconds) & 1.309276 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 0 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_0_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9986210934917502 \\
+ & Recall & 0.9595001724169223 \\
+ & F1 Score & 0.9786698383461604 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.8397348484848485 \\
+ & Recall & 0.9892458723784024 \\
+ & F1 Score & 0.908379430444581 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.9672217816547714 \\
+ & Recall & 0.9796519410977242 \\
+ & F1 Score & 0.9733971801010907 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9235176880916791 \\
+ & Recall & 0.9925033467202142 \\
+ & F1 Score & 0.9567686153052006 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9322738529307623 \\
+ & Recall & 0.9802253331533157 \\
+ & F1 Score & 0.9543037660492582 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9703623490815999 \\
+ & Recall & 0.9656762660803266 \\
+ & F1 Score & 0.9667000608816212 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9656762660803266 \\ \hline
+& True Positives & 22169 \\ \hline
+& True Negatives & 105735 \\ \hline
+& False Positives & 4220 \\ \hline
+& False Negatives & 146 \\ \hline
+& AUC & 0.91 \\ \hline
+& Duration (seconds) & 1.709033 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 1 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_1_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9992568692560226 \\
+ & Recall & 0.963973937821013 \\
+ & F1 Score & 0.9812983533867577 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.8497981567522279 \\
+ & Recall & 0.9957161981258367 \\
+ & F1 Score & 0.9169885756554614 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.9893871053329796 \\
+ & Recall & 0.9983935742971888 \\
+ & F1 Score & 0.9938699360341151 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9975961538461539 \\
+ & Recall & 1.0 \\
+ & F1 Score & 0.9987966305655837 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9590095712968459 \\
+ & Recall & 0.9895209275610096 \\
+ & F1 Score & 0.9727383739104796 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9750386759100407 \\
+ & Recall & 0.9709304815888291 \\
+ & F1 Score & 0.9718117017176336 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9709304815888291 \\ \hline
+& True Positives & 22314 \\ \hline
+& True Negatives & 106228 \\ \hline
+& False Positives & 3940 \\ \hline
+& False Negatives & 78 \\ \hline
+& AUC & 0.92 \\ \hline
+& Duration (seconds) & 1.607247 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 4 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_4_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9975897083450299 \\
+ & Recall & 0.9352075355269606 \\
+ & F1 Score & 0.9653919111964592 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.7609236725663717 \\
+ & Recall & 0.9822400713966979 \\
+ & F1 Score & 0.8575324321165608 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.9481481481481482 \\
+ & Recall & 0.9595716198125837 \\
+ & F1 Score & 0.9538256819693947 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9106571498892444 \\
+ & Recall & 0.9906291834002677 \\
+ & F1 Score & 0.9489612721210566 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9043296697371985 \\
+ & Recall & 0.9669121025341274 \\
+ & F1 Score & 0.9314278243508678 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9560910918958555 \\
+ & Recall & 0.9448592926797927 \\
+ & F1 Score & 0.9473898035900525 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9448592926797927 \\ \hline
+& True Positives & 22012 \\ \hline
+& True Negatives & 103058 \\ \hline
+& False Positives & 6882 \\ \hline
+& False Negatives & 249 \\ \hline
+& AUC & 0.9 \\ \hline
+& Duration (seconds) & 1.976551 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 5 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_5_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9986910994764397 \\
+ & Recall & 0.9554982849053522 \\
+ & F1 Score & 0.9766173538004915 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.82029145914038 \\
+ & Recall & 0.9921463632307006 \\
+ & F1 Score & 0.8980712915278198 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.9810326659641728 \\
+ & Recall & 0.9970548862115127 \\
+ & F1 Score & 0.9889788872659673 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9970627503337783 \\
+ & Recall & 0.9997322623828648 \\
+ & F1 Score & 0.9983957219251337 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.9492694937286927 \\
+ & Recall & 0.9861079491826075 \\
+ & F1 Score & 0.9655158136298531 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.969636058191247 \\
+ & Recall & 0.9636488242265023 \\
+ & F1 Score & 0.9649616710873499 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9636488242265023 \\ \hline
+& True Positives & 22234 \\ \hline
+& True Negatives & 105294 \\ \hline
+& False Positives & 4861 \\ \hline
+& False Negatives & 136 \\ \hline
+& AUC & 0.91 \\ \hline
+& Duration (seconds) & 1.588889 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 8 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_8_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9966467042314462 \\
+ & Recall & 0.9197081616726256 \\
+ & F1 Score & 0.9566329540466942 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.7136362105546762 \\
+ & Recall & 0.9455600178491744 \\
+ & F1 Score & 0.8133888643648158 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.7435396308360478 \\
+ & Recall & 0.9167336010709505 \\
+ & F1 Score & 0.8211031175059952 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9029102470041575 \\
+ & Recall & 0.9884872824631861 \\
+ & F1 Score & 0.943762781186094 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.8391831981565819 \\
+ & Recall & 0.9426222657639842 \\
+ & F1 Score & 0.8837219292758998 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9421218984077468 \\
+ & Recall & 0.9255985950684619 \\
+ & F1 Score & 0.9297595400567403 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9255985950684619 \\ \hline
+& True Positives & 21190 \\ \hline
+& True Negatives & 101350 \\ \hline
+& False Positives & 8295 \\ \hline
+& False Negatives & 339 \\ \hline
+& AUC & 0.89 \\ \hline
+& Duration (seconds) & 1.91406 \\ \hline
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|}
+\caption{Word2vec 9 Classification Results on 26\_filtered\_chunk\_extraction\_-e\_only-max-entropy\_-s\_none} \label{tab:26_filtered_chunk_extraction_-e_only-max-entropy_-s_none_word2vec_9_classifiers_results} \\
+\hline
+Class & Metric Name & Metric Value \\
+\hline
+\multirow{4}{*}{0.0} & Precision & 0.9966116011864196 \\
+ & Recall & 0.9421768090164976 \\
+ & F1 Score & 0.9686300302737701 \\
+ & Support & 110198.0 \\
+\hline
+\multirow{4}{*}{1.0} & Precision & 0.7915847710562713 \\
+ & Recall & 0.9704596162427488 \\
+ & F1 Score & 0.8719429075455055 \\
+ & Support & 22410.0 \\
+\hline
+\multirow{4}{*}{2.0} & Precision & 0.8063526834611172 \\
+ & Recall & 0.9855421686746988 \\
+ & F1 Score & 0.8869879518072289 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{4.0} & Precision & 0.9652849740932643 \\
+ & Recall & 0.9975903614457832 \\
+ & F1 Score & 0.9811718235681369 \\
+ & Support & 3735.0 \\
+\hline
+\multirow{4}{*}{Macro Avg} & Precision & 0.8899585074492682 \\
+ & Recall & 0.9739422388449321 \\
+ & F1 Score & 0.9271831782986604 \\
+ & Support & 140078.0 \\
+\hline
+\multirow{4}{*}{Weighted Avg} & Precision & 0.9579026442259151 \\
+ & Recall & 0.9493353702936935 \\
+ & F1 Score & 0.9513193320523615 \\
+ & Support & 140078.0 \\
+\hline
+& Accuracy & 0.9493353702936935 \\ \hline
+& True Positives & 21748 \\ \hline
+& True Negatives & 103826 \\ \hline
+& False Positives & 5707 \\ \hline
+& False Negatives & 350 \\ \hline
+& AUC & 0.9 \\ \hline
+& Duration (seconds) & 1.89632 \\ \hline
+\end{longtable}
+
+
