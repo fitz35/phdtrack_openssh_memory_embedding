@@ -90,7 +90,7 @@ def clustering_pie_charts(clustering_results: List[ClusteringResult], save_dir_p
         
         # Calculate number of rows and columns for subplots
         num_cols = 2  # for example, can be adjusted
-        num_rows = -(-num_clusters // num_cols)  # ceiling division
+        num_rows = max(-(-num_clusters // num_cols), 1) # ceiling division
 
         fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
         fig.suptitle(f'Clusters for {result.instance} of the dataset {result.dataset_name}')

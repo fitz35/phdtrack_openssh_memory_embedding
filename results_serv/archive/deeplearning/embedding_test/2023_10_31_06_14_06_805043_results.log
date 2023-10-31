@@ -1,0 +1,55 @@
+2023_10_31_06_14_06 - results_logger - INFO - Passed program params:
+2023_10_31_06_14_06 - results_logger - INFO - param[0]: main.py
+2023_10_31_06_14_06 - results_logger - INFO - param[1]: -d
+2023_10_31_06_14_06 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/data/25_filtered_chunk_extraction_-e_none_-s_activate
+2023_10_31_06_14_06 - results_logger - INFO - param[3]: -p
+2023_10_31_06_14_06 - results_logger - INFO - param[4]: deeplearning
+2023_10_31_06_14_06 - results_logger - INFO - param[5]: -o
+2023_10_31_06_14_06 - results_logger - INFO - param[6]: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/output/25_filtered_chunk_extraction_-e_none_-s_activate
+2023_10_31_06_14_06 - results_logger - INFO - param[7]: -otr
+2023_10_31_06_14_06 - results_logger - INFO - param[8]: training
+2023_10_31_06_14_06 - results_logger - INFO - param[9]: -ots
+2023_10_31_06_14_06 - results_logger - INFO - param[10]: validation
+2023_10_31_06_14_06 - results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset /root/phdtrack/mem2graph/data/25_filtered_chunk_extraction_-e_none_-s_activate !!!!----///
+2023_10_31_06_14_06 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_10_31_06_14_06 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_10_31_06_14_06 - results_logger - INFO - Pipeline start time : 1698732846.867144 seconds
+2023_10_31_06_14_06 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_10_31_06_14_14 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_10_31_06_14_37 - results_logger - INFO - Number of loaded files: 3735
+2023_10_31_06_14_37 - results_logger - INFO - Number of empty files: 0
+2023_10_31_06_14_38 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_10_31_06_16_51 - results_logger - INFO - Number of loaded files: 20964
+2023_10_31_06_16_51 - results_logger - INFO - Number of empty files: 0
+2023_10_31_06_16_54 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 167.870429000 s
+2023_10_31_06_16_57 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim8_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_31_06_16_57 - results_logger - INFO - Transformers instance TransformersHyperParams(index=0, word_character_size=16, embedding_dim=8, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu') already computed with timeout 5600.0 >= 5600, skipping
+2023_10_31_06_16_57 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size16_embedding_dim16_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_31_06_16_57 - results_logger - INFO - Transformers instance TransformersHyperParams(index=1, word_character_size=16, embedding_dim=16, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu') already computed with timeout 5600.0 >= 5600, skipping
+2023_10_31_06_16_57 - results_logger - INFO - !!!!!!!!!!!!! Transformers instance : transformers_word_character_size8_embedding_dim8_transformer_units2_num_heads2_num_transformer_layers2_dropout_rate01_activationrelu !!!!!!!!!!!!!
+2023_10_31_06_16_57 - results_logger - INFO - Transformers instance : TransformersHyperParams(index=2, word_character_size=8, embedding_dim=8, transformer_units=2, num_heads=2, num_transformer_layers=2, dropout_rate=0.1, activation='relu')
+2023_10_31_06_21_55 - results_logger - INFO - token number for instance 2 (with padding) : 542
+2023_10_31_06_21_57 - results_logger - INFO - encoder summary : Model: "model_2"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, None, 1)]         0         
+                                                                 
+ dense (Dense)               (None, None, 8)           16        
+                                                                 
+ model (Functional)          (None, 542, 8)            222       
+                                                                 
+ model_1 (Functional)        (None, 542, 8)            222       
+                                                                 
+ global_average_pooling1d (  (None, 8)                 0         
+ GlobalAveragePooling1D)                                         
+                                                                 
+ dense_5 (Dense)             (None, 8)                 72        
+                                                                 
+=================================================================
+Total params: 532 (2.08 KB)
+Trainable params: 532 (2.08 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+2023_10_31_06_21_57 - results_logger - INFO - timer for transformers training :  started
