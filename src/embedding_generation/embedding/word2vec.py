@@ -45,12 +45,12 @@ def word2vec_pipeline(
                 with open(os.path.join(instance_folder, "timeout_error.txt"), "r") as f:
                     timeout = float(f.read())
                 if timeout >= params.TIMEOUT_DURATION:
-                    params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed with timeout {timeout} >= {params.TIMEOUT_DURATION}, skipping")
+                    params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed with timeout {timeout} >= {params.TIMEOUT_DURATION}, skipping")
                     continue
                 else:
-                    params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed with timeout {timeout} < {params.TIMEOUT_DURATION}, recomputing")
+                    params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed with timeout {timeout} < {params.TIMEOUT_DURATION}, recomputing")
             else:
-                params.RESULTS_LOGGER.info(f"Transformers instance {instance} already computed")
+                params.RESULTS_LOGGER.info(f"Word2Vec instance {instance} already computed")
                 continue
 
         params.RESULTS_LOGGER.info(f"Word2Vec instance : {instance}")
@@ -109,7 +109,7 @@ def word2vec_pipeline(
             # test the model
             testing_pipeline(params, (train_embedded, test_embedded))
         except TimeoutError:
-            params.RESULTS_LOGGER.error(f"Timeout error in transformers pipeline {instance.index}, skipping (and marking)")
+            params.RESULTS_LOGGER.error(f"Timeout error in Word2Vec pipeline {instance.index}, skipping (and marking)")
             os.makedirs(instance_folder, exist_ok=True)
             with open(os.path.join(instance_folder, "timeout_error.txt"), "w") as f:
                 f.write(str(params.TIMEOUT_DURATION))

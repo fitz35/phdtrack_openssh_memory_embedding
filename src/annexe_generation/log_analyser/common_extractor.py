@@ -115,10 +115,33 @@ def __extract_dataset_path(log_line: str):
         return None
     return match.group(1)
 
+def __get_next_instance(log_lines: list[str], begin_line : int) -> int | None:
+    result_index = begin_line
+    for line in log_lines[begin_line:]:
+        match = re.search(r"results_logger - INFO - !+ (\S+) instance : ", line)
+        if match:
+            return result_index
+        result_index += 1
+
+    return None
+
+def __is_already_computed(log_lines: List[str], begin_line : int) -> bool:
+    pattern = re.search(r"- results_logger - INFO - \S+ instance .+ already computed", log_lines[begin_line + 1])
+    return pattern is not None
+
+def __is_end(log_lines: List[str], begin_line: int) -> bool:
+    end_time_pattern = re.compile(r"\d{4}_\d{2}_\d{2}_\d{2}_\d{2}_\d{2} - results_logger - INFO - Pipeline end time : \d+\.\d+ seconds")
+    duration_pattern = re.compile(r"\d{4}_\d{2}_\d{2}_\d{2}_\d{2}_\d{2} - results_logger - INFO - Pipeline duration : \d+\.\d+ seconds")
+
+    end_time_match = end_time_pattern.match(log_lines[begin_line])
+    duration_match = duration_pattern.match(log_lines[begin_line + 1])
+
+    return end_time_match is not None and duration_match is not None
+
 
 T = TypeVar('T')
 
-def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str], tuple[T, int]]) -> List[T]:
+def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str], T]) -> List[T]:
     """
     Extracts results from a list of log lines using a specified extractor function and data class.
 
@@ -132,20 +155,41 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
     """
     results = []
     dataset_path = None
-    begin_index = 0
+    i = 0
+    while dataset_path is None and i < len(log_lines):
+        dataset_path = __extract_dataset_path(log_lines[i])
+        i += 1
+
+    if dataset_path is None:
+        return results
+
+    begin_index = __get_next_instance(log_lines, 0)
+    if begin_index is None:
+        return results
 
     while begin_index < len(log_lines):
-        if dataset_path is None:
-            dataset_path = __extract_dataset_path(log_lines[begin_index])
-            begin_index += 1
-        else:
-            try:
-                result, next_index = extractor(log_lines, begin_index, dataset_path)
-                results.append(result)
-                begin_index = next_index
-            except AssertionError as e:
-                print(f"An error occurred: {e}")
-                traceback.print_exc()
+        try:
+            if __is_already_computed(log_lines, begin_index):
+                print(begin_index)
+                begin_index += 2
+                if __is_end(log_lines, begin_index):
+                    return results
+                continue
+
+            result = extractor(log_lines, begin_index, dataset_path)
+            results.append(result)
+            maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
+            # check end of file
+            if maybe_next_instance is None:
+                break
+            
+            if __is_end(log_lines, maybe_next_instance):
                 return results
+                
+            begin_index = maybe_next_instance
+        except AssertionError as e:
+            print(f"An error occurred: {e}, line {begin_index}")
+            traceback.print_exc()
+            return results
 
     return results

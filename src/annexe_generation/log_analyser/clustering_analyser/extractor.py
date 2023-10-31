@@ -38,9 +38,9 @@ def __extract_samples(log_lines: List[str]) -> Tuple[dict[float, int] | None, di
     final_samples = None
 
     for line in log_lines:
-        if "Number of samples before rebalancing and limiting rows" in line:
+        if "- results_logger - INFO - Number of samples before rebalancing and limiting rows:" in line:
             initial_samples = {float(k): int(v) for k, v in re.findall(r"class-(\d+\.\d+)=(\d+)", line)}
-        elif "Number of samples after rebalancing and limiting rows" in line:
+        elif "- results_logger - INFO - Number of samples after rebalancing and limiting rows:" in line:
             final_samples = {float(k): int(v) for k, v in re.findall(r"class-(\d+\.\d+)=(\d+)", line)}
 
     return initial_samples, final_samples
@@ -179,8 +179,9 @@ def __extract_min_samples(log_line: str) -> int | None:
         return int(match.group(1))
     else:
         return None
+    
 
-def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> Tuple[ClusteringResult, int] :
+def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> ClusteringResult :
     dataset_name = os.path.basename(dataset_path)
     # get the random forest lines
     clustering_lines, clustering_index = __extract_clustering_lines(all_lines, begin_index)
@@ -239,4 +240,4 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
         total_duration=total_duration
     )
 
-    return clustering_result, clustering_index + len(clustering_lines) + 1
+    return clustering_result

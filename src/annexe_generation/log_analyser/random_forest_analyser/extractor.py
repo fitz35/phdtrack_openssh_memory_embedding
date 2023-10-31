@@ -137,7 +137,7 @@ def __extract_time_elapsed(log_lines: List[str]) -> float:
 
 
 
-def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> Tuple[ClassificationResults, int] :
+def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> ClassificationResults :
         """
         Extracts information related to a random forest operation from log lines.
 
@@ -182,4 +182,4 @@ def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_pa
             false_positives, 
             false_negatives, 
             auc, 
-            duration), random_forest_start_index + len(random_forest_lines) + 1
+            duration)
