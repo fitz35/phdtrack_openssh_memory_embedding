@@ -13,7 +13,7 @@ from embedding_generation.embedding.deeplearning_pipeline import DeeplearningPip
 
 
 DEEPLEARNING_PIPELINES_NAME_TO_PIPELINE = {
-    DeeplearningPipelines.Transformers : transformers_pipeline,
+    #DeeplearningPipelines.Transformers : transformers_pipeline,
     DeeplearningPipelines.Word2vec : word2vec_pipeline,
     
 }
