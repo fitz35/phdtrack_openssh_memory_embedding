@@ -134,15 +134,58 @@ def save_classification_results_to_json(results_list: List[ClassificationResults
     with open(file_path, 'w') as f:
         json.dump(results_dicts, f, indent=4)
 
-def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str):
+
+def get_best_instances(classification_results: Dict[str, List[ClassificationResults]], metric='accuracy') -> List[ClassificationResults]:
+    """
+    Extract the best instances based on a specified metric for Word2Vec and Transformers for each dataset.
+    
+    Args:
+    classification_results (Dict[str, List[ClassificationResults]]): A dictionary where keys are dataset names and 
+                                                                      values are lists of ClassificationResults objects.
+    metric (str): The metric to be used for comparing instances. Default is 'accuracy'.
+    
+    Returns:
+    Dict[str, Dict[str, ClassificationResults]]: A dictionary with dataset names as keys. The values are another dictionary
+                                                  with 'word2vec' and 'transformer' as keys, and the best ClassificationResults
+                                                  instances as values.
+    """
+    # Initialize a dictionary to store the best instances.
+    best_instances : list[ClassificationResults] = []
+    
+    # Iterate through each dataset and its corresponding classification results.
+    for dataset_name, results in classification_results.items():
+        # Initialize variables to store the best instances and their metric values for Word2Vec and Transformers.
+        best_word2vec = None
+        best_transformer = None
+        max_word2vec_metric = -float('inf')
+        max_transformer_metric = -float('inf')
+
+        # Iterate through each classification result.
+        for result in results:
+            # Retrieve the value of the specified metric for the current result.
+            current_metric_value = getattr(result, metric)
+
+            # Check if the instance is a Word2Vec instance and if its metric value is greater than the current maximum.
+            if 'word2vec' in result.instance.lower() and current_metric_value > max_word2vec_metric:
+                max_word2vec_metric = current_metric_value
+                best_word2vec = result
+
+            # Check if the instance is a Transformer instance and if its metric value is greater than the current maximum.
+            elif 'transformer' in result.instance.lower() and current_metric_value > max_transformer_metric:
+                max_transformer_metric = current_metric_value
+                best_transformer = result
+
+        assert best_word2vec is not None and best_transformer is not None, "The best instances should not be None."
+
+        # Store the best instances for the current dataset in the result dictionary.
+        best_instances.append(best_word2vec)
+        best_instances.append(best_transformer)
+
+    return best_instances
+
+def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str, file_name: str):
     if not classification_results_list:
         raise ValueError("The list of classification results is empty.")
-
-    # Check that all instances have the same dataset name
-    dataset_names = {result.dataset_name for result in classification_results_list}
-    if len(dataset_names) != 1:
-        raise ValueError("All instances must have the same dataset name.")
-    dataset_name = dataset_names.pop()
 
     # Prepare the data
     data = []
@@ -172,9 +215,9 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
     duration_df = pd.DataFrame(durations)
 
     # Function to create a plot for a specific metric
-    def create_plot(metric_name):
+    def create_plot(file_name : str):
         fig, axs = plt.subplots(5, 1, figsize=(10, 25), sharex=True)
-        fig.suptitle(f'{dataset_name.replace("_", " ").title()} - {metric_name}', fontsize=16)
+        fig.suptitle('Metrics', fontsize=16)
         
         for i, metric in enumerate(['Precision', 'Recall', 'F1 Score', 'Accuracy', 'Duration']):
             if metric != 'Accuracy' and metric != 'Duration':
@@ -195,8 +238,8 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
         axs[4].set_xlabel('Instance')
         plt.xticks(rotation=45)
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(os.path.join(save_dir_path, f'{metric_name.lower().replace(" ", "_")}.png'))
+        plt.savefig(os.path.join(save_dir_path, f'{file_name.lower().replace(" ", "_")}.png'))
         #plt.show()
 
     # Create the plots and save them
-    create_plot('Metrics')
+    create_plot(file_name)

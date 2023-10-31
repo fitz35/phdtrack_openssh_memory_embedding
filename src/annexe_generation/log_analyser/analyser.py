@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath('../..'))
 from annexe_generation.log_analyser.clustering_analyser.extractor import clustering_extractor
 from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results
 from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
-from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, plot_metrics, save_classification_results_to_json
+from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, get_best_instances, plot_metrics, save_classification_results_to_json
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
 
 def read_file(file_path: str):
@@ -100,5 +100,9 @@ if __name__ == "__main__":
                 f.write(result.to_latex() + "\n\n")
 
 
-        plot_metrics(results, dataset_path)
+        plot_metrics(results, dataset_path, f"{dataset_name} - Metrics")
+
         save_classification_results_to_json(results, os.path.join(dataset_path, "classification_results.json")  )
+    
+
+    plot_metrics(get_best_instances(classification_results_by_dataset, "accuracy"), args.output, "Best Accuracy")
