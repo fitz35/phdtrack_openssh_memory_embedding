@@ -1,0 +1,772 @@
+[
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 0",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9979907885382214,
+                "recall": 0.9637755787399812,
+                "f1_score": 0.9805848095306794,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9065070445476016,
+                "recall": 0.9933958054439982,
+                "f1_score": 0.9479645716232329,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9878177966101694,
+                "recall": 0.998661311914324,
+                "f1_score": 0.9932099587272,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.9718969555035128,
+                "recall": 1.0,
+                "f1_score": 0.9857482185273159,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9733688415446072,
+        "macro_avg": {
+            "precision": 0.9660531462998764,
+            "recall": 0.9889581740245759,
+            "f1_score": 0.9768768896021071,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9754306125035215,
+            "recall": 0.9733688415446072,
+            "f1_score": 0.9737249197026006,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22262,
+        "true_negatives": 64572,
+        "false_positives": 2294,
+        "false_negatives": 127,
+        "auc": 0.88,
+        "duration": 1.353184
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 1",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9981469570277803,
+                "recall": 0.9728055642621531,
+                "f1_score": 0.9853133479973091,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9244328314877027,
+                "recall": 0.9946006247211067,
+                "f1_score": 0.958233915865953,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9997323340471093,
+                "recall": 1.0,
+                "f1_score": 0.9998661491098916,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 0.9997322623828648,
+                "f1_score": 0.9998661132681751,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9799337317684947,
+        "macro_avg": {
+            "precision": 0.9805780306406481,
+            "recall": 0.9917846128415311,
+            "f1_score": 0.9858198815603322,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9812280060199797,
+            "recall": 0.9799337317684947,
+            "f1_score": 0.9801714618958681,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22289,
+        "true_negatives": 65177,
+        "false_positives": 1822,
+        "false_negatives": 121,
+        "auc": 0.89,
+        "duration": 1.23036
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 2",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9724309160674556,
+                "recall": 0.9002522425707846,
+                "f1_score": 0.9349505909707421,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.7653359683794466,
+                "recall": 0.8640339134315038,
+                "f1_score": 0.8116956612869419,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9983952928590533,
+                "recall": 0.9994645247657296,
+                "f1_score": 0.9989296226919989,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.5810113519091847,
+                "recall": 0.9044176706827309,
+                "f1_score": 0.7075086396481306,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.895859783854086,
+        "macro_avg": {
+            "precision": 0.829293382303785,
+            "recall": 0.9170420878626873,
+            "f1_score": 0.8632711286494534,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9104363362049178,
+            "recall": 0.895859783854086,
+            "f1_score": 0.9001372983177933,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 19363,
+        "true_negatives": 60316,
+        "false_positives": 5633,
+        "false_negatives": 1657,
+        "auc": 0.83,
+        "duration": 1.075649
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 3",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9589999797730536,
+                "recall": 0.7076523530201944,
+                "f1_score": 0.814373314553668,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.5099574681010758,
+                "recall": 0.9095493083444891,
+                "f1_score": 0.6535107406219942,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.7768969539322247,
+        "macro_avg": {
+            "precision": 0.8672393619685324,
+            "recall": 0.9043004153411709,
+            "f1_score": 0.8669710137939155,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.8582890668252142,
+            "recall": 0.7768969539322247,
+            "f1_score": 0.7914756902849955,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 20383,
+        "true_negatives": 47412,
+        "false_positives": 19587,
+        "false_negatives": 2027,
+        "auc": 0.73,
+        "duration": 1.191172
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 4",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.998817222469701,
+                "recall": 0.9705219480887775,
+                "f1_score": 0.9844663133989403,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9187510284679941,
+                "recall": 0.9965640339134315,
+                "f1_score": 0.9560768868530332,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9788189390889667,
+        "macro_avg": {
+            "precision": 0.9793920627344237,
+            "recall": 0.9917714955005522,
+            "f1_score": 0.9851358000629934,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9803875518555645,
+            "recall": 0.9788189390889667,
+            "f1_score": 0.9790970340919299,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22333,
+        "true_negatives": 65024,
+        "false_positives": 1975,
+        "false_negatives": 77,
+        "auc": 0.88,
+        "duration": 1.394558
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 5",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9272212406515478,
+                "recall": 0.5717995790981955,
+                "f1_score": 0.707374718416485,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.403455876237212,
+                "recall": 0.8658188308790719,
+                "f1_score": 0.5504241014439306,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9547546012269938,
+                "recall": 1.0,
+                "f1_score": 0.9768536681051393,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 0.9526104417670683,
+                "f1_score": 0.9757301522007406,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.6710019715314981,
+        "macro_avg": {
+            "precision": 0.8213579295289384,
+            "recall": 0.8475572129360839,
+            "f1_score": 0.8025956600415739,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.8099314663081967,
+            "recall": 0.6710019715314981,
+            "f1_score": 0.6918042448971091,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 19403,
+        "true_negatives": 38310,
+        "false_positives": 28689,
+        "false_negatives": 3007,
+        "auc": 0.65,
+        "duration": 1.382089
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 6",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9376038584687715,
+                "recall": 0.6905625457096375,
+                "f1_score": 0.7953414414027247,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.4825279552715655,
+                "recall": 0.8626506024096385,
+                "f1_score": 0.618881454685149,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 1.0,
+                "recall": 0.9997322623828648,
+                "f1_score": 0.9998661132681751,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.7542191806273806,
+        "macro_avg": {
+            "precision": 0.8550329534350842,
+            "recall": 0.8882363526255352,
+            "f1_score": 0.8535222523390122,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.8371470844164887,
+            "recall": 0.7542191806273806,
+            "f1_score": 0.7702981509418139,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 19332,
+        "true_negatives": 46267,
+        "false_positives": 20732,
+        "false_negatives": 3078,
+        "auc": 0.7,
+        "duration": 0.944381
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Transformers 7",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.981802328397733,
+                "recall": 0.9075359333721399,
+                "f1_score": 0.9432094935236175,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.777663444930359,
+                "recall": 0.9442659526996876,
+                "f1_score": 0.8529050200519941,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.8948166877370417,
+                "recall": 0.9475234270414993,
+                "f1_score": 0.9204161248374513,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.9632469592808038,
+                "recall": 0.9753681392235609,
+                "f1_score": 0.9692696554476521,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9201891018693422,
+        "macro_avg": {
+            "precision": 0.9043823550864843,
+            "recall": 0.943673363084222,
+            "f1_score": 0.9214500734651787,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9305120792206845,
+            "recall": 0.9201891018693422,
+            "f1_score": 0.9224462550740501,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 21161,
+        "true_negatives": 60804,
+        "false_positives": 6007,
+        "false_negatives": 1113,
+        "auc": 0.84,
+        "duration": 0.980153
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 0",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9997320260407636,
+                "recall": 0.9466111434499023,
+                "f1_score": 0.9724466796485688,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.856167072309021,
+                "recall": 0.9732262382864793,
+                "f1_score": 0.9109514660429371,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.8447160316319194,
+                "recall": 0.9437751004016064,
+                "f1_score": 0.8915022761760242,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.9757447930398102,
+                "recall": 0.9908969210174029,
+                "f1_score": 0.9832624867162593,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9543657552204297,
+        "macro_avg": {
+            "precision": 0.9190899807553785,
+            "recall": 0.9636273507888478,
+            "f1_score": 0.9395407271459473,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9596214998430949,
+            "recall": 0.9543657552204297,
+            "f1_score": 0.9555179536659066,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 21810,
+        "true_negatives": 63422,
+        "false_positives": 3547,
+        "false_negatives": 16,
+        "auc": 0.88,
+        "duration": 1.77118
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 1",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9998630136986302,
+                "recall": 0.9804773205570232,
+                "f1_score": 0.990075283159632,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9448310768062761,
+                "recall": 0.9995983935742971,
+                "f1_score": 0.9714434397970467,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9994648113459995,
+                "recall": 1.0,
+                "f1_score": 0.9997323340471093,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 0.9994645247657296,
+                "f1_score": 0.9997321906802356,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9863850782935414,
+        "macro_avg": {
+            "precision": 0.9860397254627264,
+            "recall": 0.9948850597242626,
+            "f1_score": 0.9902458119210059,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9871229838912509,
+            "recall": 0.9863850782935414,
+            "f1_score": 0.9865099906287289,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22401,
+        "true_negatives": 65691,
+        "false_positives": 1308,
+        "false_negatives": 9,
+        "auc": 0.89,
+        "duration": 1.75859
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 4",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9996694318950997,
+                "recall": 0.9478648935058732,
+                "f1_score": 0.9730781606729694,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.8595392793857058,
+                "recall": 0.9740294511378849,
+                "f1_score": 0.9132099152808284,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.8502994011976048,
+                "recall": 0.9504685408299867,
+                "f1_score": 0.8975979772439949,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.979111581173982,
+                "recall": 0.9914323962516733,
+                "f1_score": 0.9852334707995211,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9556973131431993,
+        "macro_avg": {
+            "precision": 0.922154923413098,
+            "recall": 0.9659488204313545,
+            "f1_score": 0.9422798809993285,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9607033261876292,
+            "recall": 0.9556973131431993,
+            "f1_score": 0.9567880897492146,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 21828,
+        "true_negatives": 63506,
+        "false_positives": 3461,
+        "false_negatives": 20,
+        "auc": 0.88,
+        "duration": 1.66104
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 5",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9997559152415676,
+                "recall": 0.9781489275959343,
+                "f1_score": 0.9888344021124104,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9386343630800185,
+                "recall": 0.9992414100847836,
+                "f1_score": 0.9679901441632266,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9997323340471093,
+                "recall": 1.0,
+                "f1_score": 0.9998661491098916,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9847128892742493,
+        "macro_avg": {
+            "precision": 0.9845306530921738,
+            "recall": 0.9943475844201795,
+            "f1_score": 0.9891726738463821,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9856258106458463,
+            "recall": 0.9847128892742493,
+            "f1_score": 0.9848684988981383,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22393,
+        "true_negatives": 65535,
+        "false_positives": 1464,
+        "false_negatives": 16,
+        "auc": 0.89,
+        "duration": 1.477417
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 8",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9992874493927125,
+                "recall": 0.9209988208779235,
+                "f1_score": 0.9585472508524338,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.8026644788248164,
+                "recall": 0.9167782240071397,
+                "f1_score": 0.8559346748323127,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.5575746985846584,
+                "recall": 0.8543507362784472,
+                "f1_score": 0.6747726792133643,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.9706036745406824,
+                "recall": 0.9900937081659973,
+                "f1_score": 0.9802518223989396,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9201168467882617,
+        "macro_avg": {
+            "precision": 0.8325325753357175,
+            "recall": 0.9205553723323769,
+            "f1_score": 0.8673766068242625,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9356694125243822,
+            "recall": 0.9201168467882617,
+            "f1_score": 0.9247073136219024,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 20545,
+        "true_negatives": 61706,
+        "false_positives": 4620,
+        "false_negatives": 43,
+        "auc": 0.87,
+        "duration": 1.813082
+    },
+    {
+        "dataset_name": "27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate",
+        "instance": "Word2vec 9",
+        "class_metrics": {
+            "0.0": {
+                "precision": 0.9998478994919843,
+                "recall": 0.981148972372722,
+                "f1_score": 0.9904101849410524,
+                "support": 66999.0,
+                "initial_samples": 376160
+            },
+            "1.0": {
+                "precision": 0.9483745178654686,
+                "recall": 0.998438197233378,
+                "f1_score": 0.972762645914397,
+                "support": 22410.0,
+                "initial_samples": 125784
+            },
+            "2.0": {
+                "precision": 0.9775072770574226,
+                "recall": 0.9890227576974565,
+                "f1_score": 0.983231301570402,
+                "support": 3735.0,
+                "initial_samples": 20964
+            },
+            "4.0": {
+                "precision": 0.9890986439776656,
+                "recall": 0.9959839357429718,
+                "f1_score": 0.9925293489861259,
+                "support": 3735.0,
+                "initial_samples": 20964
+            }
+        },
+        "accuracy": 0.9860238028881388,
+        "macro_avg": {
+            "precision": 0.9787070845981353,
+            "recall": 0.9911484657616321,
+            "f1_score": 0.9847333703529944,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "weighted_avg": {
+            "precision": 0.9866653813364573,
+            "recall": 0.9860238028881388,
+            "f1_score": 0.9861328967643745,
+            "support": 96879.0,
+            "initial_samples": 543872
+        },
+        "true_positives": 22375,
+        "true_negatives": 65736,
+        "false_positives": 1218,
+        "false_negatives": 10,
+        "auc": 0.89,
+        "duration": 1.57113
+    }
+]

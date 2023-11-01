@@ -101,6 +101,21 @@ def __get_right_correlation_matrix_path(correlation_matrix_paths: list[str], out
     
     return right_paths
 
+
+def __check_file_extension(file_path: str, expected_extension: str) -> bool:
+    """
+    Check if the file at the given path has the expected extension.
+
+    Parameters:
+    file_path (str): The path to the file.
+    expected_extension (str): The expected file extension, including the dot (e.g., '.txt').
+
+    Returns:
+    bool: True if the file has the expected extension, False otherwise.
+    """
+    _, extension = os.path.splitext(file_path)
+    return extension.lower() == expected_extension.lower()
+
 def feature_engineering_extractor(all_lines : list[str], begin_index : int, dataset_path : str, output_correlation_matrix_dir_relative_path : str) -> FeatureEngineeringData :
     dataset_name = os.path.basename(dataset_path)
     # get the random forest lines
@@ -119,8 +134,16 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
         )
     assert len(correlation_matrix_paths) == 2, "There should be two correlation matrix paths"
 
+    correlation_pd_path = correlation_matrix_paths[1]
+    assert __check_file_extension(correlation_pd_path, ".csv"), "The correlation matrix path should have a .csv extension"
+
+    # get the correlation image path
+    correlation_image_path = correlation_matrix_paths[0]
+    assert __check_file_extension(correlation_image_path, ".png"), "The correlation image path should have a .png extension"
+
+
     # get the correlation pd
-    correlation_matrix = pd.read_csv(correlation_matrix_paths[0], index_col=0)
+    correlation_matrix = pd.read_csv(correlation_pd_path, index_col=0)
 
     # Replacing missing values (if any) with NaN
     correlation_matrix = correlation_matrix.apply(pd.to_numeric, errors='coerce')
@@ -128,8 +151,7 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
     # get the correlation sum
     correlation_sum = __extract_correlation_sum(feature_engineering_lines)
 
-    # get the correlation image path
-    correlation_image_path = correlation_matrix_paths[1]
+    
 
     return FeatureEngineeringData(
         dataset_name,
