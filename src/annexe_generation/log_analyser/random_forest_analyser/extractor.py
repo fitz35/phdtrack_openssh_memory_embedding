@@ -65,6 +65,18 @@ def __extract_and_decode_json(log_lines: list[str]) -> dict:
     return json.loads(json_string)
     
 
+def __extract_samples(log_lines: List[str]) -> Tuple[dict[float, int] | None, dict[float, int] | None]:
+    initial_samples = None
+    final_samples = None
+
+    for line in log_lines:
+        if "- results_logger - INFO - Number of samples before balancing:" in line:
+            initial_samples = {float(k): int(v) for k, v in re.findall(r"class-(\d+\.\d+)=(\d+)", line)}
+        elif "- results_logger - INFO - Number of samples after balancing:" in line:
+            final_samples = {float(k): int(v) for k, v in re.findall(r"class-(\d+\.\d+)=(\d+)", line)}
+
+    return initial_samples, final_samples
+
 def __extract_metrics(log_lines: List[str]) -> Tuple[int, int, int, int, float]:
     """
     Extract classification metrics and AUC from a list of log lines.
@@ -174,9 +186,17 @@ def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_pa
         # extract the duration of the random forest operation
         duration = __extract_time_elapsed(random_forest_lines)
 
+        # get the initial and final samples
+        initial_samples, final_samples = __extract_samples(random_forest_lines)
+
+        assert initial_samples is not None, "Initial samples not found"
+        assert final_samples is not None, "Final samples not found"
+
         # create the ClassificationResults object
         return ClassificationResults.from_json(
             json_data, 
+            initial_samples,
+            final_samples,
             dataset_name, 
             instance_name, 
             true_positives, 

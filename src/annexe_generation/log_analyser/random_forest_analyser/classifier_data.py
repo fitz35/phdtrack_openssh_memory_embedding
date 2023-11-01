@@ -13,12 +13,14 @@ class ClassificationMetrics:
     recall: float
     f1_score: float
     support: float
+    initial_samples: int
 
     def to_latex(self, label: str) -> str:
         return (f"\\multirow{{4}}{{*}}{{{label}}} & Precision & {self.precision} \\\\\n"
                 f" & Recall & {self.recall} \\\\\n"
                 f" & F1 Score & {self.f1_score} \\\\\n"
                 f" & Support & {self.support} \\\\\n"
+                f" & Initial Samples (before rebalancing) & {self.initial_samples} \\\\\n"
                 f"\\hline\n")
 
 
@@ -38,43 +40,52 @@ class ClassificationResults:
     duration: float  # Duration of the random forest operation in seconds
 
     @staticmethod
-    def from_dict(d: dict, additional_metrics: dict, duration: float, dataset_name: str, instance: str) -> 'ClassificationResults':
-        class_metrics = {key: ClassificationMetrics(**value) for key, value in d.items() if key not in {"accuracy", "macro avg", "weighted avg"}}
-        macro_avg = ClassificationMetrics(**d["macro avg"])
-        weighted_avg = ClassificationMetrics(**d["weighted avg"])
+    def from_dict(d: dict, initial_samples: Dict[float, int], final_samples: Dict[float, int],
+                  additional_metrics: dict, duration: float, dataset_name: str, instance: str) -> 'ClassificationResults':
+        initial_samples_sum = sum(initial_samples.values())
+        class_metrics = {key: ClassificationMetrics(**value, initial_samples=initial_samples[key]) for key, value in d.items() if key not in {"accuracy", "macro avg", "weighted avg"}}
+        macro_avg = ClassificationMetrics(**d["macro avg"], initial_samples=initial_samples_sum)
+        weighted_avg = ClassificationMetrics(**d["weighted avg"], initial_samples=initial_samples_sum)
         accuracy = d.get("accuracy", 0.0)
-        return ClassificationResults(dataset_name=dataset_name, instance=instance, class_metrics=class_metrics, 
-                                     accuracy=accuracy, macro_avg=macro_avg, weighted_avg=weighted_avg, 
-                                     duration=duration, **additional_metrics)
-    
+        return ClassificationResults(
+            dataset_name=dataset_name, instance=instance,
+            class_metrics=class_metrics, accuracy=accuracy,
+            macro_avg=macro_avg, weighted_avg=weighted_avg,
+            duration=duration, **additional_metrics
+        )
 
     @staticmethod
-    def from_json(json_data: Dict[str, Any], dataset_name: str, instance: str, true_positives: int, true_negatives: int,
-                false_positives: int, false_negatives: int, auc: float, duration: float) -> 'ClassificationResults':
+    def from_json(json_data: Dict[str, Any], initial_samples: Dict[float, int], final_samples: Dict[float, int],
+                  dataset_name: str, instance: str, true_positives: int, true_negatives: int,
+                  false_positives: int, false_negatives: int, auc: float, duration: float) -> 'ClassificationResults':
+        initial_samples_sum = sum(initial_samples.values())
         # Helper function to adjust the key names in the dictionary
         def adjust_keys(metrics_data: Dict[str, float]) -> Dict[str, float]:
             if 'f1-score' in metrics_data:
                 metrics_data['f1_score'] = metrics_data.pop('f1-score')
             return metrics_data
-        
+        print(initial_samples)
         # Construct class metrics
-        class_metrics = {key: ClassificationMetrics(**adjust_keys(value)) 
+        class_metrics = {key: ClassificationMetrics(**adjust_keys(value), initial_samples=initial_samples[float(key)]) 
                         for key, value in json_data.items() 
                         if key not in {"accuracy", "macro avg", "weighted avg"}}
         
         # Construct macro average and weighted average metrics
-        macro_avg = ClassificationMetrics(**adjust_keys(json_data["macro avg"]))
-        weighted_avg = ClassificationMetrics(**adjust_keys(json_data["weighted avg"]))
+        macro_avg = ClassificationMetrics(**adjust_keys(json_data["macro avg"]), initial_samples=initial_samples_sum)
+        weighted_avg = ClassificationMetrics(**adjust_keys(json_data["weighted avg"]), initial_samples=initial_samples_sum)
         
         # Retrieve accuracy, defaulting to 0.0 if not present
         accuracy = json_data.get("accuracy", 0.0)
         
         # Create and return the ClassificationResults object
-        return ClassificationResults(dataset_name=dataset_name, instance=instance, class_metrics=class_metrics,
-                                    accuracy=accuracy, macro_avg=macro_avg, weighted_avg=weighted_avg,
-                                    true_positives=true_positives, true_negatives=true_negatives,
-                                    false_positives=false_positives, false_negatives=false_negatives,
-                                    auc=auc, duration=duration)
+        return ClassificationResults(
+            dataset_name=dataset_name, instance=instance,
+            class_metrics=class_metrics, accuracy=accuracy,
+            macro_avg=macro_avg, weighted_avg=weighted_avg,
+            true_positives=true_positives, true_negatives=true_negatives,
+            false_positives=false_positives, false_negatives=false_negatives,
+            auc=auc, duration=duration
+        )
     
 
     def to_latex(self):

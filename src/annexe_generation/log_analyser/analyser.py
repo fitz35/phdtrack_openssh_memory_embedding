@@ -50,6 +50,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
 
     # Extracting the column names from the keys of the first dictionary
     columns = list(list_of_dicts[0].keys())
+    columns.sort()
     num_columns = len(columns)
 
     # Creating the LaTeX tabular environment
@@ -64,8 +65,17 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
 
     # Adding the rows
     for item in list_of_dicts:
-        row = " & ".join(item.values()) + " \\\\"
-        latex_code += row + "\n"
+        row = ""
+        for key in columns:
+            if key in item:
+                if key == "dataset":
+                    row += os.path.basename(item[key]) + " & "
+                else:
+                    row += item[key] + " & "
+            else:
+                row += " & "
+        row = row[:-2] + "\\\\ \n"
+        latex_code += row
 
     latex_code += "\\hline\n"
     latex_code += "\\end{tabular}\n"
@@ -133,7 +143,9 @@ if __name__ == "__main__":
 
     # make the list of timeout instances as latex
 
-    
+    print(list_of_dicts_to_latex_table(clustering_timeouts, "Timeouts instances", "tab:timeouts"))
+
+    # treat the data
     for dataset_name, results in clustering_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
         os.makedirs(dataset_path, exist_ok=True)
