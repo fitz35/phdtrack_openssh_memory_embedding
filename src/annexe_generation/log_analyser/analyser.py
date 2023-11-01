@@ -107,6 +107,8 @@ if __name__ == "__main__":
     log_dir_path = os.path.join(args.files_dir_path, LOG_DIR_NAME)
     feature_engineering_dir_path = os.path.join(args.files_dir_path, FEATURE_ENGINEERING_DIR_NAME)
 
+    LATEX_FILE_NAME = "latex.txt"
+
     # ------------------------- Reset the output
     if os.path.exists(args.output):
         os.system(f"rm -r {args.output}")
@@ -168,25 +170,56 @@ if __name__ == "__main__":
             feature_engineering_results_by_dataset[dataset_name] = []
         feature_engineering_results_by_dataset[dataset_name].append(result)
 
+    # ------------------------- prepare files
+    all_dataset_names = set(
+        list(clustering_results_by_dataset.keys()) +
+        list(classification_results_by_dataset.keys()) +
+        list(feature_engineering_results_by_dataset.keys())
+    )
+    FEATURE_ENGINEERING_LATEX_FILE_NAME = "feature_engineering_results.txt"
+    CLUSTERING_LATEX_FILE_NAME = "clustering_results.txt"
+    CLASSIFICATION_LATEX_FILE_NAME = "classification_results.txt"
+
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+        os.makedirs(dataset_path, exist_ok=True)
     # ------------------------- Extract the feature engineering results
 
-    print(feature_engineering_results)
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+        latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
+    
+        with open(latex_file_path, 'a') as f:
+            f.write("")
+
+    for dataset_name, results in feature_engineering_results_by_dataset.items():
+        dataset_path = os.path.join(args.output, dataset_name)
+        
+        latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
+
+        # save latex
+        for result in results:
+            with open(latex_file_path, 'a') as f:
+                f.write(result.to_latex() + "\n\n")
+                f.write(result.correlation_matrix_to_latex() + "\n\n")
 
     # ------------------------- Extract the clustering results
 
-    # make the list of timeout instances as latex
-
-    print(list_of_dicts_to_latex_table(clustering_timeouts, "Timeouts instances", "tab:timeouts"))
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+        os.makedirs(dataset_path, exist_ok=True)
+        latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
+    
+        with open(latex_file_path, 'a') as f:
+            f.write("")
 
     # treat the data
     for dataset_name, results in clustering_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
-        os.makedirs(dataset_path, exist_ok=True)
 
         # save latex
-        clustering_latex_file_path = os.path.join(dataset_path, f"clustering_results.txt")
-        with open(clustering_latex_file_path, 'w') as f:
-            f.write("")
+        clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
+   
         for result in results:
             with open(clustering_latex_file_path, 'a') as f:
                 f.write(result.to_latex() + "\n\n")
@@ -200,15 +233,21 @@ if __name__ == "__main__":
 
     # ----------------------- Extract classification results
 
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+        os.makedirs(dataset_path, exist_ok=True)
+        latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
+    
+        with open(latex_file_path, 'a') as f:
+            f.write("")
+
     for dataset_name, results in classification_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
         os.makedirs(dataset_path, exist_ok=True)
 
         # save latex
-        classification_latex_file_path = os.path.join(dataset_path, f"classification_results.txt")
+        classification_latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
 
-        with open(classification_latex_file_path, 'w') as f:
-            f.write("")
         for result in results:
             with open(classification_latex_file_path, 'a') as f:
                 f.write(result.to_latex() + "\n\n")
@@ -220,3 +259,76 @@ if __name__ == "__main__":
     
 
     plot_metrics(get_best_instances(classification_results_by_dataset, "accuracy"), args.output, "Best Accuracy")
+
+
+
+
+    # ------------------------- fusionne the latex file
+    latex_file_path = os.path.join(args.output, LATEX_FILE_NAME)
+
+    with open(latex_file_path, 'w') as f:
+        f.write("\\chapter{Machin Learning Results}\n")
+
+    # timeout instances
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Timeout instances}\n\n")
+        f.write("\\label{sec:annexe:timeout_instances}\n\n")
+        f.write(list_of_dicts_to_latex_table(clustering_timeouts, "Timeouts instances", "tab:timeouts"))
+        f.write("\n\n")
+
+    # feature engineering
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Feature Engineering results}\n\n")
+        f.write("\\label{sec:annexe:feature_engineering_results}\n\n")
+
+
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+
+        
+        feature_engineering_latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
+
+        with open(feature_engineering_latex_file_path, 'r') as feature_engineering_file:
+            with open(latex_file_path, 'a') as f:
+                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                for line in feature_engineering_file:
+                    f.write(line)
+
+    # clustering
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Clustering results}\n\n")
+        f.write("\\label{sec:annexe:clustering_results}\n\n")
+    
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+
+        clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
+
+        with open(clustering_latex_file_path, 'r') as clustering_file:
+            with open(latex_file_path, 'a') as f:
+                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                for line in clustering_file:
+                    f.write(line)
+    
+
+    # classification
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Classification results}\n\n")
+        f.write("\\label{sec:annexe:classification_results}\n\n")
+
+    for dataset_name in all_dataset_names:
+        dataset_path = os.path.join(args.output, dataset_name)
+
+        classification_latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
+
+        with open(classification_latex_file_path, 'r') as classification_file:
+            with open(latex_file_path, 'a') as f:
+                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                for line in classification_file:
+                    f.write(line)
+            
+
+
+
+    
+       

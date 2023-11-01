@@ -1,5 +1,6 @@
 
 
+import ast
 import os
 import re
 import sys
@@ -55,7 +56,7 @@ def __extract_correlation_sum(log_lines: list[str]) -> list[CorrelationSum]:
     # Define the start and end patterns
     timestamp_pattern = r"\d{4}_\d{2}_\d{2}_\d{2}_\d{2}_\d{2}"
     start_pattern = re.compile(f"{timestamp_pattern} - results_logger - INFO - Sorted correlation sums:")
-    end_pattern = re.compile("Length: \d+, dtype: float64")
+    end_pattern = re.compile(r"Length: \d+, dtype: float64")
 
     # Iterate through the lines and extract the relevant section
     for line in log_lines:
@@ -84,6 +85,28 @@ def __extract_correlation_sum(log_lines: list[str]) -> list[CorrelationSum]:
     
     return result_list
 
+
+def __extract_best_features(log_lines : list[str]) -> list[str]:
+    # Define a regular expression pattern to match the list of features
+    pattern = re.compile(r"- results_logger - INFO - Keeping columns: (\[.*\])")
+
+    for log_line in log_lines:
+        # Search for the pattern in the log line
+        match = pattern.search(log_line)
+
+        # If a match is found, convert the matched string to a list
+        if match:
+            # Extract the list as a string
+            list_str = match.group(1)
+            
+            try:
+                # Convert the string representation of the list to an actual list
+                feature_list = ast.literal_eval(list_str)
+                return feature_list
+            except (ValueError, SyntaxError) as e:
+                assert False, f"Error while converting the list of features: {e}"
+    
+    assert False, "No list of features found in the log file."
 
 def __get_right_correlation_matrix_path(correlation_matrix_paths: list[str], output_correlation_matrix_dir_relative_path : str) -> list[str]:
    
@@ -151,12 +174,14 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
     # get the correlation sum
     correlation_sum = __extract_correlation_sum(feature_engineering_lines)
 
-    
+    # get the best columns
+    best_columns = __extract_best_features(feature_engineering_lines)    
 
     return FeatureEngineeringData(
         dataset_name,
         instance_name,
         correlation_matrix,
         correlation_image_path,
-        correlation_sum
+        correlation_sum,
+        best_columns
     )

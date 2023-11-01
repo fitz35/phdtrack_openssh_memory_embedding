@@ -13,6 +13,7 @@ class ClassificationMetrics:
     recall: float
     f1_score: float
     support: float
+    final_samples: int
     initial_samples: int
 
     def to_latex(self, label: str) -> str:
@@ -20,6 +21,7 @@ class ClassificationMetrics:
                 f" & Recall & {self.recall} \\\\\n"
                 f" & F1 Score & {self.f1_score} \\\\\n"
                 f" & Support & {self.support} \\\\\n"
+                f" & Final Samples (after rebalancing) & {self.final_samples} \\\\\n"
                 f" & Initial Samples (before rebalancing) & {self.initial_samples} \\\\\n"
                 f"\\hline\n")
 
@@ -43,9 +45,10 @@ class ClassificationResults:
     def from_dict(d: dict, initial_samples: Dict[float, int], final_samples: Dict[float, int],
                   additional_metrics: dict, duration: float, dataset_name: str, instance: str) -> 'ClassificationResults':
         initial_samples_sum = sum(initial_samples.values())
-        class_metrics = {key: ClassificationMetrics(**value, initial_samples=initial_samples[key]) for key, value in d.items() if key not in {"accuracy", "macro avg", "weighted avg"}}
-        macro_avg = ClassificationMetrics(**d["macro avg"], initial_samples=initial_samples_sum)
-        weighted_avg = ClassificationMetrics(**d["weighted avg"], initial_samples=initial_samples_sum)
+        final_samples_sum = sum(final_samples.values())
+        class_metrics = {key: ClassificationMetrics(**value, initial_samples=initial_samples[key], final_samples=final_samples[key]) for key, value in d.items() if key not in {"accuracy", "macro avg", "weighted avg"}}
+        macro_avg = ClassificationMetrics(**d["macro avg"], initial_samples=initial_samples_sum, final_samples=final_samples_sum)
+        weighted_avg = ClassificationMetrics(**d["weighted avg"], initial_samples=initial_samples_sum, final_samples=final_samples_sum)
         accuracy = d.get("accuracy", 0.0)
         return ClassificationResults(
             dataset_name=dataset_name, instance=instance,
@@ -59,19 +62,20 @@ class ClassificationResults:
                   dataset_name: str, instance: str, true_positives: int, true_negatives: int,
                   false_positives: int, false_negatives: int, auc: float, duration: float) -> 'ClassificationResults':
         initial_samples_sum = sum(initial_samples.values())
+        final_samples_sum = sum(final_samples.values())
         # Helper function to adjust the key names in the dictionary
         def adjust_keys(metrics_data: Dict[str, float]) -> Dict[str, float]:
             if 'f1-score' in metrics_data:
                 metrics_data['f1_score'] = metrics_data.pop('f1-score')
             return metrics_data
         # Construct class metrics
-        class_metrics = {key: ClassificationMetrics(**adjust_keys(value), initial_samples=initial_samples[float(key)]) 
+        class_metrics = {key: ClassificationMetrics(**adjust_keys(value), initial_samples=initial_samples[float(key)], final_samples=final_samples[float(key)]) 
                         for key, value in json_data.items() 
                         if key not in {"accuracy", "macro avg", "weighted avg"}}
         
         # Construct macro average and weighted average metrics
-        macro_avg = ClassificationMetrics(**adjust_keys(json_data["macro avg"]), initial_samples=initial_samples_sum)
-        weighted_avg = ClassificationMetrics(**adjust_keys(json_data["weighted avg"]), initial_samples=initial_samples_sum)
+        macro_avg = ClassificationMetrics(**adjust_keys(json_data["macro avg"]), initial_samples=initial_samples_sum, final_samples=final_samples_sum)
+        weighted_avg = ClassificationMetrics(**adjust_keys(json_data["weighted avg"]), initial_samples=initial_samples_sum, final_samples=final_samples_sum)
         
         # Retrieve accuracy, defaulting to 0.0 if not present
         accuracy = json_data.get("accuracy", 0.0)
