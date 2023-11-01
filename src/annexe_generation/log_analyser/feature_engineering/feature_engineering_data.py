@@ -10,6 +10,8 @@ class CorrelationSum:
 
 @dataclass
 class FeatureEngineeringData:
+    dataset_name: str
+    instance: str
     correlation_matrix: pd.DataFrame
     correlation_image_path : str
     correlation_sum_sorted_list: list[CorrelationSum]

@@ -181,7 +181,7 @@ def __extract_min_samples(log_line: str) -> int | None:
         return None
     
 
-def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path : str) -> ClusteringResult :
+def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path : str, output_correlation_matrix_dir_relative_path : str) -> ClusteringResult :
     dataset_name = os.path.basename(dataset_path)
     # get the random forest lines
     clustering_lines, clustering_index = __extract_clustering_lines(all_lines, begin_index)

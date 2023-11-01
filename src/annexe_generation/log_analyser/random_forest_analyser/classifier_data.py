@@ -64,7 +64,6 @@ class ClassificationResults:
             if 'f1-score' in metrics_data:
                 metrics_data['f1_score'] = metrics_data.pop('f1-score')
             return metrics_data
-        print(initial_samples)
         # Construct class metrics
         class_metrics = {key: ClassificationMetrics(**adjust_keys(value), initial_samples=initial_samples[float(key)]) 
                         for key, value in json_data.items() 

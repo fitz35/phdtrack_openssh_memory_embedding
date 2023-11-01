@@ -152,7 +152,7 @@ def __is_end(log_lines: List[str], begin_line: int) -> bool:
 
 T = TypeVar('T')
 
-def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str], T]) -> Tuple[List[T], List[dict[str, str]]]:
+def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str, str], T], output_correlation_matrix_dir_relative_path : str) -> Tuple[List[T], List[dict[str, str]]]:
     """
     Extracts results from a list of log lines using a specified extractor function and data class.
 
@@ -210,7 +210,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 if len(log_lines) - begin_index < 10:
                     return results, timeout_instances
 
-            result = extractor(log_lines, begin_index, dataset_path)
+            result = extractor(log_lines, begin_index, dataset_path, output_correlation_matrix_dir_relative_path)
             results.append(result)
             
             # check end of file

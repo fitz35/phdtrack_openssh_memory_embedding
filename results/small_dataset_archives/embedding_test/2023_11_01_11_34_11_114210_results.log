@@ -1,0 +1,190 @@
+2023_11_01_11_34_11 - results_logger - INFO - Passed program params:
+2023_11_01_11_34_11 - results_logger - INFO - param[0]: main.py
+2023_11_01_11_34_11 - results_logger - INFO - param[1]: -d
+2023_11_01_11_34_11 - results_logger - INFO - param[2]: /home/clement/Documents/github/mem2graph/data/11_filtered_chunk_semantic_embedding_-v_-a_chunk-header-node_-e_only-max-entropy_-s_activate
+2023_11_01_11_34_11 - results_logger - INFO - param[3]: -o
+2023_11_01_11_34_11 - results_logger - INFO - param[4]: ../log
+2023_11_01_11_34_11 - results_logger - INFO - param[5]: -otr
+2023_11_01_11_34_11 - results_logger - INFO - param[6]: training
+2023_11_01_11_34_11 - results_logger - INFO - param[7]: -ots
+2023_11_01_11_34_11 - results_logger - INFO - param[8]: validation
+2023_11_01_11_34_11 - results_logger - INFO - param[9]: --no_balancing
+2023_11_01_11_34_11 - results_logger - INFO - param[10]: -p
+2023_11_01_11_34_11 - results_logger - INFO - param[11]: testingembedding
+2023_11_01_11_34_11 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /home/clement/Documents/github/mem2graph/data/11_filtered_chunk_semantic_embedding_-v_-a_chunk-header-node_-e_only-max-entropy_-s_activate !!!!----///
+2023_11_01_11_34_11 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_01_11_34_11 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_01_11_34_11 - results_logger - INFO - Start time : 1698834851.1204498
+2023_11_01_11_34_11 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_01_11_34_11 - results_logger - INFO - Loading samples and labels from 1041 files
+2023_11_01_11_34_15 - results_logger - INFO - Number of loaded files: 1041
+2023_11_01_11_34_15 - results_logger - INFO - Number of empty files: 0
+2023_11_01_11_34_15 - results_logger - INFO - Loading samples and labels from 1051 files
+2023_11_01_11_34_20 - results_logger - INFO - Number of loaded files: 1051
+2023_11_01_11_34_20 - results_logger - INFO - Number of empty files: 0
+2023_11_01_11_34_20 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 9.452332000 s
+2023_11_01_11_34_20 - results_logger - INFO - Cleaning data for DataOriginEnum.Training
+2023_11_01_11_34_20 - results_logger - INFO - Removing 19 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_children_1', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8', 'ptrs_children_1', 'ptrs_children_2', 'ptrs_children_3', 'ptrs_children_4', 'ptrs_children_5', 'ptrs_children_6', 'ptrs_children_7', 'ptrs_children_8']
+2023_11_01_11_34_20 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_01_11_34_20 - results_logger - INFO - Removing 2 columns (keeping 18 columns): ['file_path', 'chn_addr']
+2023_11_01_11_34_20 - results_logger - INFO - Cleaning data for DataOriginEnum.Validation
+2023_11_01_11_34_20 - results_logger - INFO - Removing 19 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_children_1', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8', 'ptrs_children_1', 'ptrs_children_2', 'ptrs_children_3', 'ptrs_children_4', 'ptrs_children_5', 'ptrs_children_6', 'ptrs_children_7', 'ptrs_children_8']
+2023_11_01_11_34_20 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_01_11_34_20 - results_logger - INFO - Removing 2 columns (keeping 18 columns): ['file_path', 'chn_addr']
+2023_11_01_11_34_20 - results_logger - INFO - timer for feature_engineering started
+2023_11_01_11_34_20 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_11_01_11_34_21 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+                      chns_ancestor_2  chns_ancestor_3  chns_ancestor_4  chns_ancestor_5  ...  chunk_byte_size  chunk_number_in_heap  chunk_ptrs  chunk_vns
+chns_ancestor_2              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_3              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_4              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_5              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_6              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_7              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_ancestor_8              1.000000         1.000000         1.000000         1.000000  ...         0.617993              0.110323    0.585847   0.615555
+chns_children_2              0.596582         0.596582         0.596582         0.596582  ...         0.878594              0.076837    0.995562   0.869029
+chns_children_3              0.566979         0.566979         0.566979         0.566979  ...         0.930997              0.070119    0.903069   0.926648
+chns_children_4              0.461094         0.461094         0.461094         0.461094  ...         0.782568              0.053129    0.775336   0.778296
+chns_children_5              0.372714         0.372714         0.372714         0.372714  ...         0.655865              0.036489    0.657584   0.651988
+chns_children_6              0.323317         0.323317         0.323317         0.323317  ...         0.579365              0.024833    0.593809   0.575449
+chns_children_7              0.301279         0.301279         0.301279         0.301279  ...         0.544761              0.018732    0.561816   0.540947
+chns_children_8              0.287903         0.287903         0.287903         0.287903  ...         0.523393              0.015224    0.540586   0.519698
+chunk_byte_size              0.617993         0.617993         0.617993         0.617993  ...         1.000000              0.060840    0.852518   0.999801
+chunk_number_in_heap         0.110323         0.110323         0.110323         0.110323  ...         0.060840              1.000000    0.076235   0.059913
+chunk_ptrs                   0.585847         0.585847         0.585847         0.585847  ...         0.852518              0.076235    1.000000   0.841943
+chunk_vns                    0.615555         0.615555         0.615555         0.615555  ...         0.999801              0.059913    0.841943   1.000000
+
+[18 rows x 18 columns]
+2023_11_01_11_34_21 - results_logger - INFO - Correlation matrix saved at: /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_01_11_34_20_682805.png and /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_01_11_34_20_682780.csv
+2023_11_01_11_34_21 - results_logger - INFO - Correlation sums: 
+chns_ancestor_2         11.839586
+chns_ancestor_3         11.839586
+chns_ancestor_4         11.839586
+chns_ancestor_5         11.839586
+chns_ancestor_6         11.839586
+chns_ancestor_7         11.839586
+chns_ancestor_8         11.839586
+chns_children_2         11.988042
+chns_children_3         12.646770
+chns_children_4         11.948928
+chns_children_5         10.940772
+chns_children_6         10.250644
+chns_children_7          9.872237
+chns_children_8          9.601270
+chunk_byte_size         12.134653
+chunk_number_in_heap     2.264608
+chunk_ptrs              11.899388
+chunk_vns               12.072597
+dtype: float64
+2023_11_01_11_34_21 - results_logger - INFO - Sorted correlation sums: 
+chns_children_3         12.646770
+chunk_byte_size         12.134653
+chunk_vns               12.072597
+chns_children_2         11.988042
+chns_children_4         11.948928
+chunk_ptrs              11.899388
+chns_ancestor_3         11.839586
+chns_ancestor_2         11.839586
+chns_ancestor_7         11.839586
+chns_ancestor_4         11.839586
+chns_ancestor_8         11.839586
+chns_ancestor_5         11.839586
+chns_ancestor_6         11.839586
+chns_children_5         10.940772
+chns_children_6         10.250644
+chns_children_7          9.872237
+chns_children_8          9.601270
+chunk_number_in_heap     2.264608
+dtype: float64
+2023_11_01_11_34_21 - results_logger - INFO - Keeping columns: ['chunk_number_in_heap', 'chns_children_8', 'chns_children_7', 'chns_children_6', 'chns_children_5', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4']
+2023_11_01_11_34_21 - results_logger - INFO - End feature engineering
+2023_11_01_11_34_21 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 0.636093000 s
+2023_11_01_11_34_21 - results_logger - INFO - Keeping 8 : ['chunk_number_in_heap', 'chns_children_8', 'chns_children_7', 'chns_children_6', 'chns_children_5', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4']
+2023_11_01_11_34_21 - results_logger - INFO - Keeping 8 : ['chunk_number_in_heap', 'chns_children_8', 'chns_children_7', 'chns_children_6', 'chns_children_5', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4']
+2023_11_01_11_34_21 - results_logger - INFO - Number of samples before balancing: class-0.0=20687 class-1.0=5624 class-2.0=1041 class-4.0=1041
+2023_11_01_11_34_21 - results_logger - INFO - Number of samples after balancing: class-0.0=20687 class-1.0=5624 class-2.0=1041 class-4.0=1041
+2023_11_01_11_34_21 - results_logger - INFO - timer for random forest :  started
+2023_11_01_11_34_21 - results_logger - INFO - timer for evaluate_model_score started
+2023_11_01_11_34_21 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    0.0
+11    0.0
+12    0.0
+13    0.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    1.0
+19    0.0
+Name: label, dtype: float64
+2023_11_01_11_34_21 - results_logger - INFO - Number of predicted 1 labels: 12519.0 
+ versus number of predicted 0 labels: 17012.0
+2023_11_01_11_34_21 - results_logger - INFO - Accuracy: 82.30%
+2023_11_01_11_34_21 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.8840341655716163,
+        "recall": 0.8751219512195122,
+        "f1-score": 0.8795554829220461,
+        "support": 21525.0
+    },
+    "1.0": {
+        "precision": 0.5608560692697272,
+        "recall": 0.581470189701897,
+        "f1-score": 0.5709771309771309,
+        "support": 5904.0
+    },
+    "2.0": {
+        "precision": 0.9890547263681592,
+        "recall": 0.9457659372026641,
+        "f1-score": 0.9669260700389104,
+        "support": 1051.0
+    },
+    "4.0": {
+        "precision": 0.9480401093892434,
+        "recall": 0.9895337773549001,
+        "f1-score": 0.968342644320298,
+        "support": 1051.0
+    },
+    "accuracy": 0.8229995597846331,
+    "macro avg": {
+        "precision": 0.8454962676496864,
+        "recall": 0.8479729638697434,
+        "f1-score": 0.8464503320645964,
+        "support": 29531.0
+    },
+    "weighted avg": {
+        "precision": 0.8254382282780314,
+        "recall": 0.8229995597846331,
+        "f1-score": 0.8241322058168551,
+        "support": 29531.0
+    }
+}
+2023_11_01_11_34_21 - results_logger - INFO - Confusion Matrix: 
+2023_11_01_11_34_21 - results_logger - INFO - True Positives: 3433
+2023_11_01_11_34_21 - results_logger - INFO - True Negatives: 18837
+2023_11_01_11_34_21 - results_logger - INFO - False Positives: 2688
+2023_11_01_11_34_21 - results_logger - INFO - False Negatives: 2471
+2023_11_01_11_34_21 - results_logger - INFO - AUC: 0.66
+2023_11_01_11_34_21 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.102654000 s
+2023_11_01_11_34_21 - results_logger - INFO - Time elapsed since the begining of random forest : : 0.473046000 s
+2023_11_01_11_34_21 - results_logger - INFO - timer for clustering started
+2023_11_01_11_34_21 - results_logger - INFO - timer for scaling_duration started
+2023_11_01_11_34_21 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000376000 s
+2023_11_01_11_34_21 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=20687 class-1.0=5624 class-2.0=1041 class-4.0=1041
+2023_11_01_11_34_21 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=2500 class-1.0=1824 class-2.0=337 class-4.0=337
+2023_11_01_11_34_21 - results_logger - INFO - min_samples: 168
+2023_11_01_11_34_21 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_11_01_11_35_21 - results_logger - ERROR - Timeout error while clustering
+2023_11_01_11_35_21 - results_logger - INFO - Time elapsed since the begining of clustering: 60.012354000 s
+2023_11_01_11_35_21 - results_logger - INFO - End time : 1698834921.7580273
+2023_11_01_11_35_21 - results_logger - INFO - Total duration: 70.63757753372192

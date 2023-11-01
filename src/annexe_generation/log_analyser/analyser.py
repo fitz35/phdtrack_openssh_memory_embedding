@@ -4,12 +4,24 @@ import sys
 
 
 
+
+
+
+
 sys.path.append(os.path.abspath('../..'))
 from annexe_generation.log_analyser.clustering_analyser.extractor import clustering_extractor
 from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results
 from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, get_best_instances, plot_metrics, save_classification_results_to_json
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
+from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData
+from annexe_generation.log_analyser.feature_engineering.extractor import feature_engineering_extractor
+
+
+LOG_DIR_NAME = "embedding_test"
+FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
+
+
 
 def compare_list_of_dicts(list1: list[dict[str, str]], list2: list[dict[str, str]]) -> bool:
     """
@@ -92,6 +104,9 @@ if __name__ == "__main__":
     parser.add_argument('output', type=str, help='Path to the output directory')
     args = parser.parse_args()
 
+    log_dir_path = os.path.join(args.files_dir_path, LOG_DIR_NAME)
+    feature_engineering_dir_path = os.path.join(args.files_dir_path, FEATURE_ENGINEERING_DIR_NAME)
+
     # ------------------------- Reset the output
     if os.path.exists(args.output):
         os.system(f"rm -r {args.output}")
@@ -101,30 +116,38 @@ if __name__ == "__main__":
 
     clustering_timeouts : list[dict[str, str]] = []
     classification_timeouts : list[dict[str, str]] = []
+    feature_engineering_timeouts : list[dict[str, str]] = []
 
     clustering_results : list[ClusteringResult] = []
     classification_results : list[ClassificationResults] = []
+    feature_engineering_results : list[FeatureEngineeringData] = []
 
     clustering_results_by_dataset: dict[str, list[ClusteringResult]] = {}
     classification_results_by_dataset : dict[str, list[ClassificationResults]] = {}
+    feature_engineering_results_by_dataset : dict[str, list[FeatureEngineeringData]] = {}
 
     # ------------------------- Read the files and extract data
     # Get all files in the directory
-    files = [os.path.join(args.files_dir_path, file) for file in os.listdir(args.files_dir_path) if file.endswith(".log") and not file.startswith("common_log")]
+    files = [os.path.join(args.files_dir_path, LOG_DIR_NAME, file) for file in os.listdir(log_dir_path) if file.endswith(".log") and not file.startswith("common_log")]
 
     # Read all files
     for file in files:
         lines: list[str] = read_file(file)
-        clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor)
-        classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor)
+        clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor, feature_engineering_dir_path)
+        classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor, feature_engineering_dir_path)
+        feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path)
 
         clustering_results.extend(clustering)
         classification_results.extend(classification)
+        feature_engineering_results.extend(feature_engineering)
 
         clustering_timeouts.extend(clustering_timeout)
         classification_timeouts.extend(classification_timeout)
+        feature_engineering_timeouts.extend(feature_engineering_timeout)
 
     assert compare_list_of_dicts(clustering_timeouts, classification_timeouts), "Clustering and classification timeouts are not the same"
+    assert compare_list_of_dicts(clustering_timeouts, feature_engineering_timeouts), "Clustering and feature engineering timeouts are not the same"
+    
     # extract the instance by dataset
     # Organize clustering and classification results by dataset
     for result in clustering_results:
@@ -138,6 +161,16 @@ if __name__ == "__main__":
         if dataset_name not in classification_results_by_dataset:
             classification_results_by_dataset[dataset_name] = []
         classification_results_by_dataset[dataset_name].append(result)
+
+    for result in feature_engineering_results:
+        dataset_name = result.dataset_name
+        if dataset_name not in feature_engineering_results_by_dataset:
+            feature_engineering_results_by_dataset[dataset_name] = []
+        feature_engineering_results_by_dataset[dataset_name].append(result)
+
+    # ------------------------- Extract the feature engineering results
+
+    print(feature_engineering_results)
 
     # ------------------------- Extract the clustering results
 
