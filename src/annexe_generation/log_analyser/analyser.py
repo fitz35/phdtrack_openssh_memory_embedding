@@ -20,6 +20,7 @@ from annexe_generation.log_analyser.feature_engineering.extractor import feature
 
 LOG_DIR_NAME = "embedding_test"
 FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
+NB_FEATURE_ENGINEERING_FEATURES = 8 # Number of features to keep for the feature engineering results (if different, put the instance in the feature engineering list)
 
 
 
@@ -65,6 +66,9 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     columns.sort()
     num_columns = len(columns)
 
+    # sort the list by the dataset name
+    list_of_dicts.sort(key=lambda x: x["dataset"])
+
     # Creating the LaTeX tabular environment
     latex_code = "\\begin{table}[h]\n"
     latex_code += "\\centering\n"
@@ -108,13 +112,16 @@ if __name__ == "__main__":
     feature_engineering_dir_path = os.path.join(args.files_dir_path, FEATURE_ENGINEERING_DIR_NAME)
 
     LATEX_FILE_NAME = "latex.txt"
+    IMG_FOLDER_NAME = "img/annexes"
+
+    img_folder_path = os.path.join(args.output, IMG_FOLDER_NAME)
 
     # ------------------------- Reset the output
     if os.path.exists(args.output):
         os.system(f"rm -r {args.output}")
     os.mkdir(args.output)
 
-
+    feature_engineering_fails : list[dict[str, str]] = []
 
     clustering_timeouts : list[dict[str, str]] = []
     classification_timeouts : list[dict[str, str]] = []
@@ -131,27 +138,37 @@ if __name__ == "__main__":
     # ------------------------- Read the files and extract data
     # Get all files in the directory
     files = [os.path.join(args.files_dir_path, LOG_DIR_NAME, file) for file in os.listdir(log_dir_path) if file.endswith(".log") and not file.startswith("common_log")]
-    print(f"Found {len(files)} files")
+    print(f"Found {len(files)} log files")
     for file in files:
         print(file)
     # Read all files
     for file in files:
         lines: list[str] = read_file(file)
+
+        feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path)
+        feature_engineering_results.extend(feature_engineering)
+        feature_engineering_timeouts.extend(feature_engineering_timeout)
+
         clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor, feature_engineering_dir_path)
         classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor, feature_engineering_dir_path)
-        feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path)
+        
 
         clustering_results.extend(clustering)
         classification_results.extend(classification)
-        feature_engineering_results.extend(feature_engineering)
+        
 
         clustering_timeouts.extend(clustering_timeout)
         classification_timeouts.extend(classification_timeout)
-        feature_engineering_timeouts.extend(feature_engineering_timeout)
 
     assert compare_list_of_dicts(clustering_timeouts, classification_timeouts), "Clustering and classification timeouts are not the same"
     assert compare_list_of_dicts(clustering_timeouts, feature_engineering_timeouts), "Clustering and feature engineering timeouts are not the same"
     
+    for feature_engineering_instance in feature_engineering_results:
+        if len(feature_engineering_instance.best_columns) != NB_FEATURE_ENGINEERING_FEATURES:
+            print(feature_engineering_instance.dataset_name)
+            feature_engineering_fails.append({"dataset": feature_engineering_instance.dataset_name, "instance": feature_engineering_instance.instance, "nb_features": str(len(feature_engineering_instance.best_columns))})
+
+
     # extract the instance by dataset
     # Organize clustering and classification results by dataset
     for result in clustering_results:
@@ -172,7 +189,11 @@ if __name__ == "__main__":
             feature_engineering_results_by_dataset[dataset_name] = []
         feature_engineering_results_by_dataset[dataset_name].append(result)
 
-    # ------------------------- prepare files
+    # ------------------------- prepare files and folder
+    # create the folder for the images
+    os.makedirs(img_folder_path)
+
+
     all_dataset_names = set(
         list(clustering_results_by_dataset.keys()) +
         list(classification_results_by_dataset.keys()) +
@@ -184,7 +205,9 @@ if __name__ == "__main__":
 
     for dataset_name in all_dataset_names:
         dataset_path = os.path.join(args.output, dataset_name)
-        os.makedirs(dataset_path, exist_ok=True)
+        img_dataset_path = os.path.join(img_folder_path, dataset_name)
+        os.makedirs(dataset_path)
+        os.makedirs(img_dataset_path)
     # ------------------------- Extract the feature engineering results
 
     for dataset_name in all_dataset_names:
@@ -209,7 +232,6 @@ if __name__ == "__main__":
 
     for dataset_name in all_dataset_names:
         dataset_path = os.path.join(args.output, dataset_name)
-        os.makedirs(dataset_path, exist_ok=True)
         latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
     
         with open(latex_file_path, 'a') as f:
@@ -218,6 +240,7 @@ if __name__ == "__main__":
     # treat the data
     for dataset_name, results in clustering_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
+        img_dataset_path = os.path.join(img_folder_path, dataset_name)
 
         # save latex
         clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
@@ -226,7 +249,7 @@ if __name__ == "__main__":
             with open(clustering_latex_file_path, 'a') as f:
                 f.write(result.to_latex() + "\n\n")
 
-        clustering_pie_folder_path = os.path.join(dataset_path, "clustering_pie_charts")
+        clustering_pie_folder_path = os.path.join(img_dataset_path, "clustering_pie_charts")
         os.makedirs(clustering_pie_folder_path, exist_ok=True)
         clustering_pie_charts(results, clustering_pie_folder_path)
 
@@ -237,7 +260,6 @@ if __name__ == "__main__":
 
     for dataset_name in all_dataset_names:
         dataset_path = os.path.join(args.output, dataset_name)
-        os.makedirs(dataset_path, exist_ok=True)
         latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
     
         with open(latex_file_path, 'a') as f:
@@ -245,8 +267,7 @@ if __name__ == "__main__":
 
     for dataset_name, results in classification_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
-        os.makedirs(dataset_path, exist_ok=True)
-
+        img_dataset_path = os.path.join(img_folder_path, dataset_name)
         # save latex
         classification_latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
 
@@ -255,12 +276,12 @@ if __name__ == "__main__":
                 f.write(result.to_latex() + "\n\n")
 
 
-        plot_metrics(results, dataset_path, f"{dataset_name} - Metrics")
+        plot_metrics(results, img_dataset_path, f"{dataset_name} - Metrics")
 
         save_classification_results_to_json(results, os.path.join(dataset_path, "classification_results.json")  )
     
 
-    plot_metrics(get_best_instances(classification_results_by_dataset, "accuracy"), args.output, "Best Accuracy")
+    plot_metrics(get_best_instances(classification_results_by_dataset, "accuracy"), img_folder_path, "Best Accuracy")
 
 
 
@@ -276,6 +297,13 @@ if __name__ == "__main__":
         f.write("\\section{Timeout instances}\n\n")
         f.write("\\label{sec:annexe:timeout_instances}\n\n")
         f.write(list_of_dicts_to_latex_table(clustering_timeouts, "Timeouts instances", "tab:timeouts"))
+        f.write("\n\n")
+
+    # feature engineering fails
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Feature engineering fails}\n\n")
+        f.write("\\label{sec:annexe:feature_engineering_fails}\n\n")
+        f.write(list_of_dicts_to_latex_table(feature_engineering_fails, "Feature engineering fails", "tab:feature_engineering_fails"))
         f.write("\n\n")
 
     # feature engineering

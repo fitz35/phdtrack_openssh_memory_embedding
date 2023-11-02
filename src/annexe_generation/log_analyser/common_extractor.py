@@ -212,14 +212,17 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
 
     while begin_index < len(log_lines):
         try:
+            # test if the instance is already computed
             if __is_already_computed(log_lines, begin_index):
                 begin_index += 2
                 if __is_end(log_lines, begin_index):
                     return results, timeout_instances
                 continue
 
+            # get the next instance
             maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
 
+            # check if we have a timeout
             if maybe_next_instance is not None and __is_timeout_lines(log_lines, begin_index, maybe_next_instance):
                 instance_name = extract_instance(log_lines, begin_index, maybe_next_instance)
                 
@@ -240,6 +243,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 if len(log_lines) - begin_index < 10:
                     return results, timeout_instances
 
+            # extract the instance
             result = extractor(log_lines, begin_index, dataset_path, output_correlation_matrix_dir_relative_path)
             results.append(result)
             
