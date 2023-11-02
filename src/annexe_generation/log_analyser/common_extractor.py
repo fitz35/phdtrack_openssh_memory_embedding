@@ -103,7 +103,7 @@ def extract_instance(all_lines: List[str], start_index: int, end_index: int) -> 
         instance_name = instance_name + " " + str(instance_number)
         return instance_name
     except AssertionError as e:
-        return "instance 1 (alone)"
+        return "single instance"
 
 
 def __extract_dataset_path(log_line: str):

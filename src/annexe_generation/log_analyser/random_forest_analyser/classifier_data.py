@@ -172,6 +172,7 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
         # Initialize variables to store the best instances and their metric values for Word2Vec and Transformers.
         best_word2vec = None
         best_transformer = None
+        best_single_instance = None
         max_word2vec_metric = -float('inf')
         max_transformer_metric = -float('inf')
 
@@ -190,11 +191,19 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
                 max_transformer_metric = current_metric_value
                 best_transformer = result
 
-        assert best_word2vec is not None and best_transformer is not None, "The best instances should not be None."
+            # Check if the instance is a single instance and if its metric value is greater than the current maximum.
+            elif 'single' in result.instance.lower() and current_metric_value > max_transformer_metric:
+                max_transformer_metric = current_metric_value
+                best_single_instance = result
+        
 
         # Store the best instances for the current dataset in the result dictionary.
-        best_instances.append(best_word2vec)
-        best_instances.append(best_transformer)
+        if best_single_instance:
+            best_instances.append(best_single_instance)
+        if best_word2vec:
+            best_instances.append(best_word2vec)
+        if best_transformer:
+            best_instances.append(best_transformer)
 
     return best_instances
 
