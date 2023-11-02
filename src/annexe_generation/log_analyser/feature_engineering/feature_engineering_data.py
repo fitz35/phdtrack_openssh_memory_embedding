@@ -1,4 +1,8 @@
 from dataclasses import asdict, dataclass
+import shutil
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 
 import pandas as pd
 
@@ -17,7 +21,7 @@ class FeatureEngineeringData:
     correlation_sum_sorted_list: list[CorrelationSum]
     best_columns : list[str]
 
-    def to_latex(self):
+    def to_latex(self, correlation_image_path : str):
         # Start of the LaTeX table
         latex_str = "\\begin{longtable}{|c|c|}\n"
         latex_str += "\\caption{" + self.instance + " Feature Engineering Results on " + self.dataset_name.replace("_", "\\_") + "} "
@@ -36,9 +40,17 @@ class FeatureEngineeringData:
         else:
             latex_str += "Best Features & None \\\\ \\hline\n"
 
-        # End of the LaTeX table
+        # Add some vertical space before the image
+        latex_str += "\\noalign{\\vskip 5mm}\n"
+
+        # Add image in the last row spanning all columns, with adjusted size
+        latex_str += "\\multicolumn{2}{|c|}{\\includegraphics[width=0.8\\linewidth]{" + correlation_image_path + "}} \\\\\n"
+
+
+        latex_str += "\\hline\n"
         latex_str += "\\end{longtable}\n"
         return latex_str
+
     
     def correlation_matrix_to_latex(self):
         # Start of the LaTeX table
@@ -58,3 +70,25 @@ class FeatureEngineeringData:
         # End of the LaTeX table
         latex_str += "\\end{longtable}\n"
         return latex_str
+    
+    def save_correlation_matrix_as_heatmap(self, output_path : str):
+        MAX_ROWS = 16 # more row means to regenerate the heatmap
+        num_rows, num_cols = self.correlation_matrix.shape
+
+        if num_cols > MAX_ROWS or num_rows > MAX_ROWS:
+            # Create a heatmap
+            cmap = LinearSegmentedColormap.from_list('blue_white_red', ['blue', 'white', 'red'])
+            plt.figure(figsize=(10, 10))  # You can adjust the size of the figure here
+            heatmap = sns.heatmap(self.correlation_matrix, cmap=cmap, cbar_kws={'label': 'Correlation'})
+
+            # Set labels and title if needed
+            heatmap.set_title('Features Correlation Matrix (algorithm : Pearson)', fontdict={'fontsize':12}, pad=12)
+            #heatmap.set_xlabel('X-axis Label', fontsize=10)
+            #heatmap.set_ylabel('Y-axis Label', fontsize=10)
+
+            # Save the heatmap
+            plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            plt.close()
+        else:
+            shutil.copy(self.correlation_image_path, output_path)
+        

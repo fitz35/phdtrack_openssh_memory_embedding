@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import sys
 
 
@@ -85,7 +86,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
         for key in columns:
             if key in item:
                 if key == "dataset":
-                    row += os.path.basename(item[key]) + " & "
+                    row += os.path.basename(item[key]).replace("_", "\\_") + " & "
                 else:
                     row += item[key] + " & "
             else:
@@ -100,6 +101,11 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     latex_code += "\\end{table}"
 
     return latex_code
+
+def image_real_path_to_latex_path(image_real_path : str) -> str :
+
+    image_split_path = image_real_path.split("img/")
+    return os.path.join("img/", image_split_path[1])
 
 
 if __name__ == "__main__":
@@ -219,15 +225,20 @@ if __name__ == "__main__":
 
     for dataset_name, results in feature_engineering_results_by_dataset.items():
         dataset_path = os.path.join(args.output, dataset_name)
+        img_dataset_path = os.path.join(img_folder_path, dataset_name)
         
         latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
 
         # save latex
         for result in results:
-            with open(latex_file_path, 'a') as f:
-                f.write(result.to_latex() + "\n\n")
-                f.write(result.correlation_matrix_to_latex() + "\n\n")
+            correlation_matrix_path = os.path.join(img_dataset_path, result.instance + "_correlation_matrix.png")
 
+            with open(latex_file_path, 'a') as f:
+                f.write(result.to_latex(image_real_path_to_latex_path(correlation_matrix_path)) + "\n\n")
+                #f.write(result.correlation_matrix_to_latex() + "\n\n")
+        
+            # save the correlation matrix
+            result.save_correlation_matrix_as_heatmap(correlation_matrix_path)
     # ------------------------- Extract the clustering results
 
     for dataset_name in all_dataset_names:
