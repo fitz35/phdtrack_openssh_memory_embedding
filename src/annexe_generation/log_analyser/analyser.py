@@ -131,7 +131,9 @@ if __name__ == "__main__":
     # ------------------------- Read the files and extract data
     # Get all files in the directory
     files = [os.path.join(args.files_dir_path, LOG_DIR_NAME, file) for file in os.listdir(log_dir_path) if file.endswith(".log") and not file.startswith("common_log")]
-
+    print(f"Found {len(files)} files")
+    for file in files:
+        print(file)
     # Read all files
     for file in files:
         lines: list[str] = read_file(file)

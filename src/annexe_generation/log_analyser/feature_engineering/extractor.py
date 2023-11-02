@@ -9,7 +9,7 @@ import pandas as pd
 
 
 sys.path.append(os.path.abspath('../../..'))
-from annexe_generation.log_analyser.common_extractor import extract_instance_name, extract_instance_number, extract_lines_between
+from annexe_generation.log_analyser.common_extractor import extract_instance, extract_lines_between
 from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import CorrelationSum, FeatureEngineeringData
 
 PROJECT_ROOT_NAME = "phdtrack_openssh_memory_embedding/"
@@ -144,10 +144,7 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
     # get the random forest lines
     feature_engineering_lines, feature_engineering_start_index = __extract_feature_engineering_lines(all_lines, begin_index)
 
-    instance_name = extract_instance_name(all_lines, begin_index, feature_engineering_start_index)
-    instance_number = extract_instance_number(all_lines, begin_index, feature_engineering_start_index)
-
-    instance_name = instance_name + " " + str(instance_number)
+    instance_name = extract_instance(all_lines, begin_index, feature_engineering_start_index)
 
 
     # get the correlation matrix paths

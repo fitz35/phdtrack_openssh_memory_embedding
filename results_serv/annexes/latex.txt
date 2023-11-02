@@ -9,14 +9,14 @@
 \hline
 dataset & instance \\ 
 \hline
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_2 \\ 
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_3 \\ 
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_4 \\ 
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_5 \\ 
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_6 \\ 
-26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers_7 \\ 
-25_filtered_chunk_extraction_-e_none_-s_activate & Transformers_0 \\ 
-25_filtered_chunk_extraction_-e_none_-s_activate & Transformers_1 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 2 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 3 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 4 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 5 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 6 \\ 
+26_filtered_chunk_extraction_-e_only-max-entropy_-s_none & Transformers 7 \\ 
+25_filtered_chunk_extraction_-e_none_-s_activate & Transformers 0 \\ 
+25_filtered_chunk_extraction_-e_none_-s_activate & Transformers 1 \\ 
 \hline
 \end{tabular}
 \caption{Timeouts instances}

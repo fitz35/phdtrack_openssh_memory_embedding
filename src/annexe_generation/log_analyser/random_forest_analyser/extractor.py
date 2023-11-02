@@ -7,7 +7,7 @@ import sys
 from typing import List, Tuple
 
 sys.path.append(os.path.abspath('../../..'))
-from annexe_generation.log_analyser.common_extractor import extract_instance_name, extract_instance_number, extract_lines_between
+from annexe_generation.log_analyser.common_extractor import extract_instance, extract_lines_between
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults
 
 
@@ -26,7 +26,7 @@ def __extract_random_forest_lines(log_lines: list[str], start_index: int):
     list[str]: The extracted random forest related log lines (including the start and end delimiters.)
     int: The index of the line containing the start delimiter.
     """
-    start_delimiter = "///---!!!! Launching testing pipeline on dataset"
+    start_delimiter = "- results_logger - INFO - Number of samples before balancing:"
     end_delimiter = "Time elapsed since the begining of random forest"
     return extract_lines_between(log_lines, start_index, start_delimiter, end_delimiter)
 
@@ -168,14 +168,10 @@ def random_forest_extractor(all_lines : list[str], begin_index : int, dataset_pa
         dataset_name = os.path.basename(dataset_path)
         # get the random forest lines
         random_forest_lines, random_forest_start_index = __extract_random_forest_lines(all_lines, begin_index)
-        #print(random_forest_start_index)
 
         # iterate through the line preceding the random forest lines to get the dataset path and instance name
         
-        instance_name = extract_instance_name(all_lines, begin_index, random_forest_start_index)
-        instance_number = extract_instance_number(all_lines, begin_index, random_forest_start_index)
-
-        instance_name = instance_name + " " + str(instance_number)
+        instance_name = extract_instance(all_lines, begin_index, random_forest_start_index)
 
         # extract the metrics from the random forest lines
         true_positives, true_negatives, false_positives, false_negatives, auc = __extract_metrics(random_forest_lines)

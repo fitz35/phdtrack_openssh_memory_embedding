@@ -10,7 +10,7 @@ from annexe_generation.log_analyser.clustering_analyser.clustering_data import C
 
 
 sys.path.append(os.path.abspath('../../..'))
-from annexe_generation.log_analyser.common_extractor import extract_instance_name, extract_instance_number, extract_lines_between
+from annexe_generation.log_analyser.common_extractor import extract_instance, extract_lines_between
 
 
 def __extract_clustering_lines(log_lines: List[str], start_index: int) -> Tuple[List[str], int]:
@@ -189,10 +189,7 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
 
     # iterate through the line preceding the random forest lines to get the dataset path and instance name
     
-    instance_name = extract_instance_name(all_lines, begin_index, clustering_index)
-    instance_number = extract_instance_number(all_lines, begin_index, clustering_index)
-
-    instance_name = instance_name + " " + str(instance_number)
+    instance_name = extract_instance(all_lines, begin_index, clustering_index)
 
     # get the initial and final samples
     initial_samples, final_samples = __extract_samples(clustering_lines)

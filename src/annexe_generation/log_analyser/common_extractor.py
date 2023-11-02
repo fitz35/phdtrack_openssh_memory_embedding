@@ -43,7 +43,7 @@ def extract_lines_between(log_lines: list[str], start_index: int, start_delimite
     return extracted_lines, start_delimiter_index
 
 
-def extract_instance_name(log_lines: List[str], start_index: int, end_index: int) -> str:
+def __extract_instance_name(log_lines: List[str], start_index: int, end_index: int) -> str:
     """
     Extracts the instance name from a subset of log lines.
 
@@ -69,7 +69,7 @@ def extract_instance_name(log_lines: List[str], start_index: int, end_index: int
     
     assert False, "Instance name not found"
 
-def extract_instance_number(log_lines: List[str], start_index: int, end_index: int) -> int:
+def __extract_instance_number(log_lines: List[str], start_index: int, end_index: int) -> int:
     """
     Extracts the instance number from a subset of log lines.
 
@@ -95,6 +95,16 @@ def extract_instance_number(log_lines: List[str], start_index: int, end_index: i
     
     assert False, "Instance number not found"
 
+def extract_instance(all_lines: List[str], start_index: int, end_index: int) -> str:
+    try:
+        instance_name = __extract_instance_name(all_lines, start_index, end_index)
+        instance_number = __extract_instance_number(all_lines, start_index, end_index)
+
+        instance_name = instance_name + " " + str(instance_number)
+        return instance_name
+    except AssertionError as e:
+        return "instance 1 (alone)"
+
 
 def __extract_dataset_path(log_line: str):
     """
@@ -110,10 +120,24 @@ def __extract_dataset_path(log_line: str):
     Returns:
     str or None: The extracted dataset path or None if not found.
     """
-    match = re.search(r"- results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset (\S+)", log_line)
+    match = re.search(r"- results_logger - INFO - ///---!!!! Launching .+? pipeline on dataset (\S+)", log_line)
     if not match:
         return None
     return match.group(1)
+
+def __detect_testing_pipeline_lines(log_lines : list[str], start_index : int) -> Tuple[bool, int]:
+    # Compile regular expression patterns for the two lines
+    pattern_line_1 = re.compile(r"- results_logger - INFO - param\[\d+\]: -p")
+    pattern_line_2 = re.compile(r"- results_logger - INFO - param\[\d+\]: testingembedding")
+
+    # Iterate through the list of log lines
+    for i in range(start_index, len(log_lines) - 1):
+        # Check if current line matches the first pattern and the next line matches the second pattern
+        if pattern_line_1.search(log_lines[i]) and pattern_line_2.search(log_lines[i + 1]):
+            return True, i + 1  # Return True 
+
+    return False, start_index  # Return False if no match was found
+
 
 def __get_next_instance(log_lines: list[str], begin_line : int) -> int | None:
     result_index = begin_line
@@ -122,6 +146,11 @@ def __get_next_instance(log_lines: list[str], begin_line : int) -> int | None:
         if match:
             return result_index
         result_index += 1
+    
+    # test if we are in a situation without instance
+    is_testing_pipeline, next_index = __detect_testing_pipeline_lines(log_lines, begin_line)
+    if is_testing_pipeline:
+        return next_index
 
     return None
 
@@ -174,6 +203,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
         i += 1
 
     if dataset_path is None:
+        print("No dataset path found")
         return results, timeout_instances
 
     begin_index = __get_next_instance(log_lines, 0)
@@ -191,10 +221,10 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
             maybe_next_instance = __get_next_instance(log_lines, begin_index + 1)
 
             if maybe_next_instance is not None and __is_timeout_lines(log_lines, begin_index, maybe_next_instance):
-                instance_name = extract_instance_name(log_lines, begin_index, maybe_next_instance)
-                instance_number = extract_instance_number(log_lines, begin_index, maybe_next_instance)
+                instance_name = extract_instance(log_lines, begin_index, maybe_next_instance)
+                
                 timeout_instances.append({
-                    "instance" : instance_name + "_" + str(instance_number),
+                    "instance" : instance_name,
                     "dataset" : dataset_path
                 })
                 
