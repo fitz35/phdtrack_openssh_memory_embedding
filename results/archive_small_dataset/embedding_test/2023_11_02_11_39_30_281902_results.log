@@ -1,0 +1,256 @@
+2023_11_02_11_39_30 - results_logger - INFO - Passed program params:
+2023_11_02_11_39_30 - results_logger - INFO - param[0]: main.py
+2023_11_02_11_39_30 - results_logger - INFO - param[1]: -d
+2023_11_02_11_39_30 - results_logger - INFO - param[2]: /home/clement/Documents/github/mem2graph/data/19_filtered_chunk_statistic_embedding_-a_chunk-header-node_-e_only-max-entropy_-s_activate
+2023_11_02_11_39_30 - results_logger - INFO - param[3]: -o
+2023_11_02_11_39_30 - results_logger - INFO - param[4]: ../log
+2023_11_02_11_39_30 - results_logger - INFO - param[5]: -otr
+2023_11_02_11_39_30 - results_logger - INFO - param[6]: training
+2023_11_02_11_39_30 - results_logger - INFO - param[7]: -ots
+2023_11_02_11_39_30 - results_logger - INFO - param[8]: validation
+2023_11_02_11_39_30 - results_logger - INFO - param[9]: --no_balancing
+2023_11_02_11_39_30 - results_logger - INFO - param[10]: -p
+2023_11_02_11_39_30 - results_logger - INFO - param[11]: testingembedding
+2023_11_02_11_39_30 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /home/clement/Documents/github/mem2graph/data/19_filtered_chunk_statistic_embedding_-a_chunk-header-node_-e_only-max-entropy_-s_activate !!!!----///
+2023_11_02_11_39_30 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_02_11_39_30 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_02_11_39_30 - results_logger - INFO - Start time : 1698921570.2897654
+2023_11_02_11_39_30 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_02_11_39_30 - results_logger - INFO - Loading samples and labels from 220 files
+2023_11_02_11_39_31 - results_logger - INFO - Number of loaded files: 220
+2023_11_02_11_39_31 - results_logger - INFO - Number of empty files: 0
+2023_11_02_11_39_31 - results_logger - INFO - Loading samples and labels from 283 files
+2023_11_02_11_39_33 - results_logger - INFO - Number of loaded files: 283
+2023_11_02_11_39_33 - results_logger - INFO - Number of empty files: 0
+2023_11_02_11_39_33 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 2.812152000 s
+2023_11_02_11_39_33 - results_logger - INFO - Cleaning data for DataOriginEnum.Training
+2023_11_02_11_39_33 - results_logger - INFO - Removing 1 columns with only one unique value: ['block_position_in_chunk']
+2023_11_02_11_39_33 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_02_11_39_33 - results_logger - INFO - Removing 2 columns (keeping 40 columns): ['file_path', 'chn_addr']
+2023_11_02_11_39_33 - results_logger - INFO - Cleaning data for DataOriginEnum.Validation
+2023_11_02_11_39_33 - results_logger - INFO - Removing 1 columns with only one unique value: ['block_position_in_chunk']
+2023_11_02_11_39_33 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_02_11_39_33 - results_logger - INFO - Removing 2 columns (keeping 40 columns): ['file_path', 'chn_addr']
+2023_11_02_11_39_33 - results_logger - INFO - timer for feature_engineering started
+2023_11_02_11_39_33 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_11_02_11_39_35 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+                             0        00       000      0000      0001       001  ...      kurt       mad      mean  shannon_entropy      skew   std_dev
+0                     1.000000  0.983006  0.960371  0.937808  0.769477  0.775793  ...  0.560118 -0.276963 -0.442616        -0.655526  0.531458 -0.213290
+00                    0.983006  1.000000  0.994841  0.984713  0.654513  0.656332  ...  0.671749 -0.320935 -0.497402        -0.693160  0.618772 -0.247483
+000                   0.960371  0.994841  1.000000  0.997129  0.579238  0.576406  ...  0.723551 -0.339711 -0.519416        -0.705031  0.657360 -0.261801
+0000                  0.937808  0.984713  0.997129  1.000000  0.515845  0.516187  ...  0.757164 -0.351725 -0.532126        -0.709332  0.681446 -0.270975
+0001                  0.769477  0.654513  0.579238  0.515845  1.000000  0.964284  ...  0.034989 -0.057205 -0.147285        -0.340005  0.101023 -0.044983
+001                   0.775793  0.656332  0.576406  0.516187  0.964284  1.000000  ...  0.029917 -0.058874 -0.143275        -0.339882  0.095334 -0.046578
+0010                  0.728506  0.615883  0.539876  0.483091  0.907286  0.945856  ...  0.033394 -0.064588 -0.142418        -0.316982  0.094504 -0.053698
+0011                  0.710739  0.601876  0.529890  0.475029  0.881098  0.907299  ...  0.020567 -0.041906 -0.121206        -0.314256  0.080921 -0.029797
+01                    0.774095  0.644725  0.568265  0.509234  0.947015  0.967044  ...  0.015788 -0.046529 -0.127695        -0.339202  0.079139 -0.034695
+010                   0.758714  0.630019  0.554109  0.495757  0.931943  0.953861  ...  0.014784 -0.048266 -0.125945        -0.331122  0.077059 -0.036808
+0100                  0.730183  0.616414  0.540947  0.484679  0.902318  0.942164  ...  0.032370 -0.065973 -0.141131        -0.315409  0.092970 -0.053703
+0101                  0.734185  0.604045  0.531939  0.475540  0.898756  0.909517  ...  0.004209 -0.035714 -0.111023        -0.322319  0.064201 -0.025352
+011                   0.754618  0.631600  0.558644  0.501905  0.917068  0.932865  ...  0.016531 -0.041019 -0.123280        -0.332893  0.077990 -0.029258
+0110                  0.709003  0.594247  0.525139  0.471500  0.865325  0.881168  ...  0.017055 -0.056804 -0.134288        -0.308436  0.072825 -0.049595
+0111                  0.684151  0.571536  0.506136  0.455131  0.826560  0.839562  ...  0.012995 -0.013154 -0.087565        -0.307538  0.071320  0.002558
+1                     0.769903  0.643677  0.569274  0.511320  0.935995  0.951092  ...  0.016490 -0.018683 -0.104768        -0.354607  0.077566 -0.005016
+10                    0.774063  0.644686  0.568222  0.509190  0.947015  0.967044  ...  0.015719 -0.046478 -0.127713        -0.339113  0.079134 -0.034641
+100                   0.775630  0.656137  0.576195  0.515965  0.964277  0.999998  ...  0.029579 -0.058493 -0.143147        -0.340206  0.094708 -0.046303
+1000                  0.769106  0.654079  0.578773  0.515356  0.999996  0.964239  ...  0.034320 -0.056734 -0.147645        -0.339995  0.100482 -0.044690
+1001                  0.666177  0.557947  0.482869  0.437125  0.757183  0.903152  ...  0.017342 -0.052314 -0.113950        -0.287911  0.070799 -0.041777
+101                   0.741606  0.610381  0.539515  0.483735  0.896259  0.904209  ...  0.005142 -0.035871 -0.111656        -0.324693  0.064827 -0.024792
+1010                  0.720784  0.591522  0.521433  0.466499  0.877231  0.886774  ...  0.001958 -0.034556 -0.106437        -0.314745  0.060521 -0.023576
+1011                  0.685712  0.567549  0.504256  0.454003  0.817411  0.821419  ...  0.010351 -0.033720 -0.107087        -0.301780  0.064511 -0.023865
+11                    0.728942  0.612847  0.544699  0.490887  0.877938  0.885527  ...  0.016819  0.020592 -0.068353        -0.359859  0.071871  0.036160
+110                   0.754539  0.631509  0.558548  0.501806  0.917054  0.932849  ...  0.016393 -0.040916 -0.123176        -0.332716  0.077901 -0.029138
+1100                  0.725607  0.615186  0.540626  0.483827  0.907843  0.934660  ...  0.022920 -0.043153 -0.127086        -0.323535  0.084486 -0.032588
+1101                  0.662906  0.546098  0.486861  0.439479  0.776979  0.777999  ...  0.006506 -0.031693 -0.098731        -0.288448  0.057854 -0.020507
+111                   0.626568  0.529757  0.473699  0.428529  0.746002  0.744266  ...  0.015532  0.082441 -0.004314        -0.350762  0.058151  0.100327
+1110                  0.684057  0.571435  0.506032  0.455026  0.826520  0.839512  ...  0.012779 -0.012718 -0.087535        -0.307303  0.071356  0.002987
+1111                  0.491828  0.421457  0.380862  0.346778  0.575781  0.562353  ...  0.015599  0.147978  0.063661        -0.336720  0.039289  0.165111
+chunk_byte_size       0.981075  0.930073  0.890579  0.856129  0.859161  0.868463  ...  0.423683 -0.212760 -0.362654        -0.597535  0.420811 -0.161029
+chunk_number_in_heap  0.049296  0.045306  0.042402  0.039803  0.051355  0.049682  ...  0.056057  0.037410  0.035414        -0.054580  0.074332  0.053276
+chunk_ptrs            0.901861  0.915018  0.910143  0.901008  0.597365  0.601688  ...  0.749925 -0.360152 -0.546919        -0.745977  0.688414 -0.275163
+chunk_vns             0.978529  0.925387  0.884806  0.849592  0.864214  0.873652  ...  0.408930 -0.205906 -0.353605        -0.588585  0.408275 -0.155717
+kurt                  0.560118  0.671749  0.723551  0.757164  0.034989  0.029917  ...  1.000000 -0.571823 -0.640357        -0.646892  0.771142 -0.481609
+mad                  -0.276963 -0.320935 -0.339711 -0.351725 -0.057205 -0.058874  ... -0.571823  1.000000  0.657552         0.071722 -0.244959  0.985573
+mean                 -0.442616 -0.497402 -0.519416 -0.532126 -0.147285 -0.143275  ... -0.640357  0.657552  1.000000         0.384089 -0.660682  0.636866
+shannon_entropy      -0.655526 -0.693160 -0.705031 -0.709332 -0.340005 -0.339882  ... -0.646892  0.071722  0.384089         1.000000 -0.477255  0.027393
+skew                  0.531458  0.618772  0.657360  0.681446  0.101023  0.095334  ...  0.771142 -0.244959 -0.660682        -0.477255  1.000000 -0.130335
+std_dev              -0.213290 -0.247483 -0.261801 -0.270975 -0.044983 -0.046578  ... -0.481609  0.985573  0.636866         0.027393 -0.130335  1.000000
+
+[40 rows x 40 columns]
+2023_11_02_11_39_35 - results_logger - INFO - Correlation matrix saved at: /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_02_11_39_33_218877.png and /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_02_11_39_33_218837.csv
+2023_11_02_11_39_35 - results_logger - INFO - Correlation sums: 
+0                       28.178811
+00                      25.503303
+000                     23.729593
+0000                    22.292376
+0001                    28.481795
+001                     28.950777
+0010                    26.804417
+0011                    27.017371
+01                      29.388336
+010                     28.624600
+0100                    26.949741
+0101                    28.031789
+011                     28.941796
+0110                    26.736385
+0111                    26.844072
+1                       29.462514
+10                      29.387745
+100                     28.947898
+1000                    28.475754
+1001                    25.233024
+101                     28.513357
+1010                    27.629809
+1011                    26.516896
+11                      28.331618
+110                     28.939975
+1100                    27.400523
+1101                    25.900190
+111                     24.900224
+1110                    26.841943
+1111                    19.971299
+chunk_byte_size         30.002448
+chunk_number_in_heap     2.767852
+chunk_ptrs              24.302183
+chunk_vns               30.048531
+kurt                     8.933044
+mad                      6.883565
+mean                    10.210067
+shannon_entropy         15.827513
+skew                     9.345984
+std_dev                  5.939009
+dtype: float64
+2023_11_02_11_39_35 - results_logger - INFO - Sorted correlation sums: 
+chunk_vns               30.048531
+chunk_byte_size         30.002448
+1                       29.462514
+01                      29.388336
+10                      29.387745
+001                     28.950777
+100                     28.947898
+011                     28.941796
+110                     28.939975
+010                     28.624600
+101                     28.513357
+0001                    28.481795
+1000                    28.475754
+11                      28.331618
+0                       28.178811
+0101                    28.031789
+1010                    27.629809
+1100                    27.400523
+0011                    27.017371
+0100                    26.949741
+0111                    26.844072
+1110                    26.841943
+0010                    26.804417
+0110                    26.736385
+1011                    26.516896
+1101                    25.900190
+00                      25.503303
+1001                    25.233024
+111                     24.900224
+chunk_ptrs              24.302183
+000                     23.729593
+0000                    22.292376
+1111                    19.971299
+shannon_entropy         15.827513
+mean                    10.210067
+skew                     9.345984
+kurt                     8.933044
+mad                      6.883565
+std_dev                  5.939009
+chunk_number_in_heap     2.767852
+dtype: float64
+2023_11_02_11_39_35 - results_logger - INFO - Keeping columns: ['chunk_number_in_heap', 'std_dev', 'mad', 'kurt', 'skew', 'mean', 'shannon_entropy', '1111']
+2023_11_02_11_39_35 - results_logger - INFO - End feature engineering
+2023_11_02_11_39_35 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 1.928417000 s
+2023_11_02_11_39_35 - results_logger - INFO - Keeping 8 : ['chunk_number_in_heap', 'std_dev', 'mad', 'kurt', 'skew', 'mean', 'shannon_entropy', '1111']
+2023_11_02_11_39_35 - results_logger - INFO - Keeping 8 : ['chunk_number_in_heap', 'std_dev', 'mad', 'kurt', 'skew', 'mean', 'shannon_entropy', '1111']
+2023_11_02_11_39_35 - results_logger - INFO - Number of samples before balancing: class-0.0=4371 class-1.0=1244 class-2.0=220 class-4.0=220
+2023_11_02_11_39_35 - results_logger - INFO - Number of samples after balancing: class-0.0=4371 class-1.0=1244 class-2.0=220 class-4.0=220
+2023_11_02_11_39_35 - results_logger - INFO - timer for random forest :  started
+2023_11_02_11_39_35 - results_logger - INFO - timer for evaluate_model_score started
+2023_11_02_11_39_35 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 1. 0. 4. 1. 1.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    1.0
+11    0.0
+12    0.0
+13    1.0
+14    0.0
+15    1.0
+16    0.0
+17    4.0
+18    1.0
+19    1.0
+Name: label, dtype: float64
+2023_11_02_11_39_35 - results_logger - INFO - Number of predicted 1 labels: 3263.0 
+ versus number of predicted 0 labels: 4559.0
+2023_11_02_11_39_35 - results_logger - INFO - Accuracy: 98.53%
+2023_11_02_11_39_35 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9938466947960619,
+        "recall": 0.9869064245810056,
+        "f1-score": 0.9903644008409251,
+        "support": 5728.0
+    },
+    "1.0": {
+        "precision": 0.9497135582431572,
+        "recall": 0.9764397905759162,
+        "f1-score": 0.962891255243627,
+        "support": 1528.0
+    },
+    "2.0": {
+        "precision": 0.9964285714285714,
+        "recall": 0.9858657243816255,
+        "f1-score": 0.9911190053285969,
+        "support": 283.0
+    },
+    "4.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 283.0
+    },
+    "accuracy": 0.9852978777806187,
+    "macro avg": {
+        "precision": 0.9849972061169476,
+        "recall": 0.9873029848846369,
+        "f1-score": 0.9860936653532872,
+        "support": 7822.0
+    },
+    "weighted avg": {
+        "precision": 0.9855414817823668,
+        "recall": 0.9852978777806187,
+        "f1-score": 0.9853735367600454,
+        "support": 7822.0
+    }
+}
+2023_11_02_11_39_35 - results_logger - INFO - Confusion Matrix: 
+2023_11_02_11_39_35 - results_logger - INFO - True Positives: 1492
+2023_11_02_11_39_35 - results_logger - INFO - True Negatives: 5653
+2023_11_02_11_39_35 - results_logger - INFO - False Positives: 75
+2023_11_02_11_39_35 - results_logger - INFO - False Negatives: 35
+2023_11_02_11_39_35 - results_logger - INFO - AUC: 0.89
+2023_11_02_11_39_35 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 0.170340000 s
+2023_11_02_11_39_35 - results_logger - INFO - Time elapsed since the begining of random forest : : 0.530463000 s
+2023_11_02_11_39_35 - results_logger - INFO - timer for clustering started
+2023_11_02_11_39_35 - results_logger - INFO - timer for scaling_duration started
+2023_11_02_11_39_35 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.000537000 s
+2023_11_02_11_39_35 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=4371 class-1.0=1244 class-2.0=220 class-4.0=220
+2023_11_02_11_39_35 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1684 class-1.0=1244 class-2.0=220 class-4.0=220
+2023_11_02_11_39_35 - results_logger - INFO - min_samples: 110
+2023_11_02_11_39_35 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_11_02_11_40_35 - results_logger - ERROR - Timeout error while clustering
+2023_11_02_11_40_35 - results_logger - INFO - Time elapsed since the begining of clustering: 60.011377000 s
+2023_11_02_11_40_35 - results_logger - INFO - End time : 1698921635.622623
+2023_11_02_11_40_35 - results_logger - INFO - Total duration: 65.33285760879517

@@ -1,0 +1,59 @@
+2023_11_02_11_09_26 - results_logger - INFO - Passed program params:
+2023_11_02_11_09_26 - results_logger - INFO - param[0]: main.py
+2023_11_02_11_09_26 - results_logger - INFO - param[1]: -d
+2023_11_02_11_09_26 - results_logger - INFO - param[2]: /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none
+2023_11_02_11_09_26 - results_logger - INFO - param[3]: -o
+2023_11_02_11_09_26 - results_logger - INFO - param[4]: ../log
+2023_11_02_11_09_26 - results_logger - INFO - param[5]: -otr
+2023_11_02_11_09_26 - results_logger - INFO - param[6]: training
+2023_11_02_11_09_26 - results_logger - INFO - param[7]: -ots
+2023_11_02_11_09_26 - results_logger - INFO - param[8]: validation
+2023_11_02_11_09_26 - results_logger - INFO - param[9]: -p
+2023_11_02_11_09_26 - results_logger - INFO - param[10]: testingembedding
+2023_11_02_11_09_26 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none !!!!----///
+2023_11_02_11_09_26 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_02_11_09_26 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_02_11_09_26 - results_logger - INFO - Start time : 1698919766.3093178
+2023_11_02_11_09_26 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_02_11_09_26 - results_logger - INFO - Loading samples and labels from 31 files
+2023_11_02_11_09_26 - results_logger - INFO - Number of loaded files: 31
+2023_11_02_11_09_26 - results_logger - INFO - Number of empty files: 0
+2023_11_02_11_09_26 - results_logger - INFO - Loading samples and labels from 39 files
+2023_11_02_11_09_27 - results_logger - INFO - Number of loaded files: 39
+2023_11_02_11_09_27 - results_logger - INFO - Number of empty files: 0
+2023_11_02_11_09_27 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 0.789972000 s
+2023_11_02_11_09_27 - results_logger - INFO - Cleaning data for DataOriginEnum.Training
+2023_11_02_11_09_27 - results_logger - INFO - Removing 17 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4', 'chns_ancestor_5', 'chns_ancestor_6', 'chns_ancestor_7', 'chns_ancestor_8', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8']
+2023_11_02_11_09_27 - results_logger - INFO - WARN : Removing row with NaN values in file_path: /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none/ValueNodeEmbedding_Training_Training_port-forwarding_V_8_0_P1_32_16967-1644326802-heap.raw_.csv, f_dtns_addr: 93877410333864.0
+2023_11_02_11_09_27 - results_logger - INFO - WARN : Removing row with NaN values in file_path: /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none/ValueNodeEmbedding_Training_Training_basic_V_8_0_P1_16_26477-1643982753-heap.raw_.csv, f_dtns_addr: 94036638480712.0
+2023_11_02_11_09_27 - results_logger - INFO - Removing 2 row with nan value.
+2023_11_02_11_09_27 - results_logger - INFO - Removing 2 columns (keeping 4 columns): ['file_path', 'chn_addr']
+2023_11_02_11_09_27 - results_logger - INFO - Cleaning data for DataOriginEnum.Validation
+2023_11_02_11_09_27 - results_logger - INFO - Removing 17 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4', 'chns_ancestor_5', 'chns_ancestor_6', 'chns_ancestor_7', 'chns_ancestor_8', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8']
+2023_11_02_11_09_27 - results_logger - INFO - WARN : Removing row with NaN values in file_path: /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none/ValueNodeEmbedding_Validation_Validation_basic_V_7_0_P1_32_15105-1643896819-heap.raw_.csv, f_dtns_addr: 94272586019432.0
+2023_11_02_11_09_27 - results_logger - INFO - WARN : Removing row with NaN values in file_path: /home/clement/Documents/github/mem2graph/data/0_value_node_embedding__-e_none_-s_none/ValueNodeEmbedding_Validation_Validation_basic_V_7_1_P1_32_20898-1643963138-heap.raw_.csv, f_dtns_addr: 93860678402008.0
+2023_11_02_11_09_27 - results_logger - INFO - Removing 2 row with nan value.
+2023_11_02_11_09_27 - results_logger - INFO - Removing 2 columns (keeping 4 columns): ['file_path', 'chn_addr']
+2023_11_02_11_09_27 - results_logger - INFO - timer for feature_engineering started
+2023_11_02_11_09_27 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_11_02_11_09_27 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+                      chunk_byte_size  chunk_number_in_heap  chunk_ptrs  chunk_vns
+chunk_byte_size              1.000000              0.189883    0.045321   0.999846
+chunk_number_in_heap         0.189883              1.000000    0.213570   0.186247
+chunk_ptrs                   0.045321              0.213570    1.000000   0.027756
+chunk_vns                    0.999846              0.186247    0.027756   1.000000
+2023_11_02_11_09_27 - results_logger - INFO - Correlation matrix saved at: /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_02_11_09_27_632860.png and /home/clement/Documents/github/phdtrack_openssh_memory_embedding/results/feature_correlation_matrices/correlation_matrix_pearson_2023_11_02_11_09_27_632818.csv
+2023_11_02_11_09_27 - results_logger - INFO - Correlation sums: 
+chunk_byte_size         2.235049
+chunk_number_in_heap    1.589700
+chunk_ptrs              1.286647
+chunk_vns               2.213848
+dtype: float64
+2023_11_02_11_09_27 - results_logger - INFO - Sorted correlation sums: 
+chunk_byte_size         2.235049
+chunk_vns               2.213848
+chunk_number_in_heap    1.589700
+chunk_ptrs              1.286647
+dtype: float64
+2023_11_02_11_09_27 - results_logger - INFO - Keeping columns: ['chunk_ptrs', 'chunk_number_in_heap', 'chunk_vns', 'chunk_byte_size']
+2023_11_02_11_09_27 - results_logger - INFO - End feature engineering
