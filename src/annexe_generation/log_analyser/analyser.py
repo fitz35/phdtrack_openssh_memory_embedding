@@ -144,6 +144,7 @@ if __name__ == "__main__":
     # ------------------------- Read the files and extract data
     # Get all files in the directory
     files = [os.path.join(args.files_dir_path, LOG_DIR_NAME, file) for file in os.listdir(log_dir_path) if file.endswith(".log") and not file.startswith("common_log")]
+    #files = ["/home/clement/Documents/github/phdtrack_openssh_memory_embedding/results_serv/archive/deeplearning/embedding_test/2023_10_29_08_42_19_410766_results.log"]
     print(f"Found {len(files)} log files")
     for file in files:
         print(file)

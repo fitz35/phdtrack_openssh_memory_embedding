@@ -231,6 +231,22 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                     "dataset" : dataset_path
                 })
                 
+                if maybe_next_instance is None:
+                    return results, timeout_instances
+                
+                begin_index = maybe_next_instance
+                continue
+            elif maybe_next_instance is None and __is_timeout_lines(log_lines, begin_index, len(log_lines)):
+                instance_name = extract_instance(log_lines, begin_index, len(log_lines))
+                
+                timeout_instances.append({
+                    "instance" : instance_name,
+                    "dataset" : dataset_path
+                })
+                
+                if maybe_next_instance is None:
+                    return results, timeout_instances
+                
                 begin_index = maybe_next_instance
                 continue
 
