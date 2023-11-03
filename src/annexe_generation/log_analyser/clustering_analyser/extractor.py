@@ -6,12 +6,13 @@ import re
 import sys
 from typing import List, Tuple
 
-from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusterInfo, ClusteringResult, LabelAssociation
+
 
 
 sys.path.append(os.path.abspath('../../..'))
 from annexe_generation.log_analyser.common_extractor import extract_instance, extract_lines_between
-
+from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusterInfo, ClusteringResult, LabelAssociation
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
 
 def __extract_clustering_lines(log_lines: List[str], start_index: int) -> Tuple[List[str], int]:
     """
@@ -226,7 +227,7 @@ def clustering_extractor(all_lines : list[str], begin_index : int, dataset_path 
 
 
     clustering_result = ClusteringResult(
-        dataset_name=dataset_name, 
+        dataset_name=DatasetData.from_str(dataset_name), 
         instance=instance_name, 
         initial_samples=initial_samples, 
         final_samples=final_samples, 

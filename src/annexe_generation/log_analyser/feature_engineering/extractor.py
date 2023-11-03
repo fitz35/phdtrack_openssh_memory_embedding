@@ -8,9 +8,11 @@ import sys
 import pandas as pd
 
 
+
 sys.path.append(os.path.abspath('../../..'))
 from annexe_generation.log_analyser.common_extractor import extract_instance, extract_lines_between
 from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import CorrelationSum, FeatureEngineeringData
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
 
 PROJECT_ROOT_NAME = "phdtrack_openssh_memory_embedding/"
 
@@ -185,7 +187,7 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
         prec_sum = correlation_sum_best_name[name]
     
     return FeatureEngineeringData(
-        dataset_name,
+        DatasetData.from_str(dataset_name),
         instance_name,
         correlation_matrix,
         correlation_image_path,

@@ -17,7 +17,7 @@ from annexe_generation.log_analyser.random_forest_analyser.classifier_data impor
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
 from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData, features_engineering_list_to_json
 from annexe_generation.log_analyser.feature_engineering.extractor import feature_engineering_extractor
-
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
 
 LOG_DIR_NAME = "embedding_test"
 FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
@@ -137,9 +137,15 @@ if __name__ == "__main__":
     classification_results : list[ClassificationResults] = []
     feature_engineering_results : list[FeatureEngineeringData] = []
 
+    clustering_results_by_dataset_number: dict[str, list[ClusteringResult]] = {}
+    classification_results_by_dataset_number : dict[str, list[ClassificationResults]] = {}
+    feature_engineering_results_by_dataset_number : dict[str, list[FeatureEngineeringData]] = {}
+
     clustering_results_by_dataset: dict[str, list[ClusteringResult]] = {}
     classification_results_by_dataset : dict[str, list[ClassificationResults]] = {}
     feature_engineering_results_by_dataset : dict[str, list[FeatureEngineeringData]] = {}
+
+
 
     # ------------------------- Read the files and extract data
     # Get all files in the directory
@@ -172,25 +178,45 @@ if __name__ == "__main__":
     
     for feature_engineering_instance in feature_engineering_results:
         if len(feature_engineering_instance.best_columns) != NB_FEATURE_ENGINEERING_FEATURES:
-            feature_engineering_fails.append({"dataset": feature_engineering_instance.dataset_name, "instance": feature_engineering_instance.instance, "nb_features": str(len(feature_engineering_instance.best_columns))})
+            feature_engineering_fails.append({"dataset": str(feature_engineering_instance.dataset_name.dataset_number), "instance": feature_engineering_instance.instance, "nb_features": str(len(feature_engineering_instance.best_columns))})
 
 
     # extract the instance by dataset
     # Organize clustering and classification results by dataset
     for result in clustering_results:
-        dataset_name = result.dataset_name
+        dataset_name = str(result.dataset_name.dataset_number)
+        if dataset_name not in clustering_results_by_dataset_number:
+            clustering_results_by_dataset_number[dataset_name] = []
+        clustering_results_by_dataset_number[dataset_name].append(result)
+
+    for result in classification_results:
+        dataset_name = str(result.dataset_name.dataset_number)
+        if dataset_name not in classification_results_by_dataset_number:
+            classification_results_by_dataset_number[dataset_name] = []
+        classification_results_by_dataset_number[dataset_name].append(result)
+
+    for result in feature_engineering_results:
+        dataset_name = str(result.dataset_name.dataset_number)
+        if dataset_name not in feature_engineering_results_by_dataset_number:
+            feature_engineering_results_by_dataset_number[dataset_name] = []
+        feature_engineering_results_by_dataset_number[dataset_name].append(result)
+
+
+
+    for result in clustering_results:
+        dataset_name = result.dataset_name.dataset_name
         if dataset_name not in clustering_results_by_dataset:
             clustering_results_by_dataset[dataset_name] = []
         clustering_results_by_dataset[dataset_name].append(result)
 
     for result in classification_results:
-        dataset_name = result.dataset_name
+        dataset_name = result.dataset_name.dataset_name
         if dataset_name not in classification_results_by_dataset:
             classification_results_by_dataset[dataset_name] = []
         classification_results_by_dataset[dataset_name].append(result)
 
     for result in feature_engineering_results:
-        dataset_name = result.dataset_name
+        dataset_name = result.dataset_name.dataset_name
         if dataset_name not in feature_engineering_results_by_dataset:
             feature_engineering_results_by_dataset[dataset_name] = []
         feature_engineering_results_by_dataset[dataset_name].append(result)
@@ -201,9 +227,9 @@ if __name__ == "__main__":
 
 
     all_dataset_names = set(
-        list(clustering_results_by_dataset.keys()) +
-        list(classification_results_by_dataset.keys()) +
-        list(feature_engineering_results_by_dataset.keys())
+        list(clustering_results_by_dataset_number.keys()) +
+        list(classification_results_by_dataset_number.keys()) +
+        list(feature_engineering_results_by_dataset_number.keys())
     )
     FEATURE_ENGINEERING_LATEX_FILE_NAME = "feature_engineering_results.txt"
     CLUSTERING_LATEX_FILE_NAME = "clustering_results.txt"
@@ -223,7 +249,7 @@ if __name__ == "__main__":
         with open(latex_file_path, 'a') as f:
             f.write("")
 
-    for dataset_name, results in feature_engineering_results_by_dataset.items():
+    for dataset_name, results in feature_engineering_results_by_dataset_number.items():
         dataset_path = os.path.join(args.output, dataset_name)
         img_dataset_path = os.path.join(img_folder_path, dataset_name)
         
@@ -251,7 +277,7 @@ if __name__ == "__main__":
             f.write("")
 
     # treat the data
-    for dataset_name, results in clustering_results_by_dataset.items():
+    for dataset_name, results in clustering_results_by_dataset_number.items():
         dataset_path = os.path.join(args.output, dataset_name)
         img_dataset_path = os.path.join(img_folder_path, dataset_name)
 
@@ -259,14 +285,15 @@ if __name__ == "__main__":
         clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
    
         for result in results:
+            clustering_pie_folder_path = os.path.join(img_dataset_path, "clustering_pie_charts")
+            os.makedirs(clustering_pie_folder_path, exist_ok=True)
+            clustering_image_path = os.path.join(clustering_pie_folder_path, f'{result.instance}.png')
+
             with open(clustering_latex_file_path, 'a') as f:
-                f.write(result.to_latex() + "\n\n")
-
-
-        clustering_pie_folder_path = os.path.join(img_dataset_path, "clustering_pie_charts")
-        os.makedirs(clustering_pie_folder_path, exist_ok=True)
-        clustering_pie_charts(results, clustering_pie_folder_path)
-
+                f.write(result.to_latex(image_real_path_to_latex_path((clustering_image_path))) + "\n\n")
+            
+            # save the pie charts
+            result.save_pie_charts((clustering_image_path))
 
         save_clustering_results_to_json(results, os.path.join(dataset_path, "clustering_results.json"))
 
@@ -279,7 +306,7 @@ if __name__ == "__main__":
         with open(latex_file_path, 'a') as f:
             f.write("")
 
-    for dataset_name, results in classification_results_by_dataset.items():
+    for dataset_name, results in classification_results_by_dataset_number.items():
         dataset_path = os.path.join(args.output, dataset_name)
         img_dataset_path = os.path.join(img_folder_path, dataset_name)
         # save latex
@@ -295,12 +322,12 @@ if __name__ == "__main__":
         save_classification_results_to_json(results, os.path.join(dataset_path, "classification_results.json")  )
     
 
-    plot_metrics(get_best_instances(classification_results_by_dataset, "accuracy"), img_folder_path, "Best Accuracy")
+    plot_metrics(get_best_instances(classification_results_by_dataset_number, "accuracy"), img_folder_path, "Best Accuracy")
 
 
 
 
-    # ------------------------- fusionne the latex file
+    # ------------------------- fusionne the latex file -------------------------
     latex_file_path = os.path.join(args.output, LATEX_FILE_NAME)
 
     with open(latex_file_path, 'w') as f:
@@ -320,7 +347,7 @@ if __name__ == "__main__":
         f.write(list_of_dicts_to_latex_table(feature_engineering_fails, "Feature engineering fails", "tab:feature_engineering_fails"))
         f.write("\n\n")
 
-    # feature engineering
+    # ...................... feature engineering
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Feature Engineering results}\n\n")
         f.write("\\label{sec:annexe:feature_engineering_results}\n\n")
@@ -338,7 +365,7 @@ if __name__ == "__main__":
                 for line in feature_engineering_file:
                     f.write(line)
 
-    # clustering
+    # ..................... clustering
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Clustering results}\n\n")
         f.write("\\label{sec:annexe:clustering_results}\n\n")
@@ -355,7 +382,7 @@ if __name__ == "__main__":
                     f.write(line)
     
 
-    # classification
+    # .......................... classification
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Classification results}\n\n")
         f.write("\\label{sec:annexe:classification_results}\n\n")

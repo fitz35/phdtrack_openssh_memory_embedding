@@ -1,10 +1,14 @@
 from dataclasses import asdict, dataclass
 import json
 import os
+import sys
 from typing import Dict, List
 import matplotlib.pyplot as plt
 
 import numpy as np
+
+sys.path.append(os.path.abspath('../../..'))
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
 
 @dataclass(frozen=True)
 class ClusterInfo:
@@ -22,7 +26,7 @@ class LabelAssociation:
 
 @dataclass(frozen=True)
 class ClusteringResult:
-    dataset_name: str
+    dataset_name: DatasetData
     instance: str
     initial_samples: Dict[float, int]
     final_samples: Dict[float, int]
@@ -33,11 +37,15 @@ class ClusteringResult:
     total_duration: float
 
 
-    def to_latex(self) -> str:
+    def to_latex(self, cluster_image_path : str) -> str:
         # Start longtable
+        if len(self.label_association) == 0:
+            return "" # No array to display
+        
+
         latex_str = "\\begin{longtable}{|c|c|c|c|c|}\n"
-        latex_str += "\\caption{" + self.instance + " Clustering Results on " + self.dataset_name.replace("_", "\\_") + "} "
-        latex_str += "\\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_clustering_results}\\\\\n"
+        latex_str += "\\caption{" + self.instance + " Clustering Results on " + str(self.dataset_name.dataset_number) + "} "
+        latex_str += "\\label{tab:" + str(self.dataset_name.dataset_number) + "_" + self.instance.lower().replace(" ", "_") + "_clustering_results}\\\\\n"
         latex_str += "\\hline\n"
         
         # Part 1: General Information
@@ -81,6 +89,8 @@ class ClusteringResult:
                 latex_str += f"\\multicolumn{{2}}{{c|}}{{{label}}} & \\multicolumn{{2}}{{c|}}{{{str(count)}}} \\\\\n"
             latex_str += "\\hline\n"
 
+        # Add image in the last row spanning all columns, with adjusted size
+        latex_str += "\\multicolumn{5}{|c|}{\\includegraphics[width=0.8\\linewidth]{" + cluster_image_path + "}} \\\\\n"
 
         # End longtable
         latex_str += "\\end{longtable}\n"
@@ -96,6 +106,44 @@ class ClusteringResult:
         """
         result_dict = asdict(self)
         return result_dict
+    
+    def save_pie_charts(self, latex_img_path: str):
+        num_clusters = len(self.label_association)
+        if num_clusters == 0:
+            return
+        
+        # Calculate number of rows and columns for subplots
+        num_cols = 2  # for example, can be adjusted
+        num_rows = -(-num_clusters // num_cols) # ceiling division
+
+        fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
+        fig.suptitle(f'Clusters for {self.instance} of the dataset {self.dataset_name}')
+
+        # Make axs a 2D array for consistency
+        axs = np.array(axs, ndmin=2)
+
+        for i, label_assoc in enumerate(self.label_association):
+            row = i // num_cols
+            col = i % num_cols
+            ax = axs[row, col]
+            
+            labels = list(label_assoc.label_counts.keys())
+            sizes = list(label_assoc.label_counts.values())
+
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')
+            ax.set_title(f'Cluster : {label_assoc.cluster_id}')
+
+        # If there is an odd number of clusters, remove the last subplot
+        if num_clusters % num_cols != 0:
+            fig.delaxes(axs[-1, -1])
+
+        # Adjust the layout to make sure everything fits
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+        # Save the figure
+        plt.savefig(latex_img_path)
+        plt.close()
 
 def save_clustering_results_to_json(results_list: List[ClusteringResult], file_path: str) -> None:
     """
@@ -115,10 +163,12 @@ def save_clustering_results_to_json(results_list: List[ClusteringResult], file_p
 def clustering_pie_charts(clustering_results: List[ClusteringResult], save_dir_path: str):
     for result in clustering_results:
         num_clusters = len(result.label_association)
+        if num_clusters == 0:
+            continue
         
         # Calculate number of rows and columns for subplots
         num_cols = 2  # for example, can be adjusted
-        num_rows = max(-(-num_clusters // num_cols), 1) # ceiling division
+        num_rows = -(-num_clusters // num_cols) # ceiling division
 
         fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
         fig.suptitle(f'Clusters for {result.instance} of the dataset {result.dataset_name}')

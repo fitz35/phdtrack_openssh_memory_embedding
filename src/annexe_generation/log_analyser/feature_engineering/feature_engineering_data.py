@@ -1,13 +1,18 @@
 from dataclasses import asdict, dataclass
 import json
+import os
 import shutil
+import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 import pandas as pd
 
-@dataclass
+sys.path.append(os.path.abspath('../../..'))
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
+
+@dataclass(frozen=True)
 class CorrelationSum:
     feature_name: str
     correlation_sum: float
@@ -61,24 +66,24 @@ class CorrelationSum:
         return result_list
 
 
-@dataclass
+@dataclass(frozen=True)
 class FeatureEngineeringData:
-    dataset_name: str
+    dataset_name: DatasetData
     instance: str
     correlation_matrix: pd.DataFrame
     correlation_image_path : str
     correlation_sum_sorted_list: list[CorrelationSum]
     best_columns : list[str]
-
+    
     def to_latex(self, correlation_image_path : str):
         # Start of the LaTeX table
         latex_str = "\\begin{longtable}{|c|c|}\n"
-        latex_str += "\\caption{" + self.instance + " Feature Engineering Results on " + self.dataset_name.replace("_", "\\_") + "} "
-        latex_str += "\\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_feature_engineering_results}\\\\\n"
+        latex_str += "\\caption{" + self.instance + " Feature Engineering Results on " + str(self.dataset_name.dataset_number) + "} "
+        latex_str += "\\label{tab:" + str(self.dataset_name.dataset_number) + "_" + self.instance.lower().replace(" ", "_") + "_feature_engineering_results}\\\\\n"
         latex_str += "\\hline\n"
 
         # Dataset name and instance
-        latex_str += "Dataset Name & " + self.dataset_name.replace("_", "\\_") + " \\\\ \\hline\n"
+        latex_str += "Dataset Name & " + str(self.dataset_name.dataset_number) + " \\\\ \\hline\n"
         latex_str += "Instance & " + self.instance + " \\\\ \\hline\n"
 
         # Best features
@@ -104,8 +109,8 @@ class FeatureEngineeringData:
     def correlation_matrix_to_latex(self):
         # Start of the LaTeX table
         latex_str = "\\begin{longtable}{|" + "c|"*(self.correlation_matrix.shape[1]+1) + "}\n"
-        latex_str += "\\caption{" + self.instance + " Correlation Matrix on " + self.dataset_name.replace("_", "\\_") + "} "
-        latex_str += "\\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_correlation_matrix}\\\\\n"
+        latex_str += "\\caption{" + self.instance + " Correlation Matrix on " + str(self.dataset_name.dataset_number) + "} "
+        latex_str += "\\label{tab:" + str(self.dataset_name.dataset_number) + "_" + self.instance.lower().replace(" ", "_") + "_correlation_matrix}\\\\\n"
         latex_str += "\\hline\n"
 
         # Column names

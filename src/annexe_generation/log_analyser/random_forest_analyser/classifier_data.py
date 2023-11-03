@@ -2,12 +2,16 @@ from dataclasses import asdict, dataclass
 import json
 import os
 import re
+import sys
 from typing import Any, Dict, List
 import matplotlib.pyplot as plt
 
 import pandas as pd
 
-@dataclass
+sys.path.append(os.path.abspath('../../..'))
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
+
+@dataclass(frozen=True)
 class ClassificationMetrics:
     precision: float
     recall: float
@@ -26,9 +30,9 @@ class ClassificationMetrics:
                 f"\\hline\n")
 
 
-@dataclass
+@dataclass(frozen=True)
 class ClassificationResults:
-    dataset_name: str
+    dataset_name: DatasetData
     instance: str
     class_metrics: Dict[str, ClassificationMetrics]
     accuracy: float
@@ -51,7 +55,7 @@ class ClassificationResults:
         weighted_avg = ClassificationMetrics(**d["weighted avg"], initial_samples=initial_samples_sum, final_samples=final_samples_sum)
         accuracy = d.get("accuracy", 0.0)
         return ClassificationResults(
-            dataset_name=dataset_name, instance=instance,
+            dataset_name=DatasetData.from_str(dataset_name), instance=instance,
             class_metrics=class_metrics, accuracy=accuracy,
             macro_avg=macro_avg, weighted_avg=weighted_avg,
             duration=duration, **additional_metrics
@@ -82,7 +86,7 @@ class ClassificationResults:
         
         # Create and return the ClassificationResults object
         return ClassificationResults(
-            dataset_name=dataset_name, instance=instance,
+            dataset_name=DatasetData.from_str(dataset_name), instance=instance,
             class_metrics=class_metrics, accuracy=accuracy,
             macro_avg=macro_avg, weighted_avg=weighted_avg,
             true_positives=true_positives, true_negatives=true_negatives,
@@ -93,7 +97,7 @@ class ClassificationResults:
 
     def to_latex(self):
         latex_str = "\\begin{longtable}{|c|c|c|}\n"
-        latex_str += "\\caption{" + self.instance + " Classification Results on " + self.dataset_name.replace("_", "\\_") + "} \\label{tab:" + self.dataset_name + "_" + self.instance.lower().replace(" ", "_") + "_classifiers_results} \\\\\n"
+        latex_str += "\\caption{" + self.instance + " Classification Results on " + str(self.dataset_name.dataset_number) + "} \\label{tab:" + str(self.dataset_name.dataset_number) + "_" + self.instance.lower().replace(" ", "_") + "_classifiers_results} \\\\\n"
         latex_str += "\\hline\n"
         latex_str += "Class & Metric Name & Metric Value \\\\\n"
         latex_str += "\\hline\n"
@@ -210,32 +214,13 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
 def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str, file_name: str):
     if not classification_results_list:
         raise ValueError("The list of classification results is empty.")
-    
-    def extract_leading_number(text: str) -> int:
-        """
-        Extracts the leading number from a string.
-        
-        Args:
-        text (str): The input string from which to extract the number.
-        
-        Returns:
-        int: The extracted number.
-        
-        Raises:
-        ValueError: If no leading number is found in the string.
-        """
-        match = re.match(r"(\d+)_", text)
-        if match:
-            return int(match.group(1))
-        else:
-            raise ValueError("No leading number found in the string")
 
     # Prepare the data
     data = []
     accuracies = []
     durations = []
     for result in classification_results_list:
-        instance = str(extract_leading_number(result.dataset_name)) + "." + result.instance
+        instance = str(result.dataset_name.dataset_number) + "." + result.instance
         for label, metrics in result.class_metrics.items():
             if label != '0.0':
                 data.append({
@@ -282,7 +267,7 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
         axs[4].set_xlabel('Instance')
         plt.xticks(rotation=45)
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(os.path.join(save_dir_path, f'{file_name.lower().replace(" ", "_")}.png'))
+        plt.savefig(os.path.join(save_dir_path, f'{file_name}.png'))
         #plt.show()
 
     # Create the plots and save them
