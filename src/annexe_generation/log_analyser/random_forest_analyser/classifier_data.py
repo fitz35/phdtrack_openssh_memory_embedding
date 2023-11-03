@@ -211,7 +211,7 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
 
     return best_instances
 
-def plot_metrics(classification_results_list: List[ClassificationResults], save_dir_path: str, file_name: str):
+def plot_metrics(classification_results_list: List[ClassificationResults], file_path: str):
     if not classification_results_list:
         raise ValueError("The list of classification results is empty.")
 
@@ -243,32 +243,41 @@ def plot_metrics(classification_results_list: List[ClassificationResults], save_
     accuracy_df = pd.DataFrame(accuracies)
     duration_df = pd.DataFrame(durations)
 
-    # Function to create a plot for a specific metric
-    def create_plot(file_name : str):
-        fig, axs = plt.subplots(5, 1, figsize=(10, 25), sharex=True)
-        fig.suptitle('Metrics', fontsize=16)
-        
-        for i, metric in enumerate(['Precision', 'Recall', 'F1 Score', 'Accuracy', 'Duration']):
-            if metric != 'Accuracy' and metric != 'Duration':
-                for class_label in df['Class'].unique():
-                    class_df = df[df['Class'] == class_label]
-                    axs[i].plot(class_df['Instance'], class_df[metric], marker='o', linestyle='-', label=f'Class {class_label}')
-                    axs[i].legend()
-            elif metric == 'Accuracy':
-                axs[i].plot(accuracy_df['Instance'], accuracy_df['Accuracy'], marker='o', linestyle='-', color='blue')
-                axs[i].legend(['Accuracy'])
-            else:
-                axs[i].plot(duration_df['Instance'], duration_df['Duration'], marker='o', linestyle='-', color='green')
-                axs[i].legend(['Duration (s)'])
-                
-            axs[i].set_ylabel(metric)
-            axs[i].grid(True)
-        
-        axs[4].set_xlabel('Instance')
-        plt.xticks(rotation=45)
-        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(os.path.join(save_dir_path, f'{file_name}.png'))
-        #plt.show()
+    def calculate_limited_axis(df : pd.DataFrame, metrics : str, margin_fraction=0.1):
+        min_val = df[metrics].min()
+        max_val = df[metrics].max()
+        margin = (max_val - min_val) * margin_fraction
+        new_min = max(min_val - margin, 0)  # Ensure that the new_min is not less than 0
+        new_max = min(max_val + margin, 1)  # Ensure that the new_max is not more than 1 for accuracy
+        return new_min, new_max
 
-    # Create the plots and save them
-    create_plot(file_name)
+    # Plotting
+    num_metrics = 5  # Precision, Recall, F1 Score, Accuracy, Duration
+    fig, axs = plt.subplots(num_metrics, 1, figsize=(10, num_metrics * 4), sharex=True)
+    fig.suptitle('Metrics by Class and Instance', fontsize=16)
+    
+    for i, metric in enumerate(['Precision', 'Recall', 'F1 Score']):
+        metric_df = df.pivot(index='Instance', columns='Class', values=metric)
+        lower_bound, upper_bound = calculate_limited_axis(df, metric)
+        metric_df.plot(kind='bar', ax=axs[i], legend=i == 0)
+        axs[i].set_title(metric)
+        axs[i].set_ylabel(metric)
+        axs[i].set_ylim(lower_bound, upper_bound)
+        if i == 0:
+            axs[i].legend(title='Class')
+
+    # Accuracy and Duration don't have classes, so just plot one bar per instance
+    accuracy_df.set_index('Instance').plot(kind='bar', ax=axs[3], legend=False, color='blue')
+    lower_bound, upper_bound = calculate_limited_axis(accuracy_df, 'Accuracy')
+    axs[3].set_title('Accuracy')
+    axs[3].set_ylabel('Accuracy')
+    axs[3].set_ylim(lower_bound, upper_bound)
+
+    duration_df.set_index('Instance').plot(kind='bar', ax=axs[4], legend=False, color='green')
+    axs[4].set_title('Duration')
+    axs[4].set_ylabel('Duration (s)')
+
+    axs[-1].set_xlabel('Instance')
+    plt.xticks(rotation=45)
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.savefig(file_path)

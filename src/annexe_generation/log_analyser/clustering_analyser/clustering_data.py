@@ -117,7 +117,7 @@ class ClusteringResult:
         num_rows = -(-num_clusters // num_cols) # ceiling division
 
         fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
-        fig.suptitle(f'Clusters for {self.instance} of the dataset {self.dataset_name}')
+        fig.suptitle(f'Clusters for {self.instance} of the dataset {self.dataset_name.dataset_number}')
 
         # Make axs a 2D array for consistency
         axs = np.array(axs, ndmin=2)

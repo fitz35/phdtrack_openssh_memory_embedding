@@ -17,7 +17,7 @@ from annexe_generation.log_analyser.random_forest_analyser.classifier_data impor
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
 from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData, features_engineering_list_to_json
 from annexe_generation.log_analyser.feature_engineering.extractor import feature_engineering_extractor
-from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData, datasets_to_latex_longtable
 
 LOG_DIR_NAME = "embedding_test"
 FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
@@ -127,6 +127,8 @@ if __name__ == "__main__":
         os.system(f"rm -r {args.output}")
     os.mkdir(args.output)
 
+    dataset_informations_set : set[DatasetData] = set()
+
     feature_engineering_fails : list[dict[str, str]] = []
 
     clustering_timeouts : list[dict[str, str]] = []
@@ -161,21 +163,29 @@ if __name__ == "__main__":
         feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path)
         feature_engineering_results.extend(feature_engineering)
         feature_engineering_timeouts.extend(feature_engineering_timeout)
+        
 
         clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor, feature_engineering_dir_path)
         classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor, feature_engineering_dir_path)
-        
 
         clustering_results.extend(clustering)
         classification_results.extend(classification)
         
-
         clustering_timeouts.extend(clustering_timeout)
         classification_timeouts.extend(classification_timeout)
+
+        dataset_informations_set.update([result.dataset_name for result in feature_engineering])
+        dataset_informations_set.update([result.dataset_name for result in clustering])
+        dataset_informations_set.update([result.dataset_name for result in classification])
+    
+
 
     assert compare_list_of_dicts(clustering_timeouts, classification_timeouts), "Clustering and classification timeouts are not the same"
     assert compare_list_of_dicts(clustering_timeouts, feature_engineering_timeouts), "Clustering and feature engineering timeouts are not the same"
     
+    dataset_informations = list(dataset_informations_set)
+    dataset_informations.sort(key=lambda x: x.dataset_number)
+
     for feature_engineering_instance in feature_engineering_results:
         if len(feature_engineering_instance.best_columns) != NB_FEATURE_ENGINEERING_FEATURES:
             feature_engineering_fails.append({"dataset": str(feature_engineering_instance.dataset_name.dataset_number), "instance": feature_engineering_instance.instance, "nb_features": str(len(feature_engineering_instance.best_columns))})
@@ -221,6 +231,11 @@ if __name__ == "__main__":
             feature_engineering_results_by_dataset[dataset_name] = []
         feature_engineering_results_by_dataset[dataset_name].append(result)
 
+    best_instance_by_instance_accuracy = get_best_instances(classification_results_by_dataset_number, "accuracy")
+    best_instance_by_dataset_accuracy = get_best_instances(classification_results_by_dataset, "accuracy")
+
+    best_instance_by_instance_accuracy_name = [(result.dataset_name, result.instance) for result in best_instance_by_instance_accuracy]
+    best_instance_by_dataset_accuracy_name = [(result.dataset_name, result.instance) for result in best_instance_by_dataset_accuracy]
     # ------------------------- prepare files and folder
     # create the folder for the images
     os.makedirs(img_folder_path)
@@ -261,9 +276,10 @@ if __name__ == "__main__":
         for result in results:
             correlation_matrix_path = os.path.join(img_dataset_path, result.instance + "_correlation_matrix.png")
 
-            with open(latex_file_path, 'a') as f:
-                f.write(result.to_latex(image_real_path_to_latex_path(correlation_matrix_path)) + "\n\n")
-                #f.write(result.correlation_matrix_to_latex() + "\n\n")
+            if (result.dataset_name, result.instance) in best_instance_by_instance_accuracy_name:
+                with open(latex_file_path, 'a') as f:
+                    f.write(result.to_latex(image_real_path_to_latex_path(correlation_matrix_path)) + "\n\n")
+                    #f.write(result.correlation_matrix_to_latex() + "\n\n")
         
             # save the correlation matrix
             result.save_correlation_matrix_as_heatmap(correlation_matrix_path)
@@ -285,6 +301,10 @@ if __name__ == "__main__":
         clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
    
         for result in results:
+            # save the result only if the clustering was successful
+            if len(result.label_association) == 0:
+                continue
+
             clustering_pie_folder_path = os.path.join(img_dataset_path, "clustering_pie_charts")
             os.makedirs(clustering_pie_folder_path, exist_ok=True)
             clustering_image_path = os.path.join(clustering_pie_folder_path, f'{result.instance}.png')
@@ -299,6 +319,7 @@ if __name__ == "__main__":
 
     # ----------------------- Extract classification results
 
+    
     for dataset_name in all_dataset_names:
         dataset_path = os.path.join(args.output, dataset_name)
         latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
@@ -307,22 +328,38 @@ if __name__ == "__main__":
             f.write("")
 
     for dataset_name, results in classification_results_by_dataset_number.items():
+
         dataset_path = os.path.join(args.output, dataset_name)
         img_dataset_path = os.path.join(img_folder_path, dataset_name)
         # save latex
         classification_latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
 
+        image_file_path = os.path.join(img_dataset_path, f'{dataset_name} - Metrics.png')
+
+        with open(classification_latex_file_path, 'a') as f:
+            f.write("\\begin{figure}[h!]\n")
+            f.write("\\centering\n")
+            f.write("\\includegraphics[width=0.9\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
+            f.write("\\caption{Metrics for the instances of the dataset" + dataset_name + "}\n")
+            f.write("\\label{fig:" + dataset_name + "_metrics_instance}\n")
+            f.write("\\end{figure}\n\n")
+
         for result in results:
-            with open(classification_latex_file_path, 'a') as f:
-                f.write(result.to_latex() + "\n\n")
+             # treat only the best instance by instance accuracy
+            if (result.dataset_name, result.instance) in best_instance_by_instance_accuracy_name:
+                    
+                with open(classification_latex_file_path, 'a') as f:
+                    f.write(result.to_latex() + "\n\n")
 
-
-        plot_metrics(results, img_dataset_path, f"{dataset_name} - Metrics")
+        
+        plot_metrics(results, image_file_path)
 
         save_classification_results_to_json(results, os.path.join(dataset_path, "classification_results.json")  )
     
-
-    plot_metrics(get_best_instances(classification_results_by_dataset_number, "accuracy"), img_folder_path, "Best Accuracy")
+    best_accuracy_by_instance_file_path = os.path.join(img_folder_path, "Best Accuracy (by instances).png")
+    best_accuracy_by_dataset_file_path = os.path.join(img_folder_path, "Best Accuracy (by dataset).png")
+    plot_metrics(best_instance_by_instance_accuracy, best_accuracy_by_instance_file_path)
+    plot_metrics(best_instance_by_dataset_accuracy, best_accuracy_by_dataset_file_path)
 
 
 
@@ -332,6 +369,12 @@ if __name__ == "__main__":
 
     with open(latex_file_path, 'w') as f:
         f.write("\\chapter{Machin Learning Results}\n")
+
+    # datasets informations table
+    with open(latex_file_path, 'a') as f:
+        f.write("\\section{Datasets informations}\n\n")
+        f.write(datasets_to_latex_longtable(dataset_informations))
+        f.write("\n\n")
 
     # timeout instances
     with open(latex_file_path, 'a') as f:

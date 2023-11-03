@@ -2,7 +2,7 @@
 
 
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 import re
 
 @dataclass(frozen=True)
@@ -54,3 +54,38 @@ class DatasetData:
         assert filter_chunk_size is not None, f"Could not extract chunk size filter from {dataset_full_name}"
         
         return DatasetData(dataset_full_name, dataset_name, dataset_number, filter_entropy, filter_chunk_size)
+    
+
+def datasets_to_latex_longtable(datasets: list[DatasetData]) -> str:
+    caption = "Datasets used in the experiments"
+    label = "annexes:datasets_descriptions"
+
+    header = f"""
+            \\begin{{longtable}}{{|c|c|c|c|}}
+            \\caption{{{caption}}}\\label{{{label}}} \\\\
+            \\hline
+            \\textbf{{Dataset Number}} & \\textbf{{Dataset Name}} & \\textbf{{Filter Entropy}} & \\textbf{{Filter Chunk Size}} \\\\
+            \\hline
+            \\endfirsthead
+            \\multicolumn{{4}}{{c}}
+            {{\\tablename\\ \\thetable\\ -- continued from previous page}} \\\\
+            \\hline
+            \\textbf{{Dataset Number}} & \\textbf{{Dataset Name}} & \\textbf{{Filter Entropy}} & \\textbf{{Filter Chunk Size}} \\\\
+            \\hline
+            \\endhead
+            \\hline \\multicolumn{{4}}{{|r|}}{{Continued on next page}} \\\\ \\hline
+            \\endfoot
+            \\hline
+            \\endlastfoot
+            """
+    # Start the table with the header
+
+    # Create a row for each DatasetData instance
+    rows = ""
+    for data in datasets:
+        row = f"{data.dataset_number} & {data.dataset_name} & {data.filter_entropy} & {data.filter_chunk_size} \\\\\n\\hline\n"
+        row = row.replace('_', '\\_')  # Escape underscores
+        rows += row
+
+    footer = "\\end{longtable}"
+    return header + rows + footer
