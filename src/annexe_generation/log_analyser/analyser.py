@@ -15,7 +15,7 @@ from annexe_generation.log_analyser.common_extractor import extract_all_dataset_
 from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, get_best_instances, plot_metrics, save_classification_results_to_json
 from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
-from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData
+from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData, features_engineering_list_to_json
 from annexe_generation.log_analyser.feature_engineering.extractor import feature_engineering_extractor
 
 
@@ -172,7 +172,6 @@ if __name__ == "__main__":
     
     for feature_engineering_instance in feature_engineering_results:
         if len(feature_engineering_instance.best_columns) != NB_FEATURE_ENGINEERING_FEATURES:
-            print(feature_engineering_instance.dataset_name)
             feature_engineering_fails.append({"dataset": feature_engineering_instance.dataset_name, "instance": feature_engineering_instance.instance, "nb_features": str(len(feature_engineering_instance.best_columns))})
 
 
@@ -230,6 +229,8 @@ if __name__ == "__main__":
         
         latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
 
+        features_engineering_list_to_json(results, os.path.join(dataset_path, "features_engineering_list.json"))
+
         # save latex
         for result in results:
             correlation_matrix_path = os.path.join(img_dataset_path, result.instance + "_correlation_matrix.png")
@@ -260,6 +261,7 @@ if __name__ == "__main__":
         for result in results:
             with open(clustering_latex_file_path, 'a') as f:
                 f.write(result.to_latex() + "\n\n")
+
 
         clustering_pie_folder_path = os.path.join(img_dataset_path, "clustering_pie_charts")
         os.makedirs(clustering_pie_folder_path, exist_ok=True)

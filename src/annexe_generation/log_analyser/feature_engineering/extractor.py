@@ -169,11 +169,21 @@ def feature_engineering_extractor(all_lines : list[str], begin_index : int, data
     correlation_matrix = correlation_matrix.apply(pd.to_numeric, errors='coerce')
 
     # get the correlation sum
-    correlation_sum = __extract_correlation_sum(feature_engineering_lines)
+    correlation_sum = CorrelationSum.from_correlation_dataframe(correlation_matrix)
 
     # get the best columns
-    best_columns = __extract_best_features(feature_engineering_lines)    
+    best_columns = __extract_best_features(feature_engineering_lines) 
 
+    # ----------------- assert that the 8 last columns are the best 
+    # get the 8 first columns
+    correlation_sum_best_name = {x.feature_name : x.correlation_sum for x in correlation_sum[0:8]}
+
+    prec_sum = float('-inf')
+    for name in best_columns:
+        assert name in correlation_sum_best_name, f"{name} should be in the best columns"
+        assert prec_sum <= correlation_sum_best_name[name], f"{name} isn't properly sorted"
+        prec_sum = correlation_sum_best_name[name]
+    
     return FeatureEngineeringData(
         dataset_name,
         instance_name,

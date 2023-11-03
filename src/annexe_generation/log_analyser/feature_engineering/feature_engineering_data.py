@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass
+import json
 import shutil
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -10,6 +11,54 @@ import pandas as pd
 class CorrelationSum:
     feature_name: str
     correlation_sum: float
+
+    @staticmethod
+    def from_correlation_dataframe(correlation_dataframe: pd.DataFrame) -> list['CorrelationSum']:
+        """
+        Create a list of CorrelationSum instances from a correlation matrix.
+
+        This method processes a given correlation DataFrame, calculating the sum of
+        absolute values for each column's correlation coefficients, excluding the correlation
+        of each variable with itself (which is always 1). It then sorts these sums in ascending order
+        to determine the variables with the lowest overall correlation to the others.
+        
+        Parameters:
+        correlation_dataframe (pd.DataFrame): A pandas DataFrame where each element is a 
+            correlation coefficient between two variables, with variables represented both in
+            rows and columns.
+            
+        Returns:
+        list[CorrelationSum]: A list of CorrelationSum instances, each containing the name of a 
+            variable and the sum of its absolute correlations with all other variables, sorted in 
+            ascending order of summed correlation.
+        """
+
+        # Initialize an empty list to hold the results.
+        result_list: list[CorrelationSum] = []
+        
+        # Compute the sum of absolute values of the correlation coefficients for each column.
+        # This gives us a measure of how each variable is correlated with all others.
+        corr_sums = correlation_dataframe.abs().sum()
+        
+        # Adjust the sums by subtracting 1 to remove the perfect correlation each variable has with itself.
+        # This step assumes that the main diagonal of the correlation matrix is filled with ones.
+        corr_sums -= 1
+        
+        # Sort the columns by their adjusted correlation sum in ascending order.
+        # This change in order implies that we are now interested in the variables with the
+        # lowest overall correlation with others, as opposed to the highest.
+        sorted_corr_sums = corr_sums.sort_values(ascending=True)
+        
+        # Iterate over the sorted series to populate the result_list with CorrelationSum instances.
+        for column_name, correlation_sum in sorted_corr_sums.items():
+            # Create an instance of CorrelationSum with the appropriate values.
+            correlation_sum_instance = CorrelationSum(str(column_name), correlation_sum)
+            
+            # Append the new instance to the result list.
+            result_list.append(correlation_sum_instance)
+        
+        # Return the list of CorrelationSum instances, now sorted by the sum of correlations.
+        return result_list
 
 
 @dataclass
@@ -91,4 +140,16 @@ class FeatureEngineeringData:
             plt.close()
         else:
             shutil.copy(self.correlation_image_path, output_path)
-        
+
+
+def features_engineering_list_to_json(data : list[FeatureEngineeringData], file_path : str) :
+    # Convert the list of FeatureEngineeringData to a list of dictionaries
+    data_dict_list = [asdict(feature_engineering_data) for feature_engineering_data in data]
+
+    # Serialize the pandas DataFrame to a CSV format or convert to JSON
+    for data_dict in data_dict_list:
+        data_dict['correlation_matrix'] = json.loads(data_dict['correlation_matrix'].to_json())
+
+    # Write the dictionary to a JSON file
+    with open(file_path, 'w') as json_file:
+        json.dump(data_dict_list, json_file, indent=4)
