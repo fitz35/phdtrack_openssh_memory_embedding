@@ -1,0 +1,50 @@
+2023_11_02_15_07_35 - results_logger - INFO - Passed program params:
+2023_11_02_15_07_35 - results_logger - INFO - param[0]: main.py
+2023_11_02_15_07_35 - results_logger - INFO - param[1]: -d
+2023_11_02_15_07_35 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/data/27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate
+2023_11_02_15_07_35 - results_logger - INFO - param[3]: -p
+2023_11_02_15_07_35 - results_logger - INFO - param[4]: deeplearning
+2023_11_02_15_07_35 - results_logger - INFO - param[5]: -o
+2023_11_02_15_07_35 - results_logger - INFO - param[6]: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/output/27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate
+2023_11_02_15_07_35 - results_logger - INFO - param[7]: -otr
+2023_11_02_15_07_35 - results_logger - INFO - param[8]: training
+2023_11_02_15_07_35 - results_logger - INFO - param[9]: -ots
+2023_11_02_15_07_35 - results_logger - INFO - param[10]: validation
+2023_11_02_15_07_35 - results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset /root/phdtrack/mem2graph/data/27_filtered_chunk_extraction_-e_only-max-entropy_-s_activate !!!!----///
+2023_11_02_15_07_35 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_02_15_07_35 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_02_15_07_35 - results_logger - INFO - Pipeline start time : 1698937655.066393 seconds
+2023_11_02_15_07_35 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_02_15_07_41 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_11_02_15_10_16 - results_logger - INFO - Number of loaded files: 20964
+2023_11_02_15_10_16 - results_logger - INFO - Number of empty files: 0
+2023_11_02_15_10_17 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_11_02_15_10_44 - results_logger - INFO - Number of loaded files: 3735
+2023_11_02_15_10_44 - results_logger - INFO - Number of empty files: 0
+2023_11_02_15_10_44 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 189.309141000 s
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size2_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=0, output_size=8, window_character_size=8, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size4_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=1, output_size=8, window_character_size=8, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size2_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=2, output_size=8, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size4_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=3, output_size=8, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size2_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=4, output_size=16, window_character_size=8, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size4_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=5, output_size=16, window_character_size=8, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size2_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=6, output_size=16, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size16_word_character_size4_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=7, output_size=16, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size2_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=8, output_size=100, window_character_size=8, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size4_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=9, output_size=100, window_character_size=8, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size2_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=10, output_size=100, window_character_size=16, word_character_size=2, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size100_word_character_size4_window_character_size16_min_count1 !!!!!!!!!!!!!
+2023_11_02_15_10_44 - results_logger - INFO - Word2Vec instance Word2vecHyperparams(index=11, output_size=100, window_character_size=16, word_character_size=4, min_count=1) already computed
+2023_11_02_15_10_44 - results_logger - INFO - Pipeline end time : 1698937844.6139176 seconds
+2023_11_02_15_10_44 - results_logger - INFO - Pipeline duration : 189.54752469062805 seconds

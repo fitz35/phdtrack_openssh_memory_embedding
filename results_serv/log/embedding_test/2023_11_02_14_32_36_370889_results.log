@@ -1,0 +1,26 @@
+2023_11_02_14_32_36 - results_logger - INFO - Passed program params:
+2023_11_02_14_32_36 - results_logger - INFO - param[0]: main.py
+2023_11_02_14_32_36 - results_logger - INFO - param[1]: -d
+2023_11_02_14_32_36 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/data/24_chunk_extraction_-e_none_-s_none
+2023_11_02_14_32_36 - results_logger - INFO - param[3]: -p
+2023_11_02_14_32_36 - results_logger - INFO - param[4]: deeplearning
+2023_11_02_14_32_36 - results_logger - INFO - param[5]: -o
+2023_11_02_14_32_36 - results_logger - INFO - param[6]: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/output/24_chunk_extraction_-e_none_-s_none
+2023_11_02_14_32_36 - results_logger - INFO - param[7]: -otr
+2023_11_02_14_32_36 - results_logger - INFO - param[8]: training
+2023_11_02_14_32_36 - results_logger - INFO - param[9]: -ots
+2023_11_02_14_32_36 - results_logger - INFO - param[10]: validation
+2023_11_02_14_32_36 - results_logger - INFO - ///---!!!! Launching embedding pipeline on dataset /root/phdtrack/mem2graph/data/24_chunk_extraction_-e_none_-s_none !!!!----///
+2023_11_02_14_32_36 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_02_14_32_36 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_02_14_32_36 - results_logger - INFO - Pipeline start time : 1698935556.3787892 seconds
+2023_11_02_14_32_36 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_02_14_32_44 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_11_02_14_36_05 - results_logger - INFO - Number of loaded files: 3735
+2023_11_02_14_36_05 - results_logger - INFO - Number of empty files: 0
+2023_11_02_14_36_05 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_11_02_14_52_27 - results_logger - INFO - Number of loaded files: 20964
+2023_11_02_14_52_27 - results_logger - INFO - Number of empty files: 0
+2023_11_02_14_52_31 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 1194.663786000 s
+2023_11_02_14_52_33 - results_logger - INFO - !!!!!!!!!!!!! Word2vec instance : word2vec_output_size8_word_character_size2_window_character_size8_min_count1 !!!!!!!!!!!!!
+2023_11_02_14_52_33 - results_logger - INFO - Word2Vec instance : Word2vecHyperparams(index=0, output_size=8, window_character_size=8, word_character_size=2, min_count=1)
