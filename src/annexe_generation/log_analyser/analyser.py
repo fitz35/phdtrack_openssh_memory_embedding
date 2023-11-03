@@ -71,7 +71,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     list_of_dicts.sort(key=lambda x: x["dataset"])
 
     # Creating the LaTeX tabular environment
-    latex_code = "\\begin{table}[h]\n"
+    latex_code = "\\begin{table}[ht]\n"
     latex_code += "\\centering\n"
     latex_code += "\\begin{tabular}{" + "l" * num_columns + "}\n"
     latex_code += "\\hline\n"
@@ -185,6 +185,13 @@ if __name__ == "__main__":
     
     dataset_informations = list(dataset_informations_set)
     dataset_informations.sort(key=lambda x: x.dataset_number)
+
+
+    def get_dataset_information_from_number(number: int) -> DatasetData:
+        for dataset_information in dataset_informations:
+            if dataset_information.dataset_number == number:
+                return dataset_information
+        raise Exception(f"Could not find dataset information for dataset number {number}")
 
     for feature_engineering_instance in feature_engineering_results:
         if len(feature_engineering_instance.best_columns) != NB_FEATURE_ENGINEERING_FEATURES:
@@ -337,9 +344,9 @@ if __name__ == "__main__":
         image_file_path = os.path.join(img_dataset_path, f'{dataset_name} - Metrics.png')
 
         with open(classification_latex_file_path, 'a') as f:
-            f.write("\\begin{figure}[h!]\n")
+            f.write("\\begin{figure}[H]\n")
             f.write("\\centering\n")
-            f.write("\\includegraphics[width=0.9\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
+            f.write("\\includegraphics[width=0.6\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
             f.write("\\caption{Metrics for the instances of the dataset" + dataset_name + "}\n")
             f.write("\\label{fig:" + dataset_name + "_metrics_instance}\n")
             f.write("\\end{figure}\n\n")
@@ -404,7 +411,7 @@ if __name__ == "__main__":
 
         with open(feature_engineering_latex_file_path, 'r') as feature_engineering_file:
             with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
                 for line in feature_engineering_file:
                     f.write(line)
 
@@ -420,7 +427,7 @@ if __name__ == "__main__":
 
         with open(clustering_latex_file_path, 'r') as clustering_file:
             with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
                 for line in clustering_file:
                     f.write(line)
     
@@ -437,7 +444,7 @@ if __name__ == "__main__":
 
         with open(classification_latex_file_path, 'r') as classification_file:
             with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + dataset_name.replace("_", "\\_") + "}\n\n")
+                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
                 for line in classification_file:
                     f.write(line)
             

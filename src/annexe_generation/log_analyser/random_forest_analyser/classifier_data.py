@@ -214,6 +214,12 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
 def plot_metrics(classification_results_list: List[ClassificationResults], file_path: str):
     if not classification_results_list:
         raise ValueError("The list of classification results is empty.")
+    
+    dataset_names = set([result.dataset_name.dataset_number for result in classification_results_list])
+    if len(dataset_names) != 1:
+        dataset_name = "Multiple Datasets"
+    else:
+        dataset_name = "the Dataset " + str(dataset_names.pop())
 
     # Prepare the data
     data = []
@@ -254,7 +260,7 @@ def plot_metrics(classification_results_list: List[ClassificationResults], file_
     # Plotting
     num_metrics = 5  # Precision, Recall, F1 Score, Accuracy, Duration
     fig, axs = plt.subplots(num_metrics, 1, figsize=(10, num_metrics * 4), sharex=True)
-    fig.suptitle('Metrics by Class and Instance', fontsize=16)
+    fig.suptitle('Metrics by Class and Instance for ' + dataset_name, fontsize=16)
     
     for i, metric in enumerate(['Precision', 'Recall', 'F1 Score']):
         metric_df = df.pivot(index='Instance', columns='Class', values=metric)
