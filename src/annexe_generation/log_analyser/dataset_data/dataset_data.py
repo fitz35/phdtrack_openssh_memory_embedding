@@ -14,7 +14,7 @@ class DatasetData:
     filter_entropy : bool
     filter_chunk_size : bool
 
-    def get_display_name(self) -> str:
+    def get_display_name(self, excaping : bool = True) -> str:
         return_str = ""
         if self.filter_entropy and self.filter_chunk_size:
             return_str = f"{self.dataset_number} {self.dataset_name} (filtered entropy and chunk size)"
@@ -24,8 +24,8 @@ class DatasetData:
             return_str = f"{self.dataset_number} {self.dataset_name} (filtered chunk size)"
         else:
             return_str = f"{self.dataset_number} {self.dataset_name}"
-
-        return_str = return_str.replace('_', '\\_')  # Escape underscores
+        if excaping:
+            return_str = return_str.replace('_', '\\_')  # Escape underscores
         return return_str
 
     @staticmethod

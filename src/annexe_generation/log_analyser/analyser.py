@@ -89,7 +89,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
         for key in columns:
             if key in item:
                 if key == "dataset":
-                    row += os.path.basename(item[key]).replace("_", "\\_") + " & "
+                    row += item[key] + " & "
                 else:
                     row += item[key] + " & "
             else:
@@ -417,17 +417,19 @@ if __name__ == "__main__":
         f.write("\n\n")
 
     # timeout instances
+    formated_clustering_timeouts = [{"dataset": get_dataset_information_from_number(int(value["dataset"])).get_display_name(), "instance": value["instance"]} for value in clustering_timeouts]
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Timeout instances}\n\n")
         f.write("\\label{sec:annexe:timeout_instances}\n\n")
-        f.write(list_of_dicts_to_latex_table(clustering_timeouts, "Timeouts instances", "tab:timeouts"))
+        f.write(list_of_dicts_to_latex_table(formated_clustering_timeouts, "Timeouts instances", "tab:timeouts"))
         f.write("\n\n")
 
     # feature engineering fails
+    format_feature_engineering_fails = [{"dataset": get_dataset_information_from_number(int(value["dataset"])).get_display_name(), "instance": value["instance"], "nb_features": value["nb_features"]} for value in feature_engineering_fails]
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Feature engineering fails}\n\n")
         f.write("\\label{sec:annexe:feature_engineering_fails}\n\n")
-        f.write(list_of_dicts_to_latex_table(feature_engineering_fails, "Feature engineering fails", "tab:feature_engineering_fails"))
+        f.write(list_of_dicts_to_latex_table(format_feature_engineering_fails, "Feature engineering fails", "tab:feature_engineering_fails"))
         f.write("\n\n")
     
     # Out of Memory instances (all instances who aren't in the timeout instances, the feature engineering fails and the right instances)
@@ -466,7 +468,7 @@ if __name__ == "__main__":
         with open(latex_file_path, 'a') as f:
             f.write(f"\\section{{Out of memory instances ({category})}}\n\n")
             f.write(f"\\label{{sec:annexe:out_of_memory_instances_{category.lower()}}}\n\n")
-            f.write(list_of_dicts_to_latex_table(out_of_memory_instances, "Out of memory instances", f"tab:annexe:out_of_memory_instances_{category.lower()}"))
+            f.write(list_of_dicts_to_latex_table(out_of_memory_instances, f"Out of memory instances ({category})", f"tab:annexe:out_of_memory_instances_{category.lower()}"))
             f.write("\n\n")
 
     # classification

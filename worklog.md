@@ -3,7 +3,8 @@
 ## TODO
 
 * [X] modify data loading to directly return the dict of dataorigin/data
-* [ ] make graph only with dtn and weight on pointer
+* [X] make graph only with dtn and weight on pointer
+* [ ] make the log not doubled
 
 ## 08/09
 
