@@ -2,6 +2,7 @@ import argparse
 import os
 import shutil
 import sys
+from typing import Any, Dict, List, Set
 
 
 
@@ -11,13 +12,15 @@ import sys
 
 sys.path.append(os.path.abspath('../..'))
 from annexe_generation.log_analyser.clustering_analyser.extractor import clustering_extractor
-from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results
+from annexe_generation.log_analyser.common_extractor import extract_all_dataset_results, extract_dataset_path
 from annexe_generation.log_analyser.random_forest_analyser.extractor import random_forest_extractor
 from annexe_generation.log_analyser.random_forest_analyser.classifier_data import ClassificationResults, get_best_instances, plot_metrics, save_classification_results_to_json
-from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, clustering_pie_charts, save_clustering_results_to_json
+from annexe_generation.log_analyser.clustering_analyser.clustering_data import ClusteringResult, save_clustering_results_to_json
 from annexe_generation.log_analyser.feature_engineering.feature_engineering_data import FeatureEngineeringData, features_engineering_list_to_json
 from annexe_generation.log_analyser.feature_engineering.extractor import feature_engineering_extractor
 from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData, datasets_to_latex_longtable
+from embedding_generation.data.hyperparams_transformers import get_transformers_hyperparams
+from embedding_generation.data.hyperparams_word2vec import get_word2vec_hyperparams_instances
 
 LOG_DIR_NAME = "embedding_test"
 FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
@@ -147,7 +150,12 @@ if __name__ == "__main__":
     classification_results_by_dataset : dict[str, list[ClassificationResults]] = {}
     feature_engineering_results_by_dataset : dict[str, list[FeatureEngineeringData]] = {}
 
+    # --------------------------- hyper params
 
+    transformers_instances_index = ["Transformers " + str(x.index) for x in get_transformers_hyperparams()]
+    word2vec_instances = ["Word2vec " + str(x.index) for x in get_word2vec_hyperparams_instances()]
+
+    hyperparams_instances = transformers_instances_index + word2vec_instances
 
     # ------------------------- Read the files and extract data
     # Get all files in the directory
@@ -156,6 +164,7 @@ if __name__ == "__main__":
     print(f"Found {len(files)} log files")
     for file in files:
         print(file)
+    print("\n")
     # Read all files
     for file in files:
         lines: list[str] = read_file(file)
@@ -174,9 +183,10 @@ if __name__ == "__main__":
         clustering_timeouts.extend(clustering_timeout)
         classification_timeouts.extend(classification_timeout)
 
-        dataset_informations_set.update([result.dataset_name for result in feature_engineering])
-        dataset_informations_set.update([result.dataset_name for result in clustering])
-        dataset_informations_set.update([result.dataset_name for result in classification])
+        dataset_path = extract_dataset_path(lines)
+        assert dataset_path is not None, "Could not extract the dataset path"
+
+        dataset_informations_set.add(DatasetData.from_str(os.path.basename(dataset_path)))
     
 
 
@@ -185,6 +195,10 @@ if __name__ == "__main__":
     
     dataset_informations = list(dataset_informations_set)
     dataset_informations.sort(key=lambda x: x.dataset_number)
+    print(f"Found {len(dataset_informations)} datasets")
+    for dataset_information in dataset_informations:
+        print(dataset_information.get_display_name())
+    print("\n")
 
 
     def get_dataset_information_from_number(number: int) -> DatasetData:
@@ -200,6 +214,15 @@ if __name__ == "__main__":
 
     # extract the instance by dataset
     # Organize clustering and classification results by dataset
+    for dataset in dataset_informations:
+        dataset_name = str(dataset.dataset_number)
+        if dataset_name not in clustering_results_by_dataset_number:
+            clustering_results_by_dataset_number[dataset_name] = []
+        if dataset_name not in classification_results_by_dataset_number:
+            classification_results_by_dataset_number[dataset_name] = []
+        if dataset_name not in feature_engineering_results_by_dataset_number:
+            feature_engineering_results_by_dataset_number[dataset_name] = []
+
     for result in clustering_results:
         dataset_name = str(result.dataset_name.dataset_number)
         if dataset_name not in clustering_results_by_dataset_number:
@@ -219,6 +242,15 @@ if __name__ == "__main__":
         feature_engineering_results_by_dataset_number[dataset_name].append(result)
 
 
+
+    for dataset in dataset_informations:
+        dataset_name = dataset.dataset_name
+        if dataset_name not in clustering_results_by_dataset:
+            clustering_results_by_dataset[dataset_name] = []
+        if dataset_name not in classification_results_by_dataset:
+            classification_results_by_dataset[dataset_name] = []
+        if dataset_name not in feature_engineering_results_by_dataset:
+            feature_engineering_results_by_dataset[dataset_name] = []
 
     for result in clustering_results:
         dataset_name = result.dataset_name.dataset_name
@@ -343,13 +375,14 @@ if __name__ == "__main__":
 
         image_file_path = os.path.join(img_dataset_path, f'{dataset_name} - Metrics.png')
 
-        with open(classification_latex_file_path, 'a') as f:
-            f.write("\\begin{figure}[H]\n")
-            f.write("\\centering\n")
-            f.write("\\includegraphics[width=0.6\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
-            f.write("\\caption{Metrics for the instances of the dataset" + dataset_name + "}\n")
-            f.write("\\label{fig:" + dataset_name + "_metrics_instance}\n")
-            f.write("\\end{figure}\n\n")
+        if len(results) > 0:
+            with open(classification_latex_file_path, 'a') as f:
+                f.write("\\begin{figure}[H]\n")
+                f.write("\\centering\n")
+                f.write("\\includegraphics[width=0.6\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
+                f.write("\\caption{Metrics for the instances of the dataset" + dataset_name + "}\n")
+                f.write("\\label{fig:" + dataset_name + "_metrics_instance}\n")
+                f.write("\\end{figure}\n\n")
 
         for result in results:
              # treat only the best instance by instance accuracy
@@ -358,8 +391,8 @@ if __name__ == "__main__":
                 with open(classification_latex_file_path, 'a') as f:
                     f.write(result.to_latex() + "\n\n")
 
-        
-        plot_metrics(results, image_file_path)
+        if len(results) > 0:
+            plot_metrics(results, image_file_path)
 
         save_classification_results_to_json(results, os.path.join(dataset_path, "classification_results.json")  )
     
@@ -396,7 +429,64 @@ if __name__ == "__main__":
         f.write("\\label{sec:annexe:feature_engineering_fails}\n\n")
         f.write(list_of_dicts_to_latex_table(feature_engineering_fails, "Feature engineering fails", "tab:feature_engineering_fails"))
         f.write("\n\n")
+    
+    # Out of Memory instances (all instances who aren't in the timeout instances, the feature engineering fails and the right instances)
+    list_of_all_instances_by_dataset_number_commun : dict[int, set[str]] = {}
+    for value in clustering_timeouts:
+        dataset_number = int(value["dataset"])
+        if dataset_number not in list_of_all_instances_by_dataset_number_commun:
+            list_of_all_instances_by_dataset_number_commun[dataset_number] = set()
+        list_of_all_instances_by_dataset_number_commun[dataset_number].add(value["instance"])
+    
+    for value in feature_engineering_fails:
+        dataset_number = int(value["dataset"])
+        if dataset_number not in list_of_all_instances_by_dataset_number_commun:
+            list_of_all_instances_by_dataset_number_commun[dataset_number] = set()
+        list_of_all_instances_by_dataset_number_commun[dataset_number].add(value["instance"])
+        
+    def process_out_of_memory_instances(
+        results_by_dataset_number: Dict[str, List[Any]], 
+        list_of_all_instances_by_dataset_number_commun: Dict[int, Set[str]], 
+        hyperparams_instances: List[str], 
+        category: str, 
+        latex_file_path: str
+    ) -> None:
+        instances_by_dataset_number: Dict[int, Set[str]] = list_of_all_instances_by_dataset_number_commun.copy()
 
+        for dataset_number, values in results_by_dataset_number.items():
+            instances_by_dataset_number.setdefault(int(dataset_number), set())
+            instances_by_dataset_number[int(dataset_number)].update(value.instance for value in values)
+        
+        out_of_memory_instances: List[Dict[str, str]] = []
+        for dataset_number, instances in instances_by_dataset_number.items():
+            for instance_to_test in hyperparams_instances:
+                if instance_to_test not in instances:
+                    out_of_memory_instances.append({"dataset": get_dataset_information_from_number(dataset_number).get_display_name(), "instance": instance_to_test})
+
+        with open(latex_file_path, 'a') as f:
+            f.write(f"\\section{{Out of memory instances ({category})}}\n\n")
+            f.write(f"\\label{{sec:annexe:out_of_memory_instances_{category.lower()}}}\n\n")
+            f.write(list_of_dicts_to_latex_table(out_of_memory_instances, "Out of memory instances", f"tab:annexe:out_of_memory_instances_{category.lower()}"))
+            f.write("\n\n")
+
+    # classification
+    # Example calls to the function:
+    print(classification_results_by_dataset_number.keys())
+    process_out_of_memory_instances(
+        classification_results_by_dataset_number, 
+        list_of_all_instances_by_dataset_number_commun, 
+        hyperparams_instances, 
+        'Classifications', 
+        latex_file_path
+    )
+
+    process_out_of_memory_instances(
+        clustering_results_by_dataset_number, 
+        list_of_all_instances_by_dataset_number_commun, 
+        hyperparams_instances, 
+        'Clustering', 
+        latex_file_path
+    )
     # ...................... feature engineering
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Feature Engineering results}\n\n")

@@ -1,8 +1,13 @@
 
 
+import os
+import sys
 from typing import Callable, List, Tuple, Type, TypeVar
 import traceback
 import re
+
+sys.path.append(os.path.abspath('../..'))
+from annexe_generation.log_analyser.dataset_data.dataset_data import DatasetData
 
 
 def extract_lines_between(log_lines: list[str], start_index: int, start_delimiter: str, end_delimiter: str):
@@ -178,6 +183,22 @@ def __is_end(log_lines: List[str], begin_line: int) -> bool:
 
     return end_time_match is not None and duration_match is not None
 
+def extract_dataset_path(log_lines: list[str]) -> str | None:
+    """
+    Extracts the dataset path from a list of log lines.
+
+    Args:
+    log_lines (list[str]): The list of log lines.
+
+    Returns:
+    str or None: The extracted dataset path or None if not found.
+    """
+    dataset_path = None
+    i = 0
+    while dataset_path is None and i < len(log_lines):
+        dataset_path = __extract_dataset_path(log_lines[i])
+        i += 1
+    return dataset_path
 
 T = TypeVar('T')
 
@@ -196,11 +217,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
     """
     results = []
     timeout_instances = []
-    dataset_path = None
-    i = 0
-    while dataset_path is None and i < len(log_lines):
-        dataset_path = __extract_dataset_path(log_lines[i])
-        i += 1
+    dataset_path = extract_dataset_path(log_lines)
 
     if dataset_path is None:
         print("No dataset path found")
@@ -228,7 +245,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 
                 timeout_instances.append({
                     "instance" : instance_name,
-                    "dataset" : dataset_path
+                    "dataset" : str(DatasetData.from_str(os.path.basename(dataset_path)).dataset_number)
                 })
                 
                 if maybe_next_instance is None:
@@ -241,7 +258,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 
                 timeout_instances.append({
                     "instance" : instance_name,
-                    "dataset" : dataset_path
+                    "dataset" : str(DatasetData.from_str(os.path.basename(dataset_path)).dataset_number)
                 })
                 
                 if maybe_next_instance is None:
