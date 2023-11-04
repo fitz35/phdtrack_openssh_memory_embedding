@@ -1,0 +1,58 @@
+2023_11_04_11_27_24 - results_logger - INFO - Passed program params:
+2023_11_04_11_27_24 - results_logger - INFO - param[0]: main.py
+2023_11_04_11_27_24 - results_logger - INFO - param[1]: -d
+2023_11_04_11_27_24 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/embedding/7_filtered_chunk_top_vn_semantic_embedding_-e_only-max-entropy_-s_activate
+2023_11_04_11_27_24 - results_logger - INFO - param[3]: -o
+2023_11_04_11_27_24 - results_logger - INFO - param[4]: ../log
+2023_11_04_11_27_24 - results_logger - INFO - param[5]: -otr
+2023_11_04_11_27_24 - results_logger - INFO - param[6]: training
+2023_11_04_11_27_24 - results_logger - INFO - param[7]: -ots
+2023_11_04_11_27_24 - results_logger - INFO - param[8]: validation
+2023_11_04_11_27_24 - results_logger - INFO - param[9]: --no_balancing
+2023_11_04_11_27_24 - results_logger - INFO - param[10]: -p
+2023_11_04_11_27_24 - results_logger - INFO - param[11]: testingembedding
+2023_11_04_11_27_24 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/embedding/7_filtered_chunk_top_vn_semantic_embedding_-e_only-max-entropy_-s_activate !!!!----///
+2023_11_04_11_27_24 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_04_11_27_24 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_04_11_27_24 - results_logger - INFO - Start time : 1699097244.7801628
+2023_11_04_11_27_24 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_04_11_27_24 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_11_04_11_27_59 - results_logger - INFO - Number of loaded files: 3735
+2023_11_04_11_27_59 - results_logger - INFO - Number of empty files: 0
+2023_11_04_11_27_59 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_11_04_11_30_55 - results_logger - INFO - Number of loaded files: 20964
+2023_11_04_11_30_55 - results_logger - INFO - Number of empty files: 0
+2023_11_04_11_30_57 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 213.124648000 s
+2023_11_04_11_30_57 - results_logger - INFO - Cleaning data for DataOriginEnum.Validation
+2023_11_04_11_30_57 - results_logger - INFO - Removing 17 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4', 'chns_ancestor_5', 'chns_ancestor_6', 'chns_ancestor_7', 'chns_ancestor_8', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8']
+2023_11_04_11_30_58 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_04_11_30_58 - results_logger - INFO - Removing 2 columns (keeping 4 columns): ['file_path', 'chn_addr']
+2023_11_04_11_30_58 - results_logger - INFO - Cleaning data for DataOriginEnum.Training
+2023_11_04_11_30_58 - results_logger - INFO - Removing 17 columns with only one unique value: ['block_position_in_chunk', 'chns_ancestor_1', 'chns_ancestor_2', 'chns_ancestor_3', 'chns_ancestor_4', 'chns_ancestor_5', 'chns_ancestor_6', 'chns_ancestor_7', 'chns_ancestor_8', 'ptrs_ancestor_1', 'ptrs_ancestor_2', 'ptrs_ancestor_3', 'ptrs_ancestor_4', 'ptrs_ancestor_5', 'ptrs_ancestor_6', 'ptrs_ancestor_7', 'ptrs_ancestor_8']
+2023_11_04_11_30_58 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_04_11_30_58 - results_logger - INFO - Removing 2 columns (keeping 4 columns): ['file_path', 'chn_addr']
+2023_11_04_11_30_58 - results_logger - INFO - timer for feature_engineering started
+2023_11_04_11_30_58 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_11_04_11_30_58 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+                      chunk_byte_size  ...  chunk_vns
+chunk_byte_size              1.000000  ...   0.986042
+chunk_number_in_heap        -0.017086  ...  -0.017058
+chunk_ptrs                   0.134711  ...  -0.015766
+chunk_vns                    0.986042  ...   1.000000
+
+[4 rows x 4 columns]
+2023_11_04_11_30_58 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_11_04_11_30_58_548243.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_11_04_11_30_58_548182.csv
+2023_11_04_11_30_58 - results_logger - INFO - Correlation sums: 
+chunk_byte_size         2.137839
+chunk_number_in_heap    1.061880
+chunk_ptrs              1.178214
+chunk_vns               2.018866
+dtype: float64
+2023_11_04_11_30_58 - results_logger - INFO - Sorted correlation sums: 
+chunk_byte_size         2.137839
+chunk_vns               2.018866
+chunk_ptrs              1.178214
+chunk_number_in_heap    1.061880
+dtype: float64
+2023_11_04_11_30_58 - results_logger - INFO - Keeping columns: ['chunk_number_in_heap', 'chunk_ptrs', 'chunk_vns', 'chunk_byte_size']
+2023_11_04_11_30_58 - results_logger - INFO - End feature engineering
