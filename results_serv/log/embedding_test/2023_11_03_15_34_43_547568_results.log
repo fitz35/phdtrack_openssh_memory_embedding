@@ -1,0 +1,200 @@
+2023_11_03_15_34_43 - results_logger - INFO - Passed program params:
+2023_11_03_15_34_43 - results_logger - INFO - param[0]: main.py
+2023_11_03_15_34_43 - results_logger - INFO - param[1]: -d
+2023_11_03_15_34_43 - results_logger - INFO - param[2]: /root/phdtrack/mem2graph/embedding/21_filtered_chunk_start_bytes_embedding_-e_none_-s_activate
+2023_11_03_15_34_43 - results_logger - INFO - param[3]: -o
+2023_11_03_15_34_43 - results_logger - INFO - param[4]: ../log
+2023_11_03_15_34_43 - results_logger - INFO - param[5]: -otr
+2023_11_03_15_34_43 - results_logger - INFO - param[6]: training
+2023_11_03_15_34_43 - results_logger - INFO - param[7]: -ots
+2023_11_03_15_34_43 - results_logger - INFO - param[8]: validation
+2023_11_03_15_34_43 - results_logger - INFO - param[9]: --no_balancing
+2023_11_03_15_34_43 - results_logger - INFO - param[10]: -p
+2023_11_03_15_34_43 - results_logger - INFO - param[11]: testingembedding
+2023_11_03_15_34_43 - results_logger - INFO - ///---!!!! Launching testing pipeline on dataset /root/phdtrack/mem2graph/embedding/21_filtered_chunk_start_bytes_embedding_-e_none_-s_activate !!!!----///
+2023_11_03_15_34_43 - results_logger - INFO - Data origins training : {<DataOriginEnum.Training: 'training'>}
+2023_11_03_15_34_43 - results_logger - INFO - Data origins testing : {<DataOriginEnum.Validation: 'validation'>}
+2023_11_03_15_34_43 - results_logger - INFO - Start time : 1699025683.5577621
+2023_11_03_15_34_43 - results_logger - INFO - timer for load_samples_and_labels_from_all_csv_files started
+2023_11_03_15_34_43 - results_logger - INFO - Loading samples and labels from 20964 files
+2023_11_03_15_43_33 - results_logger - INFO - Number of loaded files: 20964
+2023_11_03_15_43_33 - results_logger - INFO - Number of empty files: 0
+2023_11_03_15_43_37 - results_logger - INFO - Loading samples and labels from 3735 files
+2023_11_03_15_45_11 - results_logger - INFO - Number of loaded files: 3735
+2023_11_03_15_45_11 - results_logger - INFO - Number of empty files: 0
+2023_11_03_15_45_11 - results_logger - INFO - Time elapsed since the begining of load_samples_and_labels_from_all_csv_files: 628.404216000 s
+2023_11_03_15_45_11 - results_logger - INFO - Cleaning data for DataOriginEnum.Training
+2023_11_03_15_45_26 - results_logger - INFO - Removing 1 columns with only one unique value: ['block_position_in_chunk']
+2023_11_03_15_45_33 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_03_15_45_34 - results_logger - INFO - Removing 2 columns (keeping 16 columns): ['file_path', 'chn_addr']
+2023_11_03_15_45_34 - results_logger - INFO - Cleaning data for DataOriginEnum.Validation
+2023_11_03_15_45_36 - results_logger - INFO - Removing 1 columns with only one unique value: ['block_position_in_chunk']
+2023_11_03_15_45_37 - results_logger - INFO - Removing 0 row with nan value.
+2023_11_03_15_45_38 - results_logger - INFO - Removing 2 columns (keeping 16 columns): ['file_path', 'chn_addr']
+2023_11_03_15_45_38 - results_logger - INFO - timer for feature_engineering started
+2023_11_03_15_45_39 - results_logger - INFO - Computing correlation (algorithm: pearson)...
+2023_11_03_15_46_07 - results_logger - INFO - Correlation matrix (algorithm: pearson): 
+                        byte_0    byte_1  ...  chunk_ptrs  chunk_vns
+byte_0                1.000000  0.621151  ...   -0.049437  -0.028697
+byte_1                0.621151  1.000000  ...   -0.051860  -0.029427
+byte_10               0.046581  0.037574  ...   -0.121479  -0.006639
+byte_11               0.126194  0.118857  ...    0.074957  -0.019573
+byte_2                0.454865  0.477530  ...    0.271709  -0.041297
+byte_3                0.278958  0.289334  ...    0.372644  -0.040133
+byte_4                0.269551  0.272341  ...    0.388088  -0.039668
+byte_5                0.246714  0.244870  ...    0.362043  -0.041969
+byte_6               -0.270214 -0.273117  ...    0.375612   0.005402
+byte_7               -0.250100 -0.256308  ...    0.352827   0.011370
+byte_8               -0.188062 -0.192753  ...   -0.528165   0.033328
+byte_9               -0.185683 -0.189251  ...   -0.521754   0.034879
+chunk_byte_size      -0.032557 -0.033490  ...    0.323280   0.995912
+chunk_number_in_heap  0.548275  0.564262  ...    0.011703  -0.001109
+chunk_ptrs           -0.049437 -0.051860  ...    1.000000   0.236545
+chunk_vns            -0.028697 -0.029427  ...    0.236545   1.000000
+
+[16 rows x 16 columns]
+2023_11_03_15_46_07 - results_logger - INFO - Correlation matrix saved at: /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_11_03_15_46_06_947673.png and /root/phdtrack/phdtrack_openssh_memory_embedding/results_serv/feature_correlation_matrices/correlation_matrix_pearson_2023_11_03_15_46_06_947572.csv
+2023_11_03_15_46_07 - results_logger - INFO - Correlation sums: 
+byte_0                  4.597039
+byte_1                  4.652127
+byte_10                 3.610446
+byte_11                 2.573391
+byte_2                  5.117703
+byte_3                  5.138792
+byte_4                  5.055061
+byte_5                  4.761421
+byte_6                  4.317707
+byte_7                  4.232314
+byte_8                  5.318294
+byte_9                  5.198406
+chunk_byte_size         2.559684
+chunk_number_in_heap    4.742386
+chunk_ptrs              5.042103
+chunk_vns               2.565946
+dtype: float64
+2023_11_03_15_46_07 - results_logger - INFO - Sorted correlation sums: 
+byte_8                  5.318294
+byte_9                  5.198406
+byte_3                  5.138792
+byte_2                  5.117703
+byte_4                  5.055061
+chunk_ptrs              5.042103
+byte_5                  4.761421
+chunk_number_in_heap    4.742386
+byte_1                  4.652127
+byte_0                  4.597039
+byte_6                  4.317707
+byte_7                  4.232314
+byte_10                 3.610446
+byte_11                 2.573391
+chunk_vns               2.565946
+chunk_byte_size         2.559684
+dtype: float64
+2023_11_03_15_46_07 - results_logger - INFO - Keeping columns: ['chunk_byte_size', 'chunk_vns', 'byte_11', 'byte_10', 'byte_7', 'byte_6', 'byte_0', 'byte_1']
+2023_11_03_15_46_07 - results_logger - INFO - End feature engineering
+2023_11_03_15_46_07 - results_logger - INFO - Time elapsed since the begining of feature_engineering: 29.376403000 s
+2023_11_03_15_46_08 - results_logger - INFO - Keeping 8 : ['chunk_byte_size', 'chunk_vns', 'byte_11', 'byte_10', 'byte_7', 'byte_6', 'byte_0', 'byte_1']
+2023_11_03_15_46_08 - results_logger - INFO - Keeping 8 : ['chunk_byte_size', 'chunk_vns', 'byte_11', 'byte_10', 'byte_7', 'byte_6', 'byte_0', 'byte_1']
+2023_11_03_15_46_09 - results_logger - INFO - Number of samples before balancing: class-0.0=24506437 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_11_03_15_46_09 - results_logger - INFO - Number of samples after balancing: class-0.0=24506437 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_11_03_15_46_09 - results_logger - INFO - timer for random forest :  started
+2023_11_03_15_48_23 - results_logger - INFO - timer for evaluate_model_score started
+2023_11_03_15_48_28 - results_logger - INFO - Sample of predicted labels: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.] 
+ versus actual labels: 0     0.0
+1     0.0
+2     0.0
+3     0.0
+4     0.0
+5     0.0
+6     0.0
+7     0.0
+8     0.0
+9     0.0
+10    0.0
+11    0.0
+12    0.0
+13    0.0
+14    0.0
+15    0.0
+16    0.0
+17    0.0
+18    0.0
+19    0.0
+Name: label, dtype: float64
+2023_11_03_15_48_28 - results_logger - INFO - Number of predicted 1 labels: 49220.0 
+ versus number of predicted 0 labels: 4418006.0
+2023_11_03_15_48_29 - results_logger - INFO - Accuracy: 99.90%
+2023_11_03_15_48_37 - results_logger - INFO - {
+    "0.0": {
+        "precision": 0.9999972929965761,
+        "recall": 0.9990057119728775,
+        "f1-score": 0.9995012565538992,
+        "support": 4437346.0
+    },
+    "1.0": {
+        "precision": 0.8354345393509884,
+        "recall": 0.9994645247657296,
+        "f1-score": 0.9101178382771231,
+        "support": 22410.0
+    },
+    "2.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "4.0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3735.0
+    },
+    "accuracy": 0.9990096762509889,
+    "macro avg": {
+        "precision": 0.9588579580868911,
+        "recall": 0.9996175591846518,
+        "f1-score": 0.9774047737077556,
+        "support": 4467226.0
+    },
+    "weighted avg": {
+        "precision": 0.9991717625470574,
+        "recall": 0.9990096762509889,
+        "f1-score": 0.9990536954074426,
+        "support": 4467226.0
+    }
+}
+2023_11_03_15_48_39 - results_logger - INFO - Confusion Matrix: 
+2023_11_03_15_48_39 - results_logger - INFO - True Positives: 22398
+2023_11_03_15_48_39 - results_logger - INFO - True Negatives: 4432934
+2023_11_03_15_48_39 - results_logger - INFO - False Positives: 4412
+2023_11_03_15_48_39 - results_logger - INFO - False Negatives: 12
+2023_11_03_15_48_39 - results_logger - INFO - AUC: 1.00
+2023_11_03_15_48_39 - results_logger - INFO - Time elapsed since the begining of evaluate_model_score: 15.713838000 s
+2023_11_03_15_48_39 - results_logger - INFO - Time elapsed since the begining of random forest : : 149.691608000 s
+2023_11_03_15_48_39 - results_logger - INFO - timer for clustering started
+2023_11_03_15_48_40 - results_logger - INFO - timer for scaling_duration started
+2023_11_03_15_48_40 - results_logger - INFO - Time elapsed since the begining of scaling_duration: 0.284522000 s
+2023_11_03_15_48_41 - results_logger - INFO - Number of samples before rebalancing and limiting rows: class-0.0=24506437 class-1.0=125784 class-2.0=20964 class-4.0=20964
+2023_11_03_15_48_44 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=3750 class-1.0=2812 class-2.0=468 class-4.0=468
+2023_11_03_15_48_44 - results_logger - INFO - min_samples: 234
+2023_11_03_15_48_44 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_11_03_16_03_03 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 859.187452000 s
+2023_11_03_16_03_04 - results_logger - INFO - eps: 0.01, number of clusters: 4, silhouette score: -0.1584305316209793, noise points: 4909
+2023_11_03_16_03_04 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_11_03_16_16_15 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 791.881231000 s
+2023_11_03_16_16_16 - results_logger - INFO - eps: 0.02, number of clusters: 2, silhouette score: -0.13652625679969788, noise points: 5942
+2023_11_03_16_16_16 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_11_03_16_30_58 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 882.078606000 s
+2023_11_03_16_30_59 - results_logger - INFO - eps: 0.03, number of clusters: 2, silhouette score: -0.13652625679969788, noise points: 5942
+2023_11_03_16_30_59 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_11_03_16_44_54 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 835.125618000 s
+2023_11_03_16_44_54 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.04, number of clusters: 1
+2023_11_03_16_44_54 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_11_03_16_58_39 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 825.053374000 s
+2023_11_03_16_58_39 - results_logger - WARNING - WARN: n_clusters <= 1 !!! eps: 0.05, number of clusters: 1
+2023_11_03_16_58_39 - results_logger - INFO - Best eps: 0.02, number of clusters: 2, silhouette score: -0.13652625679969788, noise points: 5942
+2023_11_03_16_58_42 - results_logger - INFO - Associating clusters to labels : 
+ {-1.0: {0.0: 5905, 1.0: 28, 2.0: 5, 4.0: 4}, 0.0: {0.0: 941, 1.0: 2, 4.0: 1}, 1.0: {0.0: 610, 1.0: 2}}
+2023_11_03_16_58_42 - results_logger - INFO - Time elapsed since the begining of clustering: 4202.481286000 s
+2023_11_03_16_58_42 - results_logger - INFO - End time : 1699030722.1399255
+2023_11_03_16_58_42 - results_logger - INFO - Total duration: 5038.582163333893
