@@ -154,7 +154,7 @@ def save_classification_results_to_json(results_list: List[ClassificationResults
         json.dump(results_dicts, f, indent=4)
 
 
-def get_best_instances(classification_results: Dict[str, List[ClassificationResults]], metric='accuracy') -> List[ClassificationResults]:
+def get_best_instances(classification_results: Dict[str, List[ClassificationResults]], metric : list[str]=['accuracy']) -> List[ClassificationResults]:
     """
     Extract the best instances based on a specified metric for Word2Vec and Transformers for each dataset.
     
@@ -168,6 +168,7 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
                                                   with 'word2vec' and 'transformer' as keys, and the best ClassificationResults
                                                   instances as values.
     """
+    assert len(metric) >= 1, "The metric list must contain at least one metric."
     # Initialize a dictionary to store the best instances.
     best_instances : list[ClassificationResults] = []
     
@@ -183,7 +184,14 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
         # Iterate through each classification result.
         for result in results:
             # Retrieve the value of the specified metric for the current result.
-            current_metric_value = getattr(result, metric)
+            current_metric_value = getattr(result, metric[0])
+            for i in range(1, len(metric)):
+                if isinstance(current_metric_value, dict):
+                    # If it's a dictionary, use key access
+                    current_metric_value = current_metric_value[metric[i]]
+                else:
+                    # Otherwise, assume it's an attribute
+                    current_metric_value = getattr(current_metric_value, metric[i])
 
             # Check if the instance is a Word2Vec instance and if its metric value is greater than the current maximum.
             if 'word2vec' in result.instance.lower() and current_metric_value > max_word2vec_metric:

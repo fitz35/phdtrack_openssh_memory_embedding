@@ -302,11 +302,15 @@ if __name__ == "__main__":
             feature_engineering_results_by_dataset[dataset_name] = []
         feature_engineering_results_by_dataset[dataset_name].append(result)
 
-    best_instance_by_instance_accuracy = get_best_instances(classification_results_by_dataset_number, "accuracy")
-    best_instance_by_dataset_accuracy = get_best_instances(classification_results_by_dataset, "accuracy")
+    best_instance_by_instance_accuracy = get_best_instances(classification_results_by_dataset_number, ["accuracy"])
+    best_instance_by_dataset_accuracy = get_best_instances(classification_results_by_dataset, ["accuracy"])
+    best_instance_by_instance_1_0_recall = get_best_instances(classification_results_by_dataset_number, ["class_metrics", "1.0", "recall"])
+    best_instance_by_instance_1_0_precision = get_best_instances(classification_results_by_dataset_number, ["class_metrics", "1.0", "precision"])
 
     best_instance_by_instance_accuracy_name = [(result.dataset_name, result.instance) for result in best_instance_by_instance_accuracy]
     best_instance_by_dataset_accuracy_name = [(result.dataset_name, result.instance) for result in best_instance_by_dataset_accuracy]
+    best_instance_by_instance_1_0_recall_name = [(result.dataset_name, result.instance) for result in best_instance_by_instance_1_0_recall]
+    best_instance_by_instance_1_0_precision_name = [(result.dataset_name, result.instance) for result in best_instance_by_instance_1_0_precision]
     # ------------------------- prepare files and folder
     # create the folder for the images
     os.makedirs(img_folder_path)
@@ -430,8 +434,12 @@ if __name__ == "__main__":
     
     best_accuracy_by_instance_file_path = os.path.join(img_folder_path, "Best Accuracy (by instances).png")
     best_accuracy_by_dataset_file_path = os.path.join(img_folder_path, "Best Accuracy (by dataset).png")
+    best_1_0_recall_by_instance_file_path = os.path.join(img_folder_path, "Best 1.0 Recall (by instances).png")
+    best_1_0_precision_by_instance_file_path = os.path.join(img_folder_path, "Best 1.0 Precision (by instances).png")
     plot_metrics(best_instance_by_instance_accuracy, best_accuracy_by_instance_file_path)
     plot_metrics(best_instance_by_dataset_accuracy, best_accuracy_by_dataset_file_path)
+    plot_metrics(best_instance_by_instance_1_0_recall, best_1_0_recall_by_instance_file_path)
+    plot_metrics(best_instance_by_instance_1_0_precision, best_1_0_precision_by_instance_file_path)
 
 
 
