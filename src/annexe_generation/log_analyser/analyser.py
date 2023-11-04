@@ -2,7 +2,7 @@ import argparse
 import os
 import shutil
 import sys
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List, Set, TypeVar
 
 
 
@@ -25,7 +25,7 @@ from embedding_generation.data.hyperparams_word2vec import get_word2vec_hyperpar
 LOG_DIR_NAME = "embedding_test"
 FEATURE_ENGINEERING_DIR_NAME = "feature_correlation_matrices"
 NB_FEATURE_ENGINEERING_FEATURES = 8 # Number of features to keep for the feature engineering results (if different, put the instance in the feature engineering list)
-
+DEEP_LEARNING_DATASET_NAME = ["chunk_extraction"]
 
 
 def compare_list_of_dicts(list1: list[dict[str, str]], list2: list[dict[str, str]]) -> bool:
@@ -110,6 +110,38 @@ def image_real_path_to_latex_path(image_real_path : str) -> str :
     image_split_path = image_real_path.split("img/")
     return os.path.join("img/", image_split_path[1])
 
+ResultType = TypeVar('ResultType', ClusteringResult, ClassificationResults)
+def process_out_of_memory_instances(
+    results_by_dataset_number: Dict[str, List[ResultType]], 
+    list_of_all_instances_by_dataset_number_commun: Dict[int, Set[str]], 
+    hyperparams_instances: List[str], 
+    category: str, 
+    latex_file_path: str
+) -> None:
+    instances_by_dataset_number: Dict[int, Set[str]] = list_of_all_instances_by_dataset_number_commun.copy()
+
+    for dataset_number, values in results_by_dataset_number.items():
+
+        instances_by_dataset_number.setdefault(int(dataset_number), set())
+        instances_by_dataset_number[int(dataset_number)].update(value.instance for value in values)
+    
+    out_of_memory_instances: List[Dict[str, str]] = []
+    for dataset_number, instances in instances_by_dataset_number.items():
+        instances_to_test : list[str]
+        if get_dataset_information_from_number(dataset_number).dataset_name in DEEP_LEARNING_DATASET_NAME:
+            instances_to_test = hyperparams_instances
+        else:
+            instances_to_test = ["single instance"]
+            
+        for instance_to_test in instances_to_test:
+            if instance_to_test not in instances:
+                out_of_memory_instances.append({"dataset": get_dataset_information_from_number(dataset_number).get_display_name(), "instance": instance_to_test})
+
+    with open(latex_file_path, 'a') as f:
+        f.write(f"\\section{{Out of memory instances ({category})}}\n\n")
+        f.write(f"\\label{{sec:annexe:out_of_memory_instances_{category.lower()}}}\n\n")
+        f.write(list_of_dicts_to_latex_table(out_of_memory_instances, f"Out of memory instances ({category})", f"tab:annexe:out_of_memory_instances_{category.lower()}"))
+        f.write("\n\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Read a file and process its contents.')
@@ -169,13 +201,13 @@ if __name__ == "__main__":
     for file in files:
         lines: list[str] = read_file(file)
 
-        feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path)
+        feature_engineering, feature_engineering_timeout = extract_all_dataset_results(lines, feature_engineering_extractor, feature_engineering_dir_path, file)
         feature_engineering_results.extend(feature_engineering)
         feature_engineering_timeouts.extend(feature_engineering_timeout)
         
 
-        clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor, feature_engineering_dir_path)
-        classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor, feature_engineering_dir_path)
+        clustering, clustering_timeout = extract_all_dataset_results(lines, clustering_extractor, feature_engineering_dir_path, file)
+        classification, classification_timeout = extract_all_dataset_results(lines, random_forest_extractor, feature_engineering_dir_path, file)
 
         clustering_results.extend(clustering)
         classification_results.extend(classification)
@@ -445,35 +477,11 @@ if __name__ == "__main__":
         if dataset_number not in list_of_all_instances_by_dataset_number_commun:
             list_of_all_instances_by_dataset_number_commun[dataset_number] = set()
         list_of_all_instances_by_dataset_number_commun[dataset_number].add(value["instance"])
-        
-    def process_out_of_memory_instances(
-        results_by_dataset_number: Dict[str, List[Any]], 
-        list_of_all_instances_by_dataset_number_commun: Dict[int, Set[str]], 
-        hyperparams_instances: List[str], 
-        category: str, 
-        latex_file_path: str
-    ) -> None:
-        instances_by_dataset_number: Dict[int, Set[str]] = list_of_all_instances_by_dataset_number_commun.copy()
-
-        for dataset_number, values in results_by_dataset_number.items():
-            instances_by_dataset_number.setdefault(int(dataset_number), set())
-            instances_by_dataset_number[int(dataset_number)].update(value.instance for value in values)
-        
-        out_of_memory_instances: List[Dict[str, str]] = []
-        for dataset_number, instances in instances_by_dataset_number.items():
-            for instance_to_test in hyperparams_instances:
-                if instance_to_test not in instances:
-                    out_of_memory_instances.append({"dataset": get_dataset_information_from_number(dataset_number).get_display_name(), "instance": instance_to_test})
-
-        with open(latex_file_path, 'a') as f:
-            f.write(f"\\section{{Out of memory instances ({category})}}\n\n")
-            f.write(f"\\label{{sec:annexe:out_of_memory_instances_{category.lower()}}}\n\n")
-            f.write(list_of_dicts_to_latex_table(out_of_memory_instances, f"Out of memory instances ({category})", f"tab:annexe:out_of_memory_instances_{category.lower()}"))
-            f.write("\n\n")
+    
+    
 
     # classification
     # Example calls to the function:
-    print(classification_results_by_dataset_number.keys())
     process_out_of_memory_instances(
         classification_results_by_dataset_number, 
         list_of_all_instances_by_dataset_number_commun, 

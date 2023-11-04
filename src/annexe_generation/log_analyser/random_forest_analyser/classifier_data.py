@@ -252,6 +252,8 @@ def plot_metrics(classification_results_list: List[ClassificationResults], file_
     def calculate_limited_axis(df : pd.DataFrame, metrics : str, margin_fraction=0.1):
         min_val = df[metrics].min()
         max_val = df[metrics].max()
+        if min_val == max_val:
+            return max_val - max_val * margin_fraction, max_val + max_val * margin_fraction
         margin = (max_val - min_val) * margin_fraction
         new_min = max(min_val - margin, 0)  # Ensure that the new_min is not less than 0
         new_max = min(max_val + margin, 1)  # Ensure that the new_max is not more than 1 for accuracy

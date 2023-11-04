@@ -202,7 +202,12 @@ def extract_dataset_path(log_lines: list[str]) -> str | None:
 
 T = TypeVar('T')
 
-def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[str], int, str, str], T], output_correlation_matrix_dir_relative_path : str) -> Tuple[List[T], List[dict[str, str]]]:
+def extract_all_dataset_results(
+        log_lines: list[str], 
+        extractor: Callable[[list[str], int, str, str], T], 
+        output_correlation_matrix_dir_relative_path : str,
+        file_name : str
+) -> Tuple[List[T], List[dict[str, str]]]:
     """
     Extracts results from a list of log lines using a specified extractor function and data class.
 
@@ -289,7 +294,7 @@ def extract_all_dataset_results(log_lines: list[str], extractor: Callable[[list[
                 
             begin_index = maybe_next_instance
         except AssertionError as e:
-            print(f"An error occurred: {e}, line {begin_index}")
+            print(f"An error occurred: {e}, line {begin_index}, file {file_name}")
             traceback.print_exc()
             return results, timeout_instances
 
