@@ -3,7 +3,7 @@ import json
 import os
 import re
 import sys
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 import matplotlib.pyplot as plt
 
 import pandas as pd
@@ -154,45 +154,37 @@ def save_classification_results_to_json(results_list: List[ClassificationResults
         json.dump(results_dicts, f, indent=4)
 
 
-def get_best_instances(classification_results: Dict[str, List[ClassificationResults]], metric : list[str]=['accuracy']) -> List[ClassificationResults]:
-    """
-    Extract the best instances based on a specified metric for Word2Vec and Transformers for each dataset.
-    
-    Args:
-    classification_results (Dict[str, List[ClassificationResults]]): A dictionary where keys are dataset names and 
-                                                                      values are lists of ClassificationResults objects.
-    metric (str): The metric to be used for comparing instances. Default is 'accuracy'.
-    
-    Returns:
-    Dict[str, Dict[str, ClassificationResults]]: A dictionary with dataset names as keys. The values are another dictionary
-                                                  with 'word2vec' and 'transformer' as keys, and the best ClassificationResults
-                                                  instances as values.
-    """
+def __get_metric_value(result, metric_path):
+    """ Helper function to navigate through a nested dictionary or object attributes based on the metric path. """
+    value = getattr(result, metric_path[0])
+    for key in metric_path[1:]:
+        if isinstance(value, dict):
+            value = value.get(key, -float('inf'))  # Use a default low value if key is not found
+        else:
+            value = getattr(value, key, -float('inf'))  # Use a default low value if attribute is not found
+    return value
+
+def get_best_instances(classification_results: Dict[str, List[ClassificationResults]], metric: List[str] = ['accuracy']) -> List[ClassificationResults]:
     assert len(metric) >= 1, "The metric list must contain at least one metric."
-    # Initialize a dictionary to store the best instances.
-    best_instances : list[ClassificationResults] = []
-    
+
+    # Temporary list to store all candidates for sorting
+    candidate_instances: List[Tuple[float, ClassificationResults]] = []
+
     # Iterate through each dataset and its corresponding classification results.
-    for dataset_name, results in classification_results.items():
+    for results in classification_results.values():
         # Initialize variables to store the best instances and their metric values for Word2Vec and Transformers.
         best_word2vec = None
         best_transformer = None
         best_single_instance = None
         max_word2vec_metric = -float('inf')
         max_transformer_metric = -float('inf')
+        max_single_metric = -float('inf')
 
         # Iterate through each classification result.
         for result in results:
-            # Retrieve the value of the specified metric for the current result.
-            current_metric_value = getattr(result, metric[0])
-            for i in range(1, len(metric)):
-                if isinstance(current_metric_value, dict):
-                    # If it's a dictionary, use key access
-                    current_metric_value = current_metric_value[metric[i]]
-                else:
-                    # Otherwise, assume it's an attribute
-                    current_metric_value = getattr(current_metric_value, metric[i])
-
+            # Retrieve the metric value for the current result.
+            current_metric_value = __get_metric_value(result, metric)
+            
             # Check if the instance is a Word2Vec instance and if its metric value is greater than the current maximum.
             if 'word2vec' in result.instance.lower() and current_metric_value > max_word2vec_metric:
                 max_word2vec_metric = current_metric_value
@@ -204,20 +196,27 @@ def get_best_instances(classification_results: Dict[str, List[ClassificationResu
                 best_transformer = result
 
             # Check if the instance is a single instance and if its metric value is greater than the current maximum.
-            elif 'single' in result.instance.lower() and current_metric_value > max_transformer_metric:
-                max_transformer_metric = current_metric_value
+            elif 'single' in result.instance.lower() and current_metric_value > max_single_metric:
+                max_single_metric = current_metric_value
                 best_single_instance = result
         
 
         # Store the best instances for the current dataset in the result dictionary.
         if best_single_instance:
-            best_instances.append(best_single_instance)
+            candidate_instances.append((max_single_metric, best_single_instance))
         if best_word2vec:
-            best_instances.append(best_word2vec)
+            candidate_instances.append((max_word2vec_metric, best_word2vec))
         if best_transformer:
-            best_instances.append(best_transformer)
+            candidate_instances.append((max_transformer_metric, best_transformer))
 
-    return best_instances
+    # Sort the candidate instances based on the metric values in descending order.
+    candidate_instances.sort(key=lambda x: x[0], reverse=True)
+
+    # Extract the sorted ClassificationResults objects.
+    sorted_best_instances = [instance for _, instance in candidate_instances]
+
+    return sorted_best_instances
+
 
 def plot_metrics(classification_results_list: List[ClassificationResults], file_path: str):
     if not classification_results_list:
@@ -233,8 +232,11 @@ def plot_metrics(classification_results_list: List[ClassificationResults], file_
     data = []
     accuracies = []
     durations = []
+    instances = []  # List to keep track of the order of instances
+
     for result in classification_results_list:
         instance = str(result.dataset_name.dataset_number) + "." + result.instance
+        instances.append(instance)  # Append to the instance list
         for label, metrics in result.class_metrics.items():
             if label != '0.0':
                 data.append({
@@ -253,9 +255,19 @@ def plot_metrics(classification_results_list: List[ClassificationResults], file_
             'Duration': result.duration
         })
 
+    # Convert instance lists to categorical with the order preserved
+    instance_order = pd.Categorical(instances, ordered=True, categories=instances)
+
+    # Create dataframes
     df = pd.DataFrame(data)
+    df['Instance'] = pd.Categorical(df['Instance'], categories=instance_order.categories, ordered=True)
+
     accuracy_df = pd.DataFrame(accuracies)
+    accuracy_df['Instance'] = pd.Categorical(accuracy_df['Instance'], categories=instance_order.categories, ordered=True)
+
     duration_df = pd.DataFrame(durations)
+    duration_df['Instance'] = pd.Categorical(duration_df['Instance'], categories=instance_order.categories, ordered=True)
+
 
     def calculate_limited_axis(df : pd.DataFrame, metrics : str, margin_fraction=0.1):
         min_val = df[metrics].min()

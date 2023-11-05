@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import shutil
 import sys
 from typing import Any, Dict, List, Set, TypeVar
@@ -64,6 +65,10 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     """
     if not list_of_dicts:
         return "The list is empty."
+    
+    def escape_underscores(text : str):
+        # This regular expression matches all underscores (_) that are not preceded by a backslash
+        return re.sub(r'(?<!\\)_', r'\\_', text)
 
     # Extracting the column names from the keys of the first dictionary
     columns = list(list_of_dicts[0].keys())
@@ -103,7 +108,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     latex_code += f"\\label{{{label}}}\n"
     latex_code += "\\end{table}"
 
-    return latex_code
+    return escape_underscores(latex_code)
 
 def image_real_path_to_latex_path(image_real_path : str) -> str :
 
