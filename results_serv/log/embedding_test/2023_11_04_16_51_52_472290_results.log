@@ -179,3 +179,23 @@ Name: label, dtype: float64
 2023_11_04_16_58_24 - results_logger - INFO - Number of samples after rebalancing and limiting rows: class-0.0=1875 class-1.0=1875 class-2.0=1875 class-4.0=1875
 2023_11_04_16_58_24 - results_logger - INFO - min_samples: 937
 2023_11_04_16_58_24 - results_logger - INFO - timer for clustering_duration_for_0.01 started
+2023_11_04_17_11_03 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.01: 758.914242000 s
+2023_11_04_17_11_04 - results_logger - INFO - eps: 0.01, number of clusters: 3, silhouette score: 0.42391592264175415, noise points: 2387
+2023_11_04_17_11_04 - results_logger - INFO - timer for clustering_duration_for_0.02 started
+2023_11_04_17_24_15 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.02: 790.658569000 s
+2023_11_04_17_24_15 - results_logger - INFO - eps: 0.02, number of clusters: 2, silhouette score: 0.36915552616119385, noise points: 3972
+2023_11_04_17_24_15 - results_logger - INFO - timer for clustering_duration_for_0.03 started
+2023_11_04_17_35_44 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.03: 688.756807000 s
+2023_11_04_17_35_45 - results_logger - INFO - eps: 0.03, number of clusters: 2, silhouette score: 0.36915552616119385, noise points: 3972
+2023_11_04_17_35_45 - results_logger - INFO - timer for clustering_duration_for_0.04 started
+2023_11_04_17_48_18 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.04: 752.847038000 s
+2023_11_04_17_48_19 - results_logger - INFO - eps: 0.04, number of clusters: 2, silhouette score: 0.36915552616119385, noise points: 3972
+2023_11_04_17_48_19 - results_logger - INFO - timer for clustering_duration_for_0.05 started
+2023_11_04_18_01_30 - results_logger - INFO - Time elapsed since the begining of clustering_duration_for_0.05: 791.446112000 s
+2023_11_04_18_01_31 - results_logger - INFO - eps: 0.05, number of clusters: 2, silhouette score: 0.3692394495010376, noise points: 3974
+2023_11_04_18_01_31 - results_logger - INFO - Best eps: 0.01, number of clusters: 3, silhouette score: 0.42391592264175415, noise points: 2387
+2023_11_04_18_01_31 - results_logger - INFO - Associating clusters to labels : 
+ {-1.0: {0.0: 1, 1.0: 2, 2.0: 1, 4.0: 2}, 0.0: {0.0: 1, 1.0: 4, 2.0: 3, 4.0: 2}, 1.0: {0.0: 1, 1.0: 1}, 2.0: {0.0: 2, 1.0: 1, 2.0: 1, 4.0: 1}}
+2023_11_04_18_01_31 - results_logger - INFO - Time elapsed since the begining of clustering: 3786.468505000 s
+2023_11_04_18_01_31 - results_logger - INFO - End time : 1699120891.3502884
+2023_11_04_18_01_31 - results_logger - INFO - Total duration: 4178.865193843842
