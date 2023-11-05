@@ -294,6 +294,6 @@ def plot_metrics(classification_results_list: List[ClassificationResults], file_
     axs[4].set_ylabel('Duration (s)')
 
     axs[-1].set_xlabel('Instance')
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=90)
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.savefig(file_path)

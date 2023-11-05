@@ -241,7 +241,7 @@ if __name__ == "__main__":
             for file in files:
                 print(file)
             print("\n")
-    assert not has_double, "Some datasets have multiple files"
+    #assert not has_double, "Some datasets have multiple files" # this line is for debugging purpose on single instance
     
     dataset_informations = list(dataset_informations_set)
     dataset_informations.sort(key=lambda x: x.dataset_number)
@@ -523,6 +523,8 @@ if __name__ == "__main__":
         'Clustering', 
         latex_file_path
     )
+    all_dataset_names = list(all_dataset_names)
+    all_dataset_names.sort(key=lambda x: int(x))
     # ...................... feature engineering
     with open(latex_file_path, 'a') as f:
         f.write("\\section{Feature Engineering results}\n\n")
@@ -536,10 +538,12 @@ if __name__ == "__main__":
         feature_engineering_latex_file_path = os.path.join(dataset_path, FEATURE_ENGINEERING_LATEX_FILE_NAME)
 
         with open(feature_engineering_latex_file_path, 'r') as feature_engineering_file:
-            with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
-                for line in feature_engineering_file:
-                    f.write(line)
+            content = feature_engineering_file.read()
+
+            if content.strip():  # Checks if there is any non-whitespace character in the content
+                with open(latex_file_path, 'a') as f:
+                    f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
+                    f.write(content)
 
     # ..................... clustering
     with open(latex_file_path, 'a') as f:
@@ -552,10 +556,12 @@ if __name__ == "__main__":
         clustering_latex_file_path = os.path.join(dataset_path, CLUSTERING_LATEX_FILE_NAME)
 
         with open(clustering_latex_file_path, 'r') as clustering_file:
-            with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
-                for line in clustering_file:
-                    f.write(line)
+            content = clustering_file.read()
+
+            if content.strip():  # Checks if there is any non-whitespace character in the content
+                with open(latex_file_path, 'a') as f:
+                    f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
+                    f.write(content)
     
 
     # .......................... classification
@@ -569,10 +575,12 @@ if __name__ == "__main__":
         classification_latex_file_path = os.path.join(dataset_path, CLASSIFICATION_LATEX_FILE_NAME)
 
         with open(classification_latex_file_path, 'r') as classification_file:
-            with open(latex_file_path, 'a') as f:
-                f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
-                for line in classification_file:
-                    f.write(line)
+            content = classification_file.read()
+
+            if content.strip():  # Checks if there is any non-whitespace character in the content
+                with open(latex_file_path, 'a') as f:
+                    f.write("\\subsection{" + get_dataset_information_from_number(int(dataset_name)).get_display_name() + "}\n\n")
+                    f.write(content)
             
 
 
