@@ -79,7 +79,7 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     list_of_dicts.sort(key=lambda x: x["dataset"])
 
     # Creating the LaTeX tabular environment
-    latex_code = "\\begin{table}[ht]\n"
+    latex_code = "\\begin{table}[H]\n"
     latex_code += "\\centering\n"
     latex_code += "\\begin{tabular}{" + "l" * num_columns + "}\n"
     latex_code += "\\hline\n"
@@ -105,10 +105,13 @@ def list_of_dicts_to_latex_table(list_of_dicts: list[dict[str, str]], caption: s
     latex_code += "\\hline\n"
     latex_code += "\\end{tabular}\n"
     latex_code += f"\\caption{{{caption}}}\n"
+
+    latex_code = escape_underscores(latex_code)
+
     latex_code += f"\\label{{{label}}}\n"
     latex_code += "\\end{table}"
 
-    return escape_underscores(latex_code)
+    return latex_code
 
 def image_real_path_to_latex_path(image_real_path : str) -> str :
 
@@ -434,12 +437,12 @@ if __name__ == "__main__":
 
         image_file_path = os.path.join(img_dataset_path, f'{dataset_name} - Metrics.png')
 
-        if len(results) > 0:
+        if len(results) > 1:
             with open(classification_latex_file_path, 'a') as f:
                 f.write("\\begin{figure}[H]\n")
                 f.write("\\centering\n")
                 f.write("\\includegraphics[width=0.6\\textwidth]{" + image_real_path_to_latex_path(image_file_path) + "}\n")
-                f.write("\\caption{Metrics for the instances of the dataset" + dataset_name + "}\n")
+                f.write("\\caption{Metrics for the instances of the dataset " + dataset_name + "}\n")
                 f.write("\\label{fig:" + dataset_name + "_metrics_instance}\n")
                 f.write("\\end{figure}\n\n")
 
