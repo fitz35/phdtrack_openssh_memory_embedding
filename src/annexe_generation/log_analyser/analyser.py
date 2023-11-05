@@ -198,6 +198,8 @@ if __name__ == "__main__":
         print(file)
     print("\n")
     # Read all files
+    dataset_double_list : dict[DatasetData, list[str]] = {}
+
     for file in files:
         lines: list[str] = read_file(file)
 
@@ -217,13 +219,29 @@ if __name__ == "__main__":
 
         dataset_path = extract_dataset_path(lines)
         assert dataset_path is not None, "Could not extract the dataset path"
+        dataset_data = DatasetData.from_str(os.path.basename(dataset_path))
 
-        dataset_informations_set.add(DatasetData.from_str(os.path.basename(dataset_path)))
+        if dataset_data not in dataset_double_list.keys():
+            dataset_double_list[dataset_data] = []
+        dataset_double_list[dataset_data].append(file)
+
+        dataset_informations_set.add(dataset_data)
     
 
 
     assert compare_list_of_dicts(clustering_timeouts, classification_timeouts), "Clustering and classification timeouts are not the same"
     assert compare_list_of_dicts(clustering_timeouts, feature_engineering_timeouts), "Clustering and feature engineering timeouts are not the same"
+
+    # check double files
+    has_double = False
+    for dataset_data, files in dataset_double_list.items():
+        if len(files) > 1:
+            has_double = True
+            print(f"Dataset {dataset_data.dataset_name} has {len(files)} files :")
+            for file in files:
+                print(file)
+            print("\n")
+    assert not has_double, "Some datasets have multiple files"
     
     dataset_informations = list(dataset_informations_set)
     dataset_informations.sort(key=lambda x: x.dataset_number)
